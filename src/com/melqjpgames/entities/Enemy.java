@@ -1,6 +1,7 @@
 package com.melqjpgames.entities;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import com.melqjpgames.main.Game;
@@ -30,6 +31,10 @@ public class Enemy extends Entity{
 	
 	
 	private int fov;
+	private final int maskx = 0;
+	private final int masky = 0;
+	private final int maskw = 16;
+	private final int maskh = 16;
 	
 	/*
 	 * Constructor receives the position and size of player
@@ -63,51 +68,65 @@ public class Enemy extends Entity{
 	
 	public void update() {
 		moved = false;
-		
-		if(Math.abs(x - Game.player.getX()) <= width*fov &&
-		   Math.abs(y - Game.player.getY()) <= height*fov &&
-		   Game.rand.nextInt(100) < 50) {
-			if((int)x < (int)Game.player.getX() && World.isFree((int)(getX() + speed), (int) getY())) {
-				x += speed;
-				dir = rightDir;
-				moved = true;
-			}else if((int)x > (int)Game.player.getX() && World.isFree((int)(getX() - speed), (int) getY())) {
-				x -= speed;
-				dir = leftDir;
-				moved = true;
-			}else if((int)y < (int)Game.player.getY() && World.isFree((int)getX(), (int) (getY() + speed))) {
-				y += speed;
-				dir = downDir;
-				moved = true;
-			}else if((int)y > (int)Game.player.getY() && World.isFree((int)getX(), (int) (getY() - speed))) {
-				y -= speed;
-				dir = upDir;
-				moved = true;
+		if(!this.isColidingWithPlayer()) {
+			if(Math.abs(x - Game.player.getX()) <= width*fov &&
+			   Math.abs(y - Game.player.getY()) <= height*fov &&
+			   Game.rand.nextInt(100) < 75) {
+				if((int)x < (int)Game.player.getX() && World.isFree((int)(getX() + speed), (int) getY()) &&
+						!isColiding((int)(getX() + speed), (int)getY())) {
+					x += speed;
+					dir = rightDir;
+					moved = true;
+				}else if((int)x > (int)Game.player.getX() && World.isFree((int)(getX() - speed), (int) getY()) &&
+						!isColiding((int)(getX() - speed), (int)getY())) {
+					x -= speed;
+					dir = leftDir;
+					moved = true;
+				}else if((int)y < (int)Game.player.getY() && World.isFree((int)getX(), (int) (getY() + speed)) &&
+						!isColiding((int)getX(), (int)(getY() + speed))) {
+					y += speed;
+					dir = downDir;
+					moved = true;
+				}else if((int)y > (int)Game.player.getY() && World.isFree((int)getX(), (int) (getY() - speed)) &&
+						!isColiding((int)getX(), (int)(getY() - speed))) {
+					y -= speed;
+					dir = upDir;
+					moved = true;
+				}
+			}else {
+				int randDir;
+				
+				randDir = Game.rand.nextInt(4);
+				
+				if(Game.rand.nextInt(100) < 5) {
+					switch(randDir) {
+						case upDir:
+							dir = upDir;
+							y -= speed;
+							break;
+						case downDir:
+							dir = downDir;
+							y += speed;
+							break;
+						case rightDir:
+							dir = rightDir;
+							x += speed;
+							break;
+						case leftDir:
+							dir = leftDir;
+							x -= speed;
+							break;
+							
+					}
+				}
 			}
 		}else {
-			int randDir;
-			
-			randDir = Game.rand.nextInt(4);
-			
-			if(Game.rand.nextInt(100) < 5) {
-				switch(randDir) {
-					case upDir:
-						dir = upDir;
-						y -= speed;
-						break;
-					case downDir:
-						dir = downDir;
-						y += speed;
-						break;
-					case rightDir:
-						dir = rightDir;
-						x += speed;
-						break;
-					case leftDir:
-						dir = leftDir;
-						x -= speed;
-						break;
-						
+			// Attacking player
+			if(Game.rand.nextInt(100) < 10) {
+				Game.player.setLife(Game.player.getLife() - 1);
+				if(Game.player.getLife() <= 0) {
+					System.out.println("Game Over!!");
+					System.exit(1);
 				}
 			}
 		}
@@ -136,6 +155,33 @@ public class Enemy extends Entity{
 	}
 	
 
+	
+	public boolean isColidingWithPlayer() {
+		
+		Rectangle enemyCurrent = new Rectangle((int)(getX() + maskx), (int)(getY() + masky), maskw, maskh);
+		Rectangle player = new Rectangle((int)Game.player.getX(), (int)Game.player.getY(), 16, 16);
+		
+		return enemyCurrent.intersects(player);
+	}
+	
+	
+	public boolean isColiding(int xx, int yy) {
+		Rectangle enemyCurrent = new Rectangle(xx + maskx, yy + masky, maskw, maskh);
+		
+		for(int i = 0; i < Game.enemies.size(); i++) {
+			Enemy e = Game.enemies.get(i);
+			if(e == this) {
+				continue;
+			}
+			Rectangle enemyTarget = new Rectangle((int)(e.getX() + maskx), (int)(e.getY() + masky), maskw, maskh);
+			if(enemyCurrent.intersects(enemyTarget)){
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
 	// Getter and Setters methods
 	public boolean isRight() {
 		return right;

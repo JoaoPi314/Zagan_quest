@@ -52,7 +52,9 @@ public class World {
 						Game.player.setY(yy*TILE_SIZE);
 					}else if(currentPixel == 0xFFFF0000) {
 						// Enemy
-						Game.entities.add(new Enemy(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE));
+						Enemy en = new Enemy(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+						Game.entities.add(en);
+						Game.enemies.add(en);
 					}else if(currentPixel == 0xFFFF8200) {
 						// Fireball
 						Game.entities.add(new Fireball(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE));

@@ -14,9 +14,11 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import com.melqjpgames.entities.Enemy;
 import com.melqjpgames.entities.Entity;
 import com.melqjpgames.entities.Player;
 import com.melqjpgames.graphics.Spritesheet;
+import com.melqjpgames.graphics.UI;
 import com.melqjpgames.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener{
@@ -37,11 +39,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	private BufferedImage image;
 
 	public static List<Entity> entities;
+	public static List<Enemy> enemies;
 	public static Spritesheet spritesheet;
 	
 	public static World world;
 	public static Player player;
-	
+	public UI ui;
 	public static Random rand;
 	
 	
@@ -53,9 +56,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		initFrame();
 		// Everything is scalable, to undo this, multiply here by scale
 		// Initiates Objects
+		spritesheet = new Spritesheet("/spritesheet.png");
+		ui = new UI();
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
-		spritesheet = new Spritesheet("/spritesheet.png");
+		enemies = new ArrayList<Enemy>();
 		player = new Player(32, 32, 16, 16);
 		world = new World("/map_01.png");
 		
@@ -120,7 +125,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			Entity e = entities.get(i);
 			e.render(g);
 		}
-		
+		ui.render(g);
 		
 		
 		//

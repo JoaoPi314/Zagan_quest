@@ -28,8 +28,9 @@ public class Player extends Entity{
 	private int index;
 	private final int maxIndex = 3;
 	
-	
-	
+	private double life;
+	public static double maxLife = 12;
+	private boolean looseLife;
 	/*
 	 * Constructor receives the position and size of player
 	 */
@@ -40,7 +41,7 @@ public class Player extends Entity{
 		index = 0;
 		nOfSprites = 4;
 		dir = downDir;
-		
+		life = 12;
 		// Initiates sprites
 		upPlayer = new BufferedImage[nOfSprites];
 		downPlayer = new BufferedImage[nOfSprites];
@@ -145,4 +146,12 @@ public class Player extends Entity{
 		this.down = down;
 	}
 
+	public double getLife() {
+		return life;
+	}
+	
+	public void setLife(double life) {
+		this.life = life;
+	}
+	
 }
