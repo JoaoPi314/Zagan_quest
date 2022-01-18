@@ -14,7 +14,7 @@ public class Entity {
 
 	
 	public static BufferedImage HEALTH_POTION_EN;
-	public static BufferedImage FIREBALL;
+	public static BufferedImage FIREBALL_EN;
 	
 	/*
 	 * The constructor of Entity receives the position and size of entity
@@ -26,7 +26,7 @@ public class Entity {
 		this.height = height;
 		
 		HEALTH_POTION_EN = Game.spritesheet.getSprite(64, 0, width, height);
-		FIREBALL = Game.spritesheet.getSprite(80, 0, width, height);
+		FIREBALL_EN = Game.spritesheet.getSprite(80, 0, width, height);
 	}
 	
 	

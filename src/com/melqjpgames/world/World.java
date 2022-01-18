@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.melqjpgames.entities.Enemy;
+import com.melqjpgames.entities.*;
 import com.melqjpgames.main.Game;
 
 public class World {
@@ -56,9 +56,10 @@ public class World {
 						Game.entities.add(new Enemy(xx*16, yy*16, 16, 16));
 					}else if(currentPixel == 0xFFFF8200) {
 						// Fireball
-						
+						Game.entities.add(new Fireball(xx*16, yy*16, 16, 16));
 					}else if(currentPixel == 0xFF14FF00) {
 						// Health potion
+						Game.entities.add(new HealthPotion(xx*16, yy*16, 16, 16));
 					}
 				}
 			}
