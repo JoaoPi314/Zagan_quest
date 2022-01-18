@@ -1,7 +1,6 @@
 package com.melqjpgames.entities;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 public class Entity {
 
@@ -9,18 +8,16 @@ public class Entity {
 	protected double y;
 	protected int width;
 	protected int height;
-	
-	private BufferedImage sprite;
+
 	
 	/*
 	 * The constructor of Entity receives the position and size of entity
 	 */
-	public Entity(int x, int y, int width, int height, BufferedImage sprite) {
+	public Entity(int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.sprite = sprite;
 	}
 	
 	
@@ -68,7 +65,7 @@ public class Entity {
 	
 	
 	public void render(Graphics g) {
-		g.drawImage(sprite, (int)getX(), (int)getY(), null);
+
 	}
 	
 	
