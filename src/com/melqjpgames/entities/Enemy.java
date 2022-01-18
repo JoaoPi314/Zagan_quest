@@ -12,7 +12,7 @@ public class Enemy extends Entity{
 	// Directions
 	private boolean right, up, left, down;
 	private double speed;
-	private int upDir = 0, downDir = 1, rightDir = 2, leftDir = 3;
+	private final int upDir = 0, downDir = 1, rightDir = 2, leftDir = 3;
 	private int dir;
 	private boolean moved;
 	// Sprites
@@ -36,7 +36,7 @@ public class Enemy extends Entity{
 	 */
 	public Enemy(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		speed = 0.6;
+		speed = 1;
 		frames = 0;
 		index = 0;
 		nOfSprites = 4;
@@ -65,7 +65,8 @@ public class Enemy extends Entity{
 		moved = false;
 		
 		if(Math.abs(x - Game.player.getX()) <= width*fov &&
-		   Math.abs(y - Game.player.getY()) <= height*fov	) {
+		   Math.abs(y - Game.player.getY()) <= height*fov &&
+		   Game.rand.nextInt(100) < 50) {
 			if((int)x < (int)Game.player.getX() && World.isFree((int)(getX() + speed), (int) getY())) {
 				x += speed;
 				dir = rightDir;
@@ -82,6 +83,32 @@ public class Enemy extends Entity{
 				y -= speed;
 				dir = upDir;
 				moved = true;
+			}
+		}else {
+			int randDir;
+			
+			randDir = Game.rand.nextInt(4);
+			
+			if(Game.rand.nextInt(100) < 5) {
+				switch(randDir) {
+					case upDir:
+						dir = upDir;
+						y -= speed;
+						break;
+					case downDir:
+						dir = downDir;
+						y += speed;
+						break;
+					case rightDir:
+						dir = rightDir;
+						x += speed;
+						break;
+					case leftDir:
+						dir = leftDir;
+						x -= speed;
+						break;
+						
+				}
 			}
 		}
 		if(moved) {
