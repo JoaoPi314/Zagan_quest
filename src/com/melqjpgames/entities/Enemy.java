@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import com.melqjpgames.main.Game;
 import com.melqjpgames.world.Camera;
+import com.melqjpgames.world.World;
 
 public class Enemy extends Entity{
 
@@ -28,17 +29,19 @@ public class Enemy extends Entity{
 	private final int maxIndex = 3;
 	
 	
+	private int fov;
 	
 	/*
 	 * Constructor receives the position and size of player
 	 */
 	public Enemy(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		speed = 0.9;
+		speed = 0.6;
 		frames = 0;
 		index = 0;
 		nOfSprites = 4;
 		dir = downDir;
+		fov = 5;
 		
 		// Initiates sprites
 		upEnemy = new BufferedImage[nOfSprites];
@@ -60,27 +63,27 @@ public class Enemy extends Entity{
 	
 	public void update() {
 		moved = false;
-		if(isRight()) {
-			setX(getX() + speed);
-			dir = rightDir;
-			moved = true;
-		}else if(isLeft()) {
-			setX(getX() - speed);
-			dir = leftDir;
-			moved = true;
-		}
-		if(isUp()) {
-			setY(getY() - speed);
-			dir = upDir;
-			moved = true;
-		}else if(isDown()) {
-			setY(getY() + speed);
-			dir = downDir;
-			moved = true;
-		}
-		// By now, always moving
 		
-		
+		if(Math.abs(x - Game.player.getX()) <= width*fov &&
+		   Math.abs(y - Game.player.getY()) <= height*fov	) {
+			if((int)x < (int)Game.player.getX() && World.isFree((int)(getX() + speed), (int) getY())) {
+				x += speed;
+				dir = rightDir;
+				moved = true;
+			}else if((int)x > (int)Game.player.getX() && World.isFree((int)(getX() - speed), (int) getY())) {
+				x -= speed;
+				dir = leftDir;
+				moved = true;
+			}else if((int)y < (int)Game.player.getY() && World.isFree((int)getX(), (int) (getY() + speed))) {
+				y += speed;
+				dir = downDir;
+				moved = true;
+			}else if((int)y > (int)Game.player.getY() && World.isFree((int)getX(), (int) (getY() - speed))) {
+				y -= speed;
+				dir = upDir;
+				moved = true;
+			}
+		}
 		if(moved) {
 			frames++;
 			if(frames == maxFrames) {
