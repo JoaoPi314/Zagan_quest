@@ -61,20 +61,20 @@ public class Player extends Entity{
 	
 	public void update() {
 		moved = false;
-		if(isRight()) {
+		if(isRight() && World.isFree((int)(getX() + speed), (int) getY())) {
 			setX(getX() + speed);
 			dir = rightDir;
 			moved = true;
-		}else if(isLeft()) {
+		}else if(isLeft() && World.isFree((int)(getX() - speed), (int) getY())) {
 			setX(getX() - speed);
 			dir = leftDir;
 			moved = true;
 		}
-		if(isUp()) {
+		if(isUp() && World.isFree((int)getX(), (int) (getY() - speed))) {
 			setY(getY() - speed);
 			dir = upDir;
 			moved = true;
-		}else if(isDown()) {
+		}else if(isDown() && World.isFree((int)getX(), (int) (getY() + speed))) {
 			setY(getY() + speed);
 			dir = downDir;
 			moved = true;
@@ -98,7 +98,7 @@ public class Player extends Entity{
 		Camera.y = Camera.clamp((int)getY() - (Game.HEIGHT / 2), 0, World.HEIGHT*16 - Game.HEIGHT);
 		
 	}
-	
+
 	public void render(Graphics g) {
 		if(dir == upDir) {
 			g.drawImage(upPlayer[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);

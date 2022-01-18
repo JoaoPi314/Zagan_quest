@@ -12,9 +12,9 @@ import com.melqjpgames.main.Game;
 public class World {
 	
 	
-	private Tile[] tiles;
+	public static Tile[] tiles;
 	public static int WIDTH, HEIGHT;
-	
+	public static final int TILE_SIZE = 16;
 	
 	
 	public World(String path) {
@@ -28,38 +28,37 @@ public class World {
 			tiles = new Tile[WIDTH * HEIGHT];
 			map.getRGB(0, 0, WIDTH, HEIGHT, pixels, 0, WIDTH);
 
-			tiles[0] = new WallTile(0, 0, Tile.TILE_WALL);
 			// Sweeps map
 			for(int xx = 0; xx < WIDTH; xx++) {
 				for(int yy = 0; yy < HEIGHT; yy++) {
 					int currentPixel =pixels[xx + (yy*WIDTH)]; 
 					
-					tiles[xx + (yy*WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR_1);
+					tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_FLOOR_1);
 
 					
 					if(currentPixel == 0xFF000000) {
 						// floor
-						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR_1);
+						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_FLOOR_1);
 					}else if(currentPixel == 0xFF555555) {
-						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR_2);
+						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_FLOOR_2);
 					}else if(currentPixel == 0xFF1D1D1D) {
-						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR_3);
+						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_FLOOR_3);
 					}else if(currentPixel == 0xFFFFFFFF) {
 						// Wall
-						tiles[xx + (yy*WIDTH)] = new WallTile(xx*16, yy*16, Tile.TILE_WALL);
+						tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_WALL);
 					}else if(currentPixel == 0xFF0000FF) {
 						// Player
-						Game.player.setX(xx*16);
-						Game.player.setY(yy*16);
+						Game.player.setX(xx*TILE_SIZE);
+						Game.player.setY(yy*TILE_SIZE);
 					}else if(currentPixel == 0xFFFF0000) {
 						// Enemy
-						Game.entities.add(new Enemy(xx*16, yy*16, 16, 16));
+						Game.entities.add(new Enemy(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE));
 					}else if(currentPixel == 0xFFFF8200) {
 						// Fireball
-						Game.entities.add(new Fireball(xx*16, yy*16, 16, 16));
+						Game.entities.add(new Fireball(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE));
 					}else if(currentPixel == 0xFF14FF00) {
 						// Health potion
-						Game.entities.add(new HealthPotion(xx*16, yy*16, 16, 16));
+						Game.entities.add(new HealthPotion(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE));
 					}
 				}
 			}
@@ -70,6 +69,26 @@ public class World {
 		}
 	}
 	
+	public static boolean isFree(int x, int y) {
+		// Converts position to tiles
+		int x1 = x / TILE_SIZE;
+		int y1 = y / TILE_SIZE;
+		
+		int x2 = (x + TILE_SIZE - 1) / TILE_SIZE;
+		int y2 = y / TILE_SIZE;
+		
+		int x3 = x  / TILE_SIZE;
+		int y3 = (y + TILE_SIZE - 1) / TILE_SIZE;
+		
+		int x4 = (x + TILE_SIZE - 1) / TILE_SIZE;
+		int y4 = (y + TILE_SIZE - 1) / TILE_SIZE;
+		
+		return !((tiles[x1 + (y1*World.WIDTH)] instanceof WallTile) ||
+				 (tiles[x2 + (y2*World.WIDTH)] instanceof WallTile) ||
+				 (tiles[x3 + (y3*World.WIDTH)] instanceof WallTile) ||
+				 (tiles[x4 + (y4*World.WIDTH)] instanceof WallTile));
+		
+	}
 	
 	public void render(Graphics g) {
 		int xstart = Camera.x >> 4;
