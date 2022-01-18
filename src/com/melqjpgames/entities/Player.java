@@ -7,17 +7,24 @@ import com.melqjpgames.main.Game;
 
 public class Player extends Entity{
 
-	
+	// Directions
 	private boolean right, up, left, down;
 	private double speed;
 	private int upDir = 0, downDir = 1, rightDir = 2, leftDir = 3;
 	private int dir;
+	private boolean moved;
+	// Sprites
 	private BufferedImage[] upPlayer;
 	private BufferedImage[] downPlayer;
 	private BufferedImage[] rightPlayer;
 	private BufferedImage[] leftPlayer;
-	private int frames;
 	private int nOfSprites;
+	
+	// Animation of sprite
+	private int frames;
+	private final int maxFrames = 10;
+	private int index;
+	private final int maxIndex = 3;
 	
 	
 	
@@ -28,8 +35,10 @@ public class Player extends Entity{
 		super(x, y, width, height);
 		speed = 0.9;
 		frames = 0;
+		index = 0;
 		nOfSprites = 4;
 		dir = downDir;
+		
 		// Initiates sprites
 		upPlayer = new BufferedImage[nOfSprites];
 		downPlayer = new BufferedImage[nOfSprites];
@@ -49,31 +58,49 @@ public class Player extends Entity{
 	// Update and render methods
 	
 	public void update() {
+		moved = false;
 		if(isRight()) {
 			setX(getX() + speed);
 			dir = rightDir;
+			moved = true;
 		}else if(isLeft()) {
 			setX(getX() - speed);
 			dir = leftDir;
+			moved = true;
 		}
 		if(isUp()) {
 			setY(getY() - speed);
 			dir = upDir;
+			moved = true;
 		}else if(isDown()) {
 			setY(getY() + speed);
 			dir = downDir;
+			moved = true;
+		}
+		// By now, always moving
+		
+		
+		if(moved) {
+			frames++;
+			if(frames == maxFrames) {
+				frames = 0;
+				index++;
+				if(index > maxIndex) {
+					index = 0;
+				}
+			}
 		}
 	}
 	
 	public void render(Graphics g) {
 		if(dir == upDir) {
-			g.drawImage(upPlayer[0], (int)getX(), (int)getY(), null);
+			g.drawImage(upPlayer[index], (int)getX(), (int)getY(), null);
 		}else if(dir == downDir) {
-			g.drawImage(downPlayer[0], (int)getX(), (int)getY(), null);
+			g.drawImage(downPlayer[index], (int)getX(), (int)getY(), null);
 		}else if(dir == rightDir) {
-			g.drawImage(rightPlayer[0], (int)getX(), (int)getY(), null);
+			g.drawImage(rightPlayer[index], (int)getX(), (int)getY(), null);
 		}else if(dir == leftDir) {
-			g.drawImage(leftPlayer[0], (int)getX(), (int)getY(), null);
+			g.drawImage(leftPlayer[index], (int)getX(), (int)getY(), null);
 		}
 	}
 	
