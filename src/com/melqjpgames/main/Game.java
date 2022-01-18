@@ -4,6 +4,8 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import com.melqjpgames.entities.Entity;
 import com.melqjpgames.entities.Player;
 import com.melqjpgames.graphics.Spritesheet;
 
-public class Game extends Canvas implements Runnable{
+public class Game extends Canvas implements Runnable, KeyListener{
 
 	
 	/**
@@ -38,7 +40,7 @@ public class Game extends Canvas implements Runnable{
 	
 	
 	public Game() {
-
+		addKeyListener(this);
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		initFrame();
 		// Everything is scalable, to undo this, multiply here by scale
@@ -99,7 +101,7 @@ public class Game extends Canvas implements Runnable{
 		}
 		Graphics g = image.getGraphics();
 		
-		g.setColor(Color.black);
+		g.setColor(new Color(0, 0x30, 0));
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
 		
@@ -153,6 +155,61 @@ public class Game extends Canvas implements Runnable{
 		}
 		
 		stop();
+		
+	}
+
+	// Keyboard events methods
+	
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_RIGHT ||
+				e.getKeyCode() == KeyEvent.VK_D) {
+			// Moves Right
+			player.setRight(true);
+		}else if(e.getKeyCode() == KeyEvent.VK_LEFT ||
+				e.getKeyCode() == KeyEvent.VK_A) {
+			// Moves Left
+			player.setLeft(true);
+		}
+
+		if(e.getKeyCode() == KeyEvent.VK_UP ||
+				e.getKeyCode() == KeyEvent.VK_W) {
+			// Moves up
+			player.setUp(true);
+		}else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
+				e.getKeyCode() == KeyEvent.VK_S) {
+			// Moves down
+			player.setDown(true);
+		}	
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_RIGHT ||
+				e.getKeyCode() == KeyEvent.VK_D) {
+			// Stops Right
+			player.setRight(false);
+		}else if(e.getKeyCode() == KeyEvent.VK_LEFT ||
+				e.getKeyCode() == KeyEvent.VK_A) {
+			// Stops Left
+			player.setLeft(false);
+		}
+
+		if(e.getKeyCode() == KeyEvent.VK_UP ||
+				e.getKeyCode() == KeyEvent.VK_W) {
+			// Stops up
+			player.setUp(false);
+		}else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
+				e.getKeyCode() == KeyEvent.VK_S) {
+			// Stops down
+			player.setDown(false);
+		}	
 		
 	}
 
