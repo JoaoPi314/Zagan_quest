@@ -1,6 +1,9 @@
 package com.melqjpgames.entities;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
+import com.melqjpgames.main.Game;
 
 public class Entity {
 
@@ -10,6 +13,9 @@ public class Entity {
 	protected int height;
 
 	
+	public static BufferedImage HEALTH_POTION_EN;
+	public static BufferedImage FIREBALL;
+	
 	/*
 	 * The constructor of Entity receives the position and size of entity
 	 */
@@ -18,6 +24,9 @@ public class Entity {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		
+		HEALTH_POTION_EN = Game.spritesheet.getSprite(64, 0, width, height);
+		FIREBALL = Game.spritesheet.getSprite(80, 0, width, height);
 	}
 	
 	

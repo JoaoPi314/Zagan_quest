@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import com.melqjpgames.entities.Entity;
 import com.melqjpgames.entities.Player;
 import com.melqjpgames.graphics.Spritesheet;
+import com.melqjpgames.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener{
 
@@ -28,15 +29,18 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	private Thread thread;
 	private boolean isRunning = true;
 	
-	private final int WIDTH = 240;
-	private final int HEIGHT = 160;
+	private final int WIDTH = 256;
+	private final int HEIGHT = 240;
 	private final int SCALE = 4;
 	
 	private BufferedImage image;
 
-	public List<Entity> entities;
+	public static List<Entity> entities;
 	public static Spritesheet spritesheet;
-	public Player player;
+	
+	public static World world;
+	public static Player player;
+	
 	
 	
 	public Game() {
@@ -48,8 +52,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
 		spritesheet = new Spritesheet("/spritesheet.png");
+		player = new Player(32, 32, 16, 16);
+		world = new World("/map_01.png");
 		
-		player = new Player(0, 0, 16, 16);
+		
 		entities.add(player);
 	}
 	
@@ -101,10 +107,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		}
 		Graphics g = image.getGraphics();
 		
-		g.setColor(new Color(0, 0x30, 0));
+		g.setColor(Color.black);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
-		
+		world.render(g);
 		
 		for(int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
