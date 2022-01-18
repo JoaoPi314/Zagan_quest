@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.melqjpgames.main.Game;
+import com.melqjpgames.world.Camera;
+import com.melqjpgames.world.World;
 
 public class Player extends Entity{
 
@@ -90,17 +92,22 @@ public class Player extends Entity{
 				}
 			}
 		}
+		
+		// Makes camera follow player
+		Camera.x = Camera.clamp((int)getX() - (Game.WIDTH / 2), 0, World.WIDTH*16 - Game.WIDTH);
+		Camera.y = Camera.clamp((int)getY() - (Game.HEIGHT / 2), 0, World.HEIGHT*16 - Game.HEIGHT);
+		
 	}
 	
 	public void render(Graphics g) {
 		if(dir == upDir) {
-			g.drawImage(upPlayer[index], (int)getX(), (int)getY(), null);
+			g.drawImage(upPlayer[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 		}else if(dir == downDir) {
-			g.drawImage(downPlayer[index], (int)getX(), (int)getY(), null);
+			g.drawImage(downPlayer[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 		}else if(dir == rightDir) {
-			g.drawImage(rightPlayer[index], (int)getX(), (int)getY(), null);
+			g.drawImage(rightPlayer[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 		}else if(dir == leftDir) {
-			g.drawImage(leftPlayer[index], (int)getX(), (int)getY(), null);
+			g.drawImage(leftPlayer[index],  (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 		}
 	}
 	

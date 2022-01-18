@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.melqjpgames.main.Game;
+import com.melqjpgames.world.Camera;
 
 public class Enemy extends Entity{
 
@@ -94,13 +95,13 @@ public class Enemy extends Entity{
 	
 	public void render(Graphics g) {
 		if(dir == upDir) {
-			g.drawImage(upEnemy[index], (int)getX(), (int)getY(), null);
+			g.drawImage(upEnemy[index],  (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 		}else if(dir == downDir) {
-			g.drawImage(downEnemy[index], (int)getX(), (int)getY(), null);
+			g.drawImage(downEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 		}else if(dir == rightDir) {
-			g.drawImage(rightEnemy[index], (int)getX(), (int)getY(), null);
+			g.drawImage(rightEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 		}else if(dir == leftDir) {
-			g.drawImage(leftEnemy[index], (int)getX(), (int)getY(), null);
+			g.drawImage(leftEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 		}
 	}
 	
