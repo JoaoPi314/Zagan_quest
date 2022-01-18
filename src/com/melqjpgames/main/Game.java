@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JFrame;
 
 import com.melqjpgames.entities.Entity;
+import com.melqjpgames.entities.Player;
 import com.melqjpgames.graphics.Spritesheet;
 
 public class Game extends Canvas implements Runnable{
@@ -33,6 +34,7 @@ public class Game extends Canvas implements Runnable{
 
 	public List<Entity> entities;
 	public Spritesheet spritesheet;
+	public Player player;
 	
 	
 	public Game() {
@@ -45,6 +47,8 @@ public class Game extends Canvas implements Runnable{
 		entities = new ArrayList<Entity>();
 		spritesheet = new Spritesheet("/spritesheet.png");
 		
+		player = new Player(0, 0, 16, 16, spritesheet.getSprite(0, 32, 16, 16));
+		entities.add(player);
 	}
 	
 	public void initFrame() {
