@@ -31,10 +31,10 @@ public class Enemy extends Entity{
 	
 	
 	private int fov;
-	private final int maskx = 0;
-	private final int masky = 0;
-	private final int maskw = 16;
-	private final int maskh = 16;
+	public final int maskx = 0;
+	public final int masky = 0;
+	public final int maskw = 16;
+	public final int maskh = 16;
 	
 	/*
 	 * Constructor receives the position and size of player
@@ -122,12 +122,10 @@ public class Enemy extends Entity{
 			}
 		}else {
 			// Attacking player
+			Game.player.kbDir = dir;
 			if(Game.rand.nextInt(100) < 10) {
 				Game.player.setLife(Game.player.getLife() - 1);
-				if(Game.player.getLife() <= 0) {
-					System.out.println("Game Over!!");
-					System.exit(1);
-				}
+				Game.player.isDamaged = true;
 			}
 		}
 		if(moved) {

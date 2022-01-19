@@ -46,9 +46,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public static Player player;
 	public UI ui;
 	public static Random rand;
-	
-	
-	
+		
 	public Game() {
 		rand = new Random();
 		addKeyListener(this);
@@ -56,6 +54,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		initFrame();
 		// Everything is scalable, to undo this, multiply here by scale
 		// Initiates Objects
+		initGame();
+	}
+	
+	public void initGame() {
 		spritesheet = new Spritesheet("/spritesheet.png");
 		ui = new UI();
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -63,10 +65,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		enemies = new ArrayList<Enemy>();
 		player = new Player(32, 32, 16, 16);
 		world = new World("/map_01.png");
-		
-		
 		entities.add(player);
 	}
+	
 	
 	public void initFrame() {
 		frame = new JFrame("Game #1");
@@ -105,6 +106,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		for(int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			e.update();
+		}
+		if(player.getLife() <= 0) {
+			initGame();
 		}
 	}
 

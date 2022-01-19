@@ -57,10 +57,14 @@ public class World {
 						Game.enemies.add(en);
 					}else if(currentPixel == 0xFFFF8200) {
 						// Fireball
-						Game.entities.add(new Fireball(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE));
+						Fireball fireball = new Fireball(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+						fireball.setMask(4, 0, 8, 16);
+						Game.entities.add(fireball);
 					}else if(currentPixel == 0xFF14FF00) {
 						// Health potion
-						Game.entities.add(new HealthPotion(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE));
+						HealthPotion healthPotion = new HealthPotion(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+						healthPotion.setMask(4, 0, 8, 16);
+						Game.entities.add(healthPotion);
 					}
 				}
 			}
