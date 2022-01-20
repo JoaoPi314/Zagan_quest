@@ -39,6 +39,10 @@ public class Player extends Entity{
 	private int fireballs;
 	private boolean shoot;
 	
+	private boolean coolDown;
+	private double framesCoolDown;
+	private double maxFramesCoolDown;
+	
 	
 	public boolean isDamaged = false;
 	private int damageFrames = 0;
@@ -139,7 +143,7 @@ public class Player extends Entity{
 			}
 		}
 		
-		if(isShoot() ) {
+		if(isShoot() && !coolDown) {
 			// FIREEEE
 			shoot = false;
 			int dx = 0;
@@ -153,17 +157,34 @@ public class Player extends Entity{
 			}else if(dir == leftDir) {
 				dx = -1;
 			}
+			coolDown = true;
+			
 			
 			if(hasFireball && fireballs > 0) {	
 				FireballShoot fire = new FireballShoot((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), dir, dx, dy);
 				Game.fireballs.add(fire);
 				this.fireballs --;
+				
+				if(fireballs <= 0)
+					hasFireball = false;
+				
+				setMaxFramesCoolDown(60);
 			}else {
 				int randFire = Game.rand.nextInt(3);
 				LuteFire fire = new LuteFire((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), dir, dx, dy, randFire);
 				Game.luteFires.add(fire);
+				setMaxFramesCoolDown(30);
+			}
+			setFramesCoolDown(getMaxFramesCoolDown());
+		}
+		
+		if(coolDown) {
+			setFramesCoolDown(getFramesCoolDown() - 1);
+			if(getFramesCoolDown() <= 0) {
+				coolDown = false;
 			}
 		}
+		
 		
 		
 		// Makes camera follow player
@@ -295,6 +316,22 @@ public class Player extends Entity{
 
 	public void setShoot(boolean shoot) {
 		this.shoot = shoot;
+	}
+
+	public double getFramesCoolDown() {
+		return framesCoolDown;
+	}
+
+	public void setFramesCoolDown(double framesCoolDown) {
+		this.framesCoolDown = framesCoolDown;
+	}
+
+	public double getMaxFramesCoolDown() {
+		return maxFramesCoolDown;
+	}
+
+	public void setMaxFramesCoolDown(double maxFramesCoolDown) {
+		this.maxFramesCoolDown = maxFramesCoolDown;
 	}
 	
 }

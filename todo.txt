@@ -1,6 +1,6 @@
 -- Implement animations when enemies die
 -- Implement animation when player die
--- Implement cooldown to shoot (Prevent shoot too fast) (ON GOING)
+-- Implement cooldown to shoot (Prevent shoot too fast) (DONE)
 -- Implement wave scheme with a boss at the end
 	- Implementing a wave bar (DONE)
 -- Improve  mpa adding a ritual circle at the middle
@@ -9,3 +9,5 @@
 -- Add option to save and load game
 -- Implement Cutscene at the beginning (Player entering and a door closing)
 -- Implement cutscene at endind of each map (Player exiting)
+
+-- Fix bug when a enemy is knocked back and has a obstacle, the enemy becomes stuck on obstacle
