@@ -1,13 +1,15 @@
+
+-- Implement animation in itens
 -- Implement animations when enemies die
 -- Implement animation when player die
 -- Implement cooldown to shoot (Prevent shoot too fast) (DONE)
 -- Implement wave scheme with a boss at the end
 	- Implementing a wave bar (DONE)
--- Improve  mpa adding a ritual circle at the middle
+-- Improve  map adding a ritual circle at the middle
 -- Implement more levels with more enemies and more bosses
 -- Add menu, game over screen
 -- Add option to save and load game
 -- Implement Cutscene at the beginning (Player entering and a door closing)
 -- Implement cutscene at endind of each map (Player exiting)
 
--- Fix bug when a enemy is knocked back and has a obstacle, the enemy becomes stuck on obstacle
+-- Fix bug when a enemy is knocked back and has a enemy behind, the enemy becomes stuck on enemy

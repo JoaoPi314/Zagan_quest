@@ -14,8 +14,8 @@ public class Entity {
 	protected int height;
 
 	
-	public static BufferedImage HEALTH_POTION_EN;
-	public static BufferedImage FIREBALL_EN;
+	public static BufferedImage []HEALTH_POTION_EN;
+	public static BufferedImage []FIREBALL_EN;
 	private int maskx, masky, mwidth, mheight;
 	
 	/*
@@ -32,8 +32,16 @@ public class Entity {
 		this.mwidth = width;
 		this.mheight = height;
 		
-		HEALTH_POTION_EN = Game.spritesheet.getSprite(64, 0, width, height);
-		FIREBALL_EN = Game.spritesheet.getSprite(80, 0, width, height);
+		HEALTH_POTION_EN = new BufferedImage[4];
+		FIREBALL_EN = new BufferedImage[4];
+		
+		
+		for(int i = 0; i < FIREBALL_EN.length; i++) {
+			HEALTH_POTION_EN[i] = Game.spritesheet.getSprite(96 + i*16, 112, width, height);
+			FIREBALL_EN[i] = Game.spritesheet.getSprite(96 + i*16, 128, width, height);
+		}
+		
+		
 	}
 	
 	
