@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import com.melqjpgames.entities.Enemy;
 import com.melqjpgames.entities.Entity;
 import com.melqjpgames.entities.FireballShoot;
+import com.melqjpgames.entities.LuteFire;
 import com.melqjpgames.entities.Player;
 import com.melqjpgames.graphics.Spritesheet;
 import com.melqjpgames.graphics.UI;
@@ -42,6 +43,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public static List<Entity> entities;
 	public static List<Enemy> enemies;
 	public static List<FireballShoot> fireballs;
+	public static List<LuteFire> luteFires;
 	public static Spritesheet spritesheet;
 	
 	public static World world;
@@ -66,6 +68,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
 		fireballs = new ArrayList<FireballShoot>();
+		luteFires = new ArrayList<LuteFire>();
 		player = new Player(32, 32, 16, 16);
 		world = new World("/map_01.png");
 		entities.add(player);
@@ -116,6 +119,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			f.update();
 		}
 		
+		for(int i = 0; i < luteFires.size(); i++) {
+			LuteFire f = luteFires.get(i);
+			f.update();
+		}
+		
+		
 		if(player.getLife() <= 0) {
 			initGame();
 		}
@@ -140,6 +149,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		}
 		for(int i = 0; i < fireballs.size(); i++) {
 			FireballShoot f = fireballs.get(i);
+			f.render(g);
+		}
+		
+		for(int i = 0; i < luteFires.size(); i++) {
+			LuteFire f = luteFires.get(i);
 			f.render(g);
 		}
 		ui.render(g);
@@ -219,10 +233,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 				e.getKeyCode() == KeyEvent.VK_S) {
 			// Moves down
 			player.setDown(true);
-		}	
+		}
+		
 		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 			player.setShoot(true);
 		}
+
 	}
 
 	@Override

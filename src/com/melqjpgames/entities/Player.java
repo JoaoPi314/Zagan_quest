@@ -143,23 +143,26 @@ public class Player extends Entity{
 		if(isShoot() ) {
 			// FIREEEE
 			shoot = false;
-			if(hasFireball && fireballs > 0) {
-				int dx = 0;
-				int dy = 0;
-				if(dir == upDir) {
-					dy = -1;
-				}else if(dir == downDir) {
-					dy = 1;
-				}else if(dir == rightDir) {
-					dx = 1;
-				}else if(dir == leftDir) {
-					dx = -1;
-				}
-				
+			int dx = 0;
+			int dy = 0;
+			if(dir == upDir) {
+				dy = -1;
+			}else if(dir == downDir) {
+				dy = 1;
+			}else if(dir == rightDir) {
+				dx = 1;
+			}else if(dir == leftDir) {
+				dx = -1;
+			}
+			
+			if(hasFireball && fireballs > 0) {	
 				FireballShoot fire = new FireballShoot((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), dir, dx, dy);
-				
 				Game.fireballs.add(fire);
 				this.fireballs --;
+			}else {
+				int randFire = Game.rand.nextInt(3);
+				LuteFire fire = new LuteFire((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), dx, dy, randFire);
+				Game.luteFires.add(fire);
 			}
 		}
 		

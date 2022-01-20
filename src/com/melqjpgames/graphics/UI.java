@@ -28,12 +28,11 @@ public class UI {
 		}
 		
 		// Draw Fireballs
-		if(Game.player.isHasFireball()) {
-			g.drawImage(fireball, 12, Game.HEIGHT - 16, null);
-			g.setFont(new Font("arial", Font.BOLD, 8));
-			g.setColor(Color.white);
-			g.drawString("x"+Game.player.getFireballs(), 21, Game.HEIGHT - 8);
-		}
+		g.drawImage(fireball, 12, Game.HEIGHT - 16, null);
+		g.setFont(new Font("arial", Font.BOLD, 8));
+		g.setColor(Color.white);
+		g.drawString("x"+Game.player.getFireballs(), 21, Game.HEIGHT - 8);
+		
 	}
 	
 }

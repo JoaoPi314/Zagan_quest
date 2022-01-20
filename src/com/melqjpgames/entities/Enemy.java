@@ -177,6 +177,18 @@ public class Enemy extends Entity{
 			}
 			
 		}
+		
+		for(int i = 0; i < Game.luteFires.size(); i++) {
+			Entity e = Game.luteFires.get(i);
+			
+			if(Entity.isColiding(this, e)) {
+				this.life -= 1;
+				Game.luteFires.remove(i);
+				return;
+			}
+			
+		}
+		
 	}
 	
 	
