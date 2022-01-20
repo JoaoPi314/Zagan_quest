@@ -36,6 +36,10 @@ public class Enemy extends Entity{
 	public final int maskw = 16;
 	public final int maskh = 16;
 	
+	private int life = 10;
+	
+	
+	
 	/*
 	 * Constructor receives the position and size of player
 	 */
@@ -122,7 +126,7 @@ public class Enemy extends Entity{
 			}
 		}else {
 			// Attacking player
-			Game.player.kbDir = dir;
+			Game.player.setKbDir(dir);
 			if(Game.rand.nextInt(100) < 10) {
 				Game.player.setLife(Game.player.getLife() - 1);
 				Game.player.isDamaged = true;
@@ -138,6 +142,13 @@ public class Enemy extends Entity{
 				}
 			}
 		}
+		
+		colidingBullet();
+		
+		if(this.life <= 0) {
+			selfDestruction();
+		}
+		
 	}
 	
 	public void render(Graphics g) {
@@ -151,8 +162,23 @@ public class Enemy extends Entity{
 			g.drawImage(leftEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 		}
 	}
-	
+	public void selfDestruction() {
+		Game.entities.remove(this);
+	}
 
+	public void colidingBullet() {
+		for(int i = 0; i < Game.fireballs.size(); i++) {
+			Entity e = Game.fireballs.get(i);
+			
+			if(Entity.isColiding(this, e)) {
+				this.life -= 5;
+				Game.fireballs.remove(i);
+				return;
+			}
+			
+		}
+	}
+	
 	
 	public boolean isColidingWithPlayer() {
 		

@@ -38,11 +38,15 @@ public class Player extends Entity{
 	private boolean looseLife;
 	private boolean hasFireball;
 	private int fireballs;
+	private boolean shoot;
+	
 	
 	public boolean isDamaged = false;
 	private int damageFrames = 0;
 	private int kbSpeed = 3;
-	public static int kbDir;
+	private  int kbDir;
+	
+	
 	
 	/*
 	 * Constructor receives the position and size of player
@@ -101,17 +105,17 @@ public class Player extends Entity{
 		}
 		// By now, always moving
 		if(isDamaged) {
-			if(kbDir == rightDir && World.isFree((int)(getX() + speed*kbSpeed), (int) getY())) {
+			if(getKbDir() == rightDir && World.isFree((int)(getX() + speed*kbSpeed), (int) getY())) {
 				setX(getX() + speed*kbSpeed);
 				moved = true;
-			}else if(kbDir == leftDir && World.isFree((int)(getX() - speed*kbSpeed), (int) getY())) {
+			}else if(getKbDir() == leftDir && World.isFree((int)(getX() - speed*kbSpeed), (int) getY())) {
 				setX(getX() - speed*kbSpeed);
 				moved = true;
 			}
-			if(kbDir == upDir && World.isFree((int)getX(), (int) (getY() - speed*kbSpeed))) {
+			if(getKbDir() == upDir && World.isFree((int)getX(), (int) (getY() - speed*kbSpeed))) {
 				setY(getY() - speed*kbSpeed);
 				moved = true;
-			}else if(kbDir == downDir && World.isFree((int)getX(), (int) (getY() + speed*kbSpeed))) {
+			}else if(getKbDir() == downDir && World.isFree((int)getX(), (int) (getY() + speed*kbSpeed))) {
 				setY(getY() + speed*kbSpeed);
 				moved = true;
 			}
@@ -136,9 +140,29 @@ public class Player extends Entity{
 			}
 		}
 		
-		if(life <= 0) {
-			
+		if(isShoot() ) {
+			// FIREEEE
+			shoot = false;
+			if(hasFireball && fireballs > 0) {
+				int dx = 0;
+				int dy = 0;
+				if(dir == upDir) {
+					dy = -1;
+				}else if(dir == downDir) {
+					dy = 1;
+				}else if(dir == rightDir) {
+					dx = 1;
+				}else if(dir == leftDir) {
+					dx = -1;
+				}
+				
+				FireballShoot fire = new FireballShoot((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), dir, dx, dy);
+				
+				Game.fireballs.add(fire);
+				this.fireballs --;
+			}
 		}
+		
 		
 		// Makes camera follow player
 		Camera.x = Camera.clamp((int)getX() - (Game.WIDTH / 2), 0, World.WIDTH*16 - Game.WIDTH);
@@ -253,6 +277,22 @@ public class Player extends Entity{
 
 	public void setFireballs(int fireballs) {
 		this.fireballs = fireballs;
+	}
+
+	public int getKbDir() {
+		return kbDir;
+	}
+
+	public void setKbDir(int kbDir) {
+		this.kbDir = kbDir;
+	}
+
+	public boolean isShoot() {
+		return shoot;
+	}
+
+	public void setShoot(boolean shoot) {
+		this.shoot = shoot;
 	}
 	
 }

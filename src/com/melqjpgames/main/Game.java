@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 
 import com.melqjpgames.entities.Enemy;
 import com.melqjpgames.entities.Entity;
+import com.melqjpgames.entities.FireballShoot;
 import com.melqjpgames.entities.Player;
 import com.melqjpgames.graphics.Spritesheet;
 import com.melqjpgames.graphics.UI;
@@ -40,6 +41,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 	public static List<Entity> entities;
 	public static List<Enemy> enemies;
+	public static List<FireballShoot> fireballs;
 	public static Spritesheet spritesheet;
 	
 	public static World world;
@@ -63,6 +65,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
+		fireballs = new ArrayList<FireballShoot>();
 		player = new Player(32, 32, 16, 16);
 		world = new World("/map_01.png");
 		entities.add(player);
@@ -107,6 +110,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			Entity e = entities.get(i);
 			e.update();
 		}
+		
+		for(int i = 0; i < fireballs.size(); i++) {
+			FireballShoot f = fireballs.get(i);
+			f.update();
+		}
+		
 		if(player.getLife() <= 0) {
 			initGame();
 		}
@@ -128,6 +137,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		for(int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			e.render(g);
+		}
+		for(int i = 0; i < fireballs.size(); i++) {
+			FireballShoot f = fireballs.get(i);
+			f.render(g);
 		}
 		ui.render(g);
 		
@@ -183,6 +196,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {
 
+		
 	}
 
 	@Override
@@ -206,7 +220,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			// Moves down
 			player.setDown(true);
 		}	
-		
+		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+			player.setShoot(true);
+		}
 	}
 
 	@Override
