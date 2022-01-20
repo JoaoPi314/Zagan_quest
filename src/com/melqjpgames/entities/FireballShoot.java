@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import com.melqjpgames.main.Game;
 import com.melqjpgames.world.Camera;
+import com.melqjpgames.world.World;
 
 public class FireballShoot extends Entity{
 
@@ -34,7 +35,7 @@ public class FireballShoot extends Entity{
 	public FireballShoot(int x, int y, int width, int height, int dir, int dx, int dy) {
 		super(x, y, width, height);
 		
-		this.dir = dir;
+		this.setDir(dir);
 		this.dx = dx;
 		this.dy = dy;
 		fireUp = new BufferedImage[4];
@@ -54,8 +55,12 @@ public class FireballShoot extends Entity{
 	}
 	
 	public void update() {
-		x += dx*speed;
-		y += dy*speed;
+		if(World.isFree((int)(x + dx*speed),(int)(y + dy*speed))) {
+			x += dx*speed;
+			y += dy*speed;
+		}else {
+			Game.fireballs.remove(this);
+		}
 		
 		frames++;
 		if(frames == maxFrames) {
@@ -75,7 +80,7 @@ public class FireballShoot extends Entity{
 	}
 	
 	public void render(Graphics g) {
-		switch(dir) {
+		switch(getDir()) {
 			case upDir:
 				g.drawImage(fireUp[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 				break;
@@ -92,6 +97,14 @@ public class FireballShoot extends Entity{
 				g.drawImage(fireRight[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 				break;
 		}
+	}
+
+	public int getDir() {
+		return dir;
+	}
+
+	public void setDir(int dir) {
+		this.dir = dir;
 	}
 	
 	

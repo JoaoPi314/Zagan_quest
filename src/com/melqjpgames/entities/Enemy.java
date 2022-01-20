@@ -23,6 +23,13 @@ public class Enemy extends Entity{
 	private BufferedImage[] leftEnemy;
 	private int nOfSprites;
 	
+	private BufferedImage enemyDamageUp;
+	private BufferedImage enemyDamageDown;
+	private BufferedImage enemyDamageRight;
+	private BufferedImage enemyDamageLeft;
+	
+	
+	
 	// Animation of sprite
 	private int frames;
 	private final int maxFrames = 10;
@@ -38,6 +45,10 @@ public class Enemy extends Entity{
 	
 	private int life = 10;
 	
+	public boolean isDamaged = false;
+	private int damageFrames = 0;
+	private int kbSpeed = 3;
+	private  int kbDir;
 	
 	
 	/*
@@ -58,6 +69,10 @@ public class Enemy extends Entity{
 		rightEnemy = new BufferedImage[nOfSprites];
 		leftEnemy = new BufferedImage[nOfSprites];
 		
+		enemyDamageUp = Game.spritesheet.getSprite(64, 80, 16, 16);
+		enemyDamageDown = Game.spritesheet.getSprite(64, 96, 16, 16);
+		enemyDamageRight = Game.spritesheet.getSprite(64, 112, 16, 16);
+		enemyDamageLeft = Game.spritesheet.getSprite(64, 128, 16, 16);
 		
 		for(int i = 0; i < nOfSprites; i++) {
 			upEnemy[i] = Game.spritesheet.getSprite(i*16, 80, getWidth(), getHeight());
@@ -132,6 +147,31 @@ public class Enemy extends Entity{
 				Game.player.isDamaged = true;
 			}
 		}
+		
+		if(isDamaged) {
+			if(getKbDir() == rightDir && World.isFree((int)(getX() + speed*kbSpeed), (int) getY())) {
+				setX(getX() + speed*kbSpeed);
+				moved = true;
+			}else if(getKbDir() == leftDir && World.isFree((int)(getX() - speed*kbSpeed), (int) getY())) {
+				setX(getX() - speed*kbSpeed);
+				moved = true;
+			}
+			if(getKbDir() == upDir && World.isFree((int)getX(), (int) (getY() - speed*kbSpeed))) {
+				setY(getY() - speed*kbSpeed);
+				moved = true;
+			}else if(getKbDir() == downDir && World.isFree((int)getX(), (int) (getY() + speed*kbSpeed))) {
+				setY(getY() + speed*kbSpeed);
+				moved = true;
+			}
+		}
+		if(isDamaged) {
+			damageFrames++;
+			if(damageFrames ==8) {
+				damageFrames = 0;
+				isDamaged = false;
+			}
+		}
+		
 		if(moved) {
 			frames++;
 			if(frames == maxFrames) {
@@ -152,14 +192,28 @@ public class Enemy extends Entity{
 	}
 	
 	public void render(Graphics g) {
-		if(dir == upDir) {
-			g.drawImage(upEnemy[index],  (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-		}else if(dir == downDir) {
-			g.drawImage(downEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-		}else if(dir == rightDir) {
-			g.drawImage(rightEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-		}else if(dir == leftDir) {
-			g.drawImage(leftEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+		
+		if(!isDamaged) {
+			if(dir == upDir) {
+				g.drawImage(upEnemy[index],  (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+			}else if(dir == downDir) {
+				g.drawImage(downEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+			}else if(dir == rightDir) {
+				g.drawImage(rightEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+			}else if(dir == leftDir) {
+				g.drawImage(leftEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+			}
+		}else {
+			if(dir == upDir) {
+				g.drawImage(enemyDamageUp, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+			}else if(dir == downDir) {
+				g.drawImage(enemyDamageDown, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+			}else if(dir == rightDir) {
+				g.drawImage(enemyDamageRight, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+			}else if(dir == leftDir) {
+				g.drawImage(enemyDamageLeft,  (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+			}
+
 		}
 	}
 	public void selfDestruction() {
@@ -168,9 +222,12 @@ public class Enemy extends Entity{
 
 	public void colidingBullet() {
 		for(int i = 0; i < Game.fireballs.size(); i++) {
-			Entity e = Game.fireballs.get(i);
+			FireballShoot e = Game.fireballs.get(i);
 			
 			if(Entity.isColiding(this, e)) {
+				this.kbDir = e.getDir();
+				this.kbSpeed = 3;
+				this.isDamaged = true;
 				this.life -= 5;
 				Game.fireballs.remove(i);
 				return;
@@ -179,9 +236,12 @@ public class Enemy extends Entity{
 		}
 		
 		for(int i = 0; i < Game.luteFires.size(); i++) {
-			Entity e = Game.luteFires.get(i);
+			LuteFire e = Game.luteFires.get(i);
 			
 			if(Entity.isColiding(this, e)) {
+				this.isDamaged = true;
+				this.kbDir = e.getDir();
+				this.kbSpeed = 1;
 				this.life -= 1;
 				Game.luteFires.remove(i);
 				return;
@@ -251,4 +311,11 @@ public class Enemy extends Entity{
 		this.down = down;
 	}
 
+	public int getKbDir() {
+		return kbDir;
+	}
+
+	public void setKbDir(int kbDir) {
+		this.kbDir = kbDir;
+	}
 }

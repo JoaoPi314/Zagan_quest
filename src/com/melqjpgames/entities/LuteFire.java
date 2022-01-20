@@ -5,12 +5,14 @@ import java.awt.image.BufferedImage;
 
 import com.melqjpgames.main.Game;
 import com.melqjpgames.world.Camera;
+import com.melqjpgames.world.World;
 
 public class LuteFire extends Entity{
 
 	
 	private int dx;
 	private int dy;
+	private int dir;
 	private double speed;
 	private int indexNote = 0;
 	private BufferedImage[][] notes;
@@ -28,11 +30,12 @@ public class LuteFire extends Entity{
 	private int timeRemain = 0;
 	
 	
-	public LuteFire(int x, int y, int width, int height, int dx, int dy, int indexNote) {
+	public LuteFire(int x, int y, int width, int height, int dir, int dx, int dy, int indexNote) {
 		super(x, y, width, height);
 		
 		this.dx = dx;
 		this.dy = dy;
+		this.setDir(dir);
 		this.indexNote = indexNote;
 		notes = new BufferedImage[3][4];
 			
@@ -47,9 +50,12 @@ public class LuteFire extends Entity{
 	}
 	
 	public void update() {
-		x += dx*speed;
-		y += dy*speed;
-		
+		if(World.isFree((int)(x + dx*speed),(int)(y + dy*speed))) {
+			x += dx*speed;
+			y += dy*speed;
+		}else {
+			Game.luteFires.remove(this);
+		}
 		frames++;
 		if(frames == maxFrames) {
 			frames = 0;
@@ -69,6 +75,14 @@ public class LuteFire extends Entity{
 	
 	public void render(Graphics g) {
 		g.drawImage(notes[indexNote][index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+	}
+
+	public int getDir() {
+		return dir;
+	}
+
+	public void setDir(int dir) {
+		this.dir = dir;
 	}
 	
 	

@@ -35,7 +35,6 @@ public class Player extends Entity{
 	
 	private double life;
 	public static double maxLife = 12;
-	private boolean looseLife;
 	private boolean hasFireball;
 	private int fireballs;
 	private boolean shoot;
@@ -161,7 +160,7 @@ public class Player extends Entity{
 				this.fireballs --;
 			}else {
 				int randFire = Game.rand.nextInt(3);
-				LuteFire fire = new LuteFire((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), dx, dy, randFire);
+				LuteFire fire = new LuteFire((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), dir, dx, dy, randFire);
 				Game.luteFires.add(fire);
 			}
 		}
