@@ -218,6 +218,7 @@ public class Enemy extends Entity{
 	}
 	public void selfDestruction() {
 		Game.entities.remove(this);
+		Game.enemies.remove(this);
 	}
 
 	public void colidingBullet() {

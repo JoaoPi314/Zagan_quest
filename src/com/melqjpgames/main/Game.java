@@ -63,7 +63,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	public void initGame() {
 		spritesheet = new Spritesheet("/spritesheet.png");
-		ui = new UI();
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
@@ -71,6 +70,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		luteFires = new ArrayList<LuteFire>();
 		player = new Player(32, 32, 16, 16);
 		world = new World("/map_01.png");
+		ui = new UI();
+
 		entities.add(player);
 	}
 	
@@ -113,6 +114,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			Entity e = entities.get(i);
 			e.update();
 		}
+		ui.update();
 		
 		for(int i = 0; i < fireballs.size(); i++) {
 			FireballShoot f = fireballs.get(i);

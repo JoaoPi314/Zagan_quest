@@ -1,7 +1,8 @@
 -- Implement animations when enemies die
 -- Implement animation when player die
--- Implement cooldown to shoot (Prevent shoot too fast)
+-- Implement cooldown to shoot (Prevent shoot too fast) (ON GOING)
 -- Implement wave scheme with a boss at the end
+	- Implementing a wave bar (DONE)
 -- Improve  mpa adding a ritual circle at the middle
 -- Implement more levels with more enemies and more bosses
 -- Add menu, game over screen
