@@ -27,8 +27,7 @@ public class Enemy extends Entity{
 	private BufferedImage enemyDamageDown;
 	private BufferedImage enemyDamageRight;
 	private BufferedImage enemyDamageLeft;
-	
-	
+
 	
 	// Animation of sprite
 	private int frames;
@@ -49,6 +48,7 @@ public class Enemy extends Entity{
 	private int damageFrames = 0;
 	private int kbSpeed = 3;
 	private  int kbDir;
+	private boolean isDying;
 	
 	
 	/*
@@ -79,6 +79,8 @@ public class Enemy extends Entity{
 			downEnemy[i] = Game.spritesheet.getSprite(i*16, 96, getWidth(), getHeight());
 			rightEnemy[i] = Game.spritesheet.getSprite(i*16, 112, getWidth(), getHeight());
 			leftEnemy[i] = Game.spritesheet.getSprite(i*16, 128, getWidth(), getHeight());
+			
+
 		}
 		
 	}
@@ -217,6 +219,7 @@ public class Enemy extends Entity{
 		}
 	}
 	public void selfDestruction() {
+		Game.deadEnemies.add(new EnemyDied((int)getX(), (int)getY(), getWidth(), getHeight(), dir));
 		Game.entities.remove(this);
 		Game.enemies.remove(this);
 	}

@@ -26,7 +26,7 @@ public class LuteFire extends Entity{
 	private int index;
 	private final int maxIndex = 3;
 	
-	private int totalTime = 60; 
+	private int totalTime = 30; 
 	private int timeRemain = 0;
 	
 	
