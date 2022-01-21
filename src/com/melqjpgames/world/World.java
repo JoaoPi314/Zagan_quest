@@ -13,6 +13,7 @@ public class World {
 	
 	
 	public static Tile[] tiles;
+
 	public static int WIDTH, HEIGHT;
 	public static final int TILE_SIZE = 16;
 	
@@ -27,7 +28,8 @@ public class World {
 			int[] pixels = new int[WIDTH * HEIGHT];
 			tiles = new Tile[WIDTH * HEIGHT];
 			map.getRGB(0, 0, WIDTH, HEIGHT, pixels, 0, WIDTH);
-
+			
+			
 			// Sweeps map
 			for(int xx = 0; xx < WIDTH; xx++) {
 				for(int yy = 0; yy < HEIGHT; yy++) {
@@ -65,11 +67,12 @@ public class World {
 						HealthPotion healthPotion = new HealthPotion(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 						healthPotion.setMask(4, 0, 8, 16);
 						Game.entities.add(healthPotion);
+					}else if(currentPixel == 0xFF6F009F) {
+						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_RITUAL_FLOOR);
 					}
 				}
 			}
-			
-			
+						
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -110,7 +113,7 @@ public class World {
 				Tile tile = tiles[xx + (yy*WIDTH)];
 				tile.render(g);
 			}
-		}
+		}		
 	}
 	
 	

@@ -16,6 +16,8 @@ public class Tile {
 	public static BufferedImage TILE_FLOOR_2;
 	public static BufferedImage TILE_FLOOR_3;
 	public static BufferedImage TILE_WALL;
+	public static BufferedImage TILE_RITUAL_FLOOR;
+	public static BufferedImage TILE_RITUAL_STATUE;
 	
 	public Tile(int x, int y, BufferedImage sprite) {
 		this.x = x;
@@ -27,6 +29,8 @@ public class Tile {
 		TILE_FLOOR_2 = Game.spritesheet.getSprite(16, 0, width, height);
 		TILE_FLOOR_3 = Game.spritesheet.getSprite(32, 0, width, height);
 		TILE_WALL = Game.spritesheet.getSprite(48, 0, width, height);
+		TILE_RITUAL_FLOOR = Game.spritesheet.getSprite(64, 0, width, height);
+		TILE_RITUAL_STATUE = Game.spritesheet.getSprite(224, 64, 64, 64);
 	}
 
 	public void render(Graphics g) {

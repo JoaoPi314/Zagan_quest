@@ -1,11 +1,15 @@
 
--- Implement animation in itens
--- Implement animations when enemies die
+-- Implement animation in itens (DONE)
+-- Implement animations when enemies die (DONE)
 -- Implement animation when player die
 -- Implement cooldown to shoot (Prevent shoot too fast) (DONE)
 -- Implement wave scheme with a boss at the end
 	- Implementing a wave bar (DONE)
--- Improve  map adding a ritual circle at the middle
+	- Adds Sprite of Statue that will become a boss (DONE)
+-- Improve  map adding a ritual circle at the middle (GOING)
+	- Implement different floor in ritual zone (DONE)
+	- Get a demon statue image (DONE)
+	- Implement the Boss class that initially will be the statue
 -- Implement more levels with more enemies and more bosses
 -- Add menu, game over screen
 -- Add option to save and load game
