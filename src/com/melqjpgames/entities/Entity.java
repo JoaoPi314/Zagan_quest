@@ -16,7 +16,10 @@ public class Entity {
 	
 	public static BufferedImage []HEALTH_POTION_EN;
 	public static BufferedImage []FIREBALL_EN;
-	private int maskx, masky, mwidth, mheight;
+	protected int maskx;
+	protected int masky;
+	protected int mwidth;
+	protected int mheight;
 	
 	/*
 	 * The constructor of Entity receives the position and size of entity

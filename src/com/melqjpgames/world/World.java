@@ -13,7 +13,8 @@ public class World {
 	
 	
 	public static Tile[] tiles;
-
+	public static Tile statue;
+	
 	public static int WIDTH, HEIGHT;
 	public static final int TILE_SIZE = 16;
 	
@@ -29,6 +30,7 @@ public class World {
 			tiles = new Tile[WIDTH * HEIGHT];
 			map.getRGB(0, 0, WIDTH, HEIGHT, pixels, 0, WIDTH);
 			
+			int xStatue= 0, yStatue = 0; 
 			
 			// Sweeps map
 			for(int xx = 0; xx < WIDTH; xx++) {
@@ -69,9 +71,17 @@ public class World {
 						Game.entities.add(healthPotion);
 					}else if(currentPixel == 0xFF6F009F) {
 						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_RITUAL_FLOOR);
+					}else if(currentPixel == 0xFFEE03FF) {
+						xStatue = xx;
+						yStatue = yy;
+						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_RITUAL_FLOOR);
+					}else if(currentPixel == 0xFF6C0073) {
+						tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_RITUAL_FLOOR);
 					}
 				}
 			}
+			
+			statue = new WallTile(xStatue*TILE_SIZE, yStatue*TILE_SIZE, Tile.TILE_RITUAL_STATUE);
 						
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -114,6 +124,7 @@ public class World {
 				tile.render(g);
 			}
 		}		
+		statue.render(g);
 	}
 	
 	

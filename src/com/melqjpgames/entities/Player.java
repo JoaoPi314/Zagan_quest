@@ -143,7 +143,7 @@ public class Player extends Entity{
 			}
 		}
 		
-		if(isShoot() && !coolDown) {
+		if(isShoot() && !isCoolDown()) {
 			// FIREEEE
 			shoot = false;
 			int dx = 0;
@@ -157,7 +157,7 @@ public class Player extends Entity{
 			}else if(dir == leftDir) {
 				dx = -1;
 			}
-			coolDown = true;
+			setCoolDown(true);
 			
 			
 			if(hasFireball && fireballs > 0) {	
@@ -178,10 +178,10 @@ public class Player extends Entity{
 			setFramesCoolDown(getMaxFramesCoolDown());
 		}
 		
-		if(coolDown) {
+		if(isCoolDown()) {
 			setFramesCoolDown(getFramesCoolDown() - 1);
 			if(getFramesCoolDown() <= 0) {
-				coolDown = false;
+				setCoolDown(false);
 			}
 		}
 		
@@ -332,6 +332,14 @@ public class Player extends Entity{
 
 	public void setMaxFramesCoolDown(double maxFramesCoolDown) {
 		this.maxFramesCoolDown = maxFramesCoolDown;
+	}
+
+	public boolean isCoolDown() {
+		return coolDown;
+	}
+
+	public void setCoolDown(boolean coolDown) {
+		this.coolDown = coolDown;
 	}
 	
 }

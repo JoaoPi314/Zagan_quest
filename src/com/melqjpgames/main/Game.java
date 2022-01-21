@@ -237,6 +237,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+	
+	
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT ||
 				e.getKeyCode() == KeyEvent.VK_D) {
 			// Moves Right
@@ -257,10 +259,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			player.setDown(true);
 		}
 		
-		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-			player.setShoot(true);
+		if(!player.isCoolDown()) {
+			if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+				player.setShoot(true);
+			}
 		}
-
 	}
 
 	@Override
