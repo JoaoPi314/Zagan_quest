@@ -3,7 +3,9 @@ package com.melqjpgames.main;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
@@ -53,11 +55,16 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public UI ui;
 	public static Random rand;
 	
+	private String gameState = "NORMAL";
+	private boolean showGOMessage;
+	private int framesGO = 0;
+	private int maxFramesGO = 30;
+	private boolean reset;
 	
 	private int currentLevel = 1;
 	private int maxLevels = 2;
-	
-	
+	private int currentWave = 1;
+	private int maxWaves = 3;
 	
 	public Game() {
 		rand = new Random();
@@ -81,7 +88,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		world = new World(level);
 		ui = new UI();
 
-		entities.add(player);
+		
 	}
 	
 	
@@ -120,10 +127,17 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	public void update() {
 		
+		if(gameState.equals("NORMAL")) {
+			reset = false;
+		}
 		for(int i = 0; i < deadEnemies.size(); i++) {
 			EnemyDied e = deadEnemies.get(i);
 			e.update();
 		}
+		
+		if(gameState.equals("NORMAL"))
+			player.update();
+		
 		
 		for(int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
@@ -144,17 +158,28 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		
 		if(player.getLife() <= 0) {
-			initGame("/map_01.png");
+			gameState = "GAMEOVER";
 		}
 		
 		if(enemies.size() == 0) {
-			currentLevel++;
-			if(currentLevel > maxLevels) {
-				currentLevel = 1;
+			nextWaveorLevel();
+		}
+		
+		if(gameState.equals("GAMEOVER")) {
+			framesGO++;
+			if(framesGO > maxFramesGO) {
+				framesGO = 0;
+				if(this.showGOMessage) {
+					this.showGOMessage = false;
+				}else {
+					this.showGOMessage = true;
+				}
 			}
-			String newWorld = "/map_0"+currentLevel+".png";
-			System.out.println(newWorld);
-			initGame(newWorld);
+			if(reset) {
+				initGame("/map_01.png");
+				reset = false;
+				gameState = "NORMAL";
+			}
 		}
 	}
 
@@ -175,14 +200,15 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			e.render(g);
 		}
 		
+		if(gameState.equals("NORMAL"))
+			player.render(g);
+		else
+			player.renderDead(g);
+		
 		for(int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			e.render(g);
 		}
-		
-		
-
-		
 		
 		
 		for(int i = 0; i < fireballs.size(); i++) {
@@ -201,9 +227,61 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		g.dispose();
 		g = bs.getDrawGraphics();
 		g.drawImage(image,  0,  0,  WIDTH*SCALE,  HEIGHT*SCALE, null);
+		
+		if(gameState == "GAMEOVER") {
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setColor(new Color(0x00, 0x00, 0x00, 150));
+			g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
+			g.setColor(Color.white);
+			g.setFont(new Font("arial", Font.BOLD, 48));
+			g.drawString("Game Over", WIDTH*SCALE / 2 - 125, HEIGHT*SCALE / 2);
+			g.setFont(new Font("arial", Font.BOLD, 28));
+			
+			if(showGOMessage) {
+				g.drawString("Try again? (Press ENTER)", WIDTH*SCALE / 2 - 175, HEIGHT*SCALE / 2 + 48);
+			}
+			
+			
+		}
+		
 		bs.show();
 		
 	}
+	
+	
+	public void nextWaveorLevel() {
+		
+//		switch(currentLevel) {
+//			case 1:
+//				switch(currentWave) {
+//					case 1:
+//						
+//						break;
+//					
+//					case 2:
+//						break;
+//						
+//					case 3:
+//						break;
+//				}
+//				break;
+//			
+//		}
+//		
+		
+		
+		
+		currentLevel++;
+		if(currentLevel > maxLevels) {
+			currentLevel = 1;
+		}
+		String newWorld = "/map_0"+currentLevel+".png";
+		System.out.println(newWorld);
+		initGame(newWorld);
+	}
+	
+	
+	
 	
 	@Override
 	public void run() {
@@ -280,6 +358,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 				player.setShoot(true);
 			}
 		}
+		
+		if(gameState.equals("GAMEOVER")) {
+			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				reset = true;
+			}
+		}
+		
+		
 	}
 
 	@Override

@@ -27,6 +27,8 @@ public class Player extends Entity{
 	private BufferedImage playerDamageRight;
 	private BufferedImage playerDamageLeft;
 	
+	private BufferedImage playerDead;
+	
 	// Animation of sprite
 	private int frames;
 	private final int maxFrames = 10;
@@ -74,6 +76,9 @@ public class Player extends Entity{
 		playerDamageDown = Game.spritesheet.getSprite(64, 32, 16, 16);
 		playerDamageRight = Game.spritesheet.getSprite(64, 48, 16, 16);
 		playerDamageLeft = Game.spritesheet.getSprite(64, 64, 16, 16);
+		
+		playerDead = Game.spritesheet.getSprite(16, 144, getWidth(), getHeight());
+		
 		
 		for(int i = 0; i < nOfSprites; i++) {
 			upPlayer[i] = Game.spritesheet.getSprite(i*16, 16, getWidth(), getHeight());
@@ -240,9 +245,9 @@ public class Player extends Entity{
 		}
 	}
 	
-
-	
-	
+	public void renderDead(Graphics g) {
+		g.drawImage(playerDead, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+	}
 	
 	
 	// Getter and Setters methods

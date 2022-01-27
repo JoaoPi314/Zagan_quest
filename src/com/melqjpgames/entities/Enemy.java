@@ -89,10 +89,10 @@ public class Enemy extends Entity{
 	
 	public void update() {
 		moved = false;
-		if(!this.isColidingWithPlayer()) {
+		if(!this.isColidingWithPlayer() || Game.player.getLife() <= 0) {
 			if(Math.abs(x - Game.player.getX()) <= width*fov &&
 			   Math.abs(y - Game.player.getY()) <= height*fov &&
-			   Game.rand.nextInt(100) < 75) {
+			   Game.rand.nextInt(100) < 75 && Game.player.getLife() > 0) {
 				if((int)x < (int)Game.player.getX() && World.isFree((int)(getX() + speed), (int) getY()) &&
 						!isColiding((int)(getX() + speed), (int)getY())) {
 					x += speed;

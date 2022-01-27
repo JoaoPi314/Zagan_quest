@@ -9,10 +9,10 @@
 -- Improve  map adding a ritual circle at the middle (GOING)
 	- Implement different floor in ritual zone (DONE)
 	- Get a demon statue image (DONE)
-	- Implement the Boss class that initially will be the statue (GOING)
-	
+	- Implement the statue (DONE)
 	
 -- Implement more levels with more enemies and more bosses
+	- Implement logic to go to next level (DONE)
 -- Add menu, game over screen
 -- Add option to save and load game
 -- Implement Cutscene at the beginning (Player entering and a door closing)
@@ -20,4 +20,4 @@
 
 
 
--- Fix bug when a enemy is knocked back and has a enemy behind, the enemy becomes stuck on enemy
+-- Fix bug when a enemy is knocked back and has a enemy behind, the enemy becomes stuck on enemy (DONE)
