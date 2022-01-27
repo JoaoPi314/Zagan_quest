@@ -140,6 +140,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		if(player.getLife() <= 0) {
 			initGame();
 		}
+		
+		if(enemies.size() == 0) {
+			System.out.println("Next level!");
+		}
+		
 	}
 
 	public void render() {

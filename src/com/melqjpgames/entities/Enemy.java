@@ -151,17 +151,21 @@ public class Enemy extends Entity{
 		}
 		
 		if(isDamaged) {
-			if(getKbDir() == rightDir && World.isFree((int)(getX() + speed*kbSpeed), (int) getY())) {
+			if(getKbDir() == rightDir && World.isFree((int)(getX() + speed*kbSpeed), (int) getY()) &&
+					!isColiding((int)(getX() + speed*kbSpeed), (int)getY())) {
 				setX(getX() + speed*kbSpeed);
 				moved = true;
-			}else if(getKbDir() == leftDir && World.isFree((int)(getX() - speed*kbSpeed), (int) getY())) {
+			}else if(getKbDir() == leftDir && World.isFree((int)(getX() - speed*kbSpeed), (int) getY()) &&
+					!isColiding((int)(getX() - speed*kbSpeed), (int)getY())) {
 				setX(getX() - speed*kbSpeed);
 				moved = true;
 			}
-			if(getKbDir() == upDir && World.isFree((int)getX(), (int) (getY() - speed*kbSpeed))) {
+			if(getKbDir() == upDir && World.isFree((int)getX(), (int) (getY() - speed*kbSpeed)) &&
+					!isColiding((int)getX(), (int)(getY() - speed*kbSpeed))) {
 				setY(getY() - speed*kbSpeed);
 				moved = true;
-			}else if(getKbDir() == downDir && World.isFree((int)getX(), (int) (getY() + speed*kbSpeed))) {
+			}else if(getKbDir() == downDir && World.isFree((int)getX(), (int) (getY() + speed*kbSpeed)) &&
+					!isColiding((int)getX(), (int)(getY() + speed*kbSpeed))) {
 				setY(getY() + speed*kbSpeed);
 				moved = true;
 			}
