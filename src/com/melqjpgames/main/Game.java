@@ -52,7 +52,13 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public static Player player;
 	public UI ui;
 	public static Random rand;
-		
+	
+	
+	private int currentLevel = 1;
+	private int maxLevels = 2;
+	
+	
+	
 	public Game() {
 		rand = new Random();
 		addKeyListener(this);
@@ -60,10 +66,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		initFrame();
 		// Everything is scalable, to undo this, multiply here by scale
 		// Initiates Objects
-		initGame();
+		initGame("/map_01.png");
 	}
 	
-	public void initGame() {
+	public void initGame(String level) {
 		spritesheet = new Spritesheet("/spritesheet.png");
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
@@ -72,7 +78,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		luteFires = new ArrayList<LuteFire>();
 		deadEnemies = new ArrayList<EnemyDied>();
 		player = new Player(32, 32, 16, 16);
-		world = new World("/map_01.png");
+		world = new World(level);
 		ui = new UI();
 
 		entities.add(player);
@@ -138,13 +144,18 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		
 		if(player.getLife() <= 0) {
-			initGame();
+			initGame("/map_01.png");
 		}
 		
 		if(enemies.size() == 0) {
-			System.out.println("Next level!");
+			currentLevel++;
+			if(currentLevel > maxLevels) {
+				currentLevel = 1;
+			}
+			String newWorld = "/map_0"+currentLevel+".png";
+			System.out.println(newWorld);
+			initGame(newWorld);
 		}
-		
 	}
 
 	public void render() {

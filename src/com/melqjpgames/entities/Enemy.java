@@ -250,7 +250,7 @@ public class Enemy extends Entity{
 				this.isDamaged = true;
 				this.kbDir = e.getDir();
 				this.kbSpeed = 1;
-				this.life -= 1;
+				this.life -= 10;
 				Game.luteFires.remove(i);
 				return;
 			}
