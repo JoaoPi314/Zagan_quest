@@ -11,32 +11,32 @@ import com.melqjpgames.world.World;
 public class Enemy extends Entity{
 
 	// Directions
-	private boolean right, up, left, down;
-	private double speed;
-	private final int upDir = 0, downDir = 1, rightDir = 2, leftDir = 3;
-	private int dir;
-	private boolean moved;
+	protected boolean right, up, left, down;
+	protected double speed;
+	protected final int upDir = 0, downDir = 1, rightDir = 2, leftDir = 3;
+	protected int dir;
+	protected boolean moved;
 	// Sprites
-	private BufferedImage[] upEnemy;
-	private BufferedImage[] downEnemy;
-	private BufferedImage[] rightEnemy;
-	private BufferedImage[] leftEnemy;
-	private int nOfSprites;
+	protected BufferedImage[] upEnemy;
+	protected BufferedImage[] downEnemy;
+	protected BufferedImage[] rightEnemy;
+	protected BufferedImage[] leftEnemy;
+	protected int nOfSprites;
 	
-	private BufferedImage enemyDamageUp;
-	private BufferedImage enemyDamageDown;
-	private BufferedImage enemyDamageRight;
-	private BufferedImage enemyDamageLeft;
+	protected BufferedImage enemyDamageUp;
+	protected BufferedImage enemyDamageDown;
+	protected BufferedImage enemyDamageRight;
+	protected BufferedImage enemyDamageLeft;
 
 	
 	// Animation of sprite
-	private int frames;
-	private final int maxFrames = 10;
-	private int index;
-	private final int maxIndex = 3;
+	protected int frames;
+	protected final int maxFrames = 10;
+	protected int index;
+	protected final int maxIndex = 3;
 	
 	
-	private int fov;
+	protected int fov;
 	public final int maskx = 0;
 	public final int masky = 0;
 	public final int maskw = 16;

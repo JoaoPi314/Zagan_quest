@@ -27,7 +27,7 @@ public class EnemyDied extends Entity{
 	public EnemyDied(int x, int y, int width, int height, int dir) {
 		super(x, y, width, height);
 		
-		this.dir = dir;
+		this.setDir(dir);
 		dyingUp = new BufferedImage[nOfSprites];
 		dyingDown = new BufferedImage[nOfSprites];
 		dyingRight = new BufferedImage[nOfSprites];
@@ -57,15 +57,25 @@ public class EnemyDied extends Entity{
 	}
 	
 	public void render(Graphics g) {
-		if(dir == upDir) {
+		if(getDir() == upDir) {
 			g.drawImage(dyingUp[index],  (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-		}else if(dir == downDir) {
+		}else if(getDir() == downDir) {
 			g.drawImage(dyingDown[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-		}else if(dir == rightDir) {
+		}else if(getDir() == rightDir) {
 			g.drawImage(dyingRight[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-		}else if(dir == leftDir) {
+		}else if(getDir() == leftDir) {
 			g.drawImage(dyingLeft[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 		}
+	}
+
+
+	public int getDir() {
+		return dir;
+	}
+
+
+	public void setDir(int dir) {
+		this.dir = dir;
 	}
 	
 }

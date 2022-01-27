@@ -22,6 +22,7 @@ import com.melqjpgames.entities.Entity;
 import com.melqjpgames.entities.FireballShoot;
 import com.melqjpgames.entities.LuteFire;
 import com.melqjpgames.entities.Player;
+import com.melqjpgames.entities.Skeleton;
 import com.melqjpgames.graphics.Spritesheet;
 import com.melqjpgames.graphics.UI;
 import com.melqjpgames.world.World;
@@ -251,33 +252,39 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	public void nextWaveorLevel() {
 		
-//		switch(currentLevel) {
-//			case 1:
-//				switch(currentWave) {
-//					case 1:
-//						
-//						break;
-//					
-//					case 2:
-//						break;
-//						
-//					case 3:
-//						break;
-//				}
-//				break;
-//			
-//		}
-//		
-		
-		
-		
-		currentLevel++;
-		if(currentLevel > maxLevels) {
-			currentLevel = 1;
+		switch(currentLevel) {
+			case 1:
+				switch(currentWave) {
+					case 1: // Jumps to wave 2
+						for(int i = 0; i < deadEnemies.size(); i++) {
+							EnemyDied en = deadEnemies.get(i);
+							Skeleton skeleton = new Skeleton((int)en.getX(), (int)en.getY(), en.getWidth(), en.getHeight(), en.getDir());
+							enemies.add(skeleton);
+							entities.add(skeleton);
+						}
+						deadEnemies.removeAll(deadEnemies);
+						currentWave++;
+						break;
+					case 2: // Jumps to wave 3
+						break;
+						
+					case 3: // Jumps to level 2
+						break;
+				}
+				break;
+			
 		}
-		String newWorld = "/map_0"+currentLevel+".png";
-		System.out.println(newWorld);
-		initGame(newWorld);
+		
+		
+		
+		
+//		currentLevel++;
+//		if(currentLevel > maxLevels) {
+//			currentLevel = 1;
+//		}
+//		String newWorld = "/map_0"+currentLevel+".png";
+//		System.out.println(newWorld);
+//		initGame(newWorld);
 	}
 	
 	
