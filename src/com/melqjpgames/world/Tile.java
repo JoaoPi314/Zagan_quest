@@ -17,6 +17,7 @@ public class Tile {
 	public static BufferedImage[][] TILE_GRASS;
 	public static BufferedImage[][] TILE_WALL;
 	public static BufferedImage[][] TILE_STONE_FLOOR;
+	public static BufferedImage[][] TILE_PATH;
 	public static BufferedImage TILE_RITUAL_STATUE;
 	
 	
@@ -24,7 +25,7 @@ public class Tile {
 		TILE_GRASS = new BufferedImage[3][3];
 		TILE_WALL = new BufferedImage[3][3];
 		TILE_STONE_FLOOR = new BufferedImage[3][3];
-		
+		TILE_PATH = new BufferedImage[3][3];
 		TILE_ROCK = Game.spritesheet1.getSprite(48, 48, 16, 16);
 		
 		// Initiates sprites 
@@ -34,6 +35,7 @@ public class Tile {
 				TILE_GRASS[i][j] = Game.spritesheet1.getSprite(j*16, i*16, 16, 16);
 				TILE_WALL[i][j] = Game.spritesheet1.getSprite(48 + j*16, i*16, 16, 16);
 				TILE_STONE_FLOOR[i][j] = Game.spritesheet1.getSprite(j*16, 48 + i*16, 16, 16);
+				TILE_PATH[i][j] = Game.spritesheet1.getSprite(96 + j*16, i*16, 16, 16);
 			}
 		}
 	}

@@ -100,13 +100,39 @@ public class World {
 						case 0xFF6C0073: // Stone floor but is statue
 							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[1][1]);
 							break;
+						case 0xFFCDA664: // Path middle
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_PATH[1][1]);
+							break;
+						case 0xFFA58259: // Path up
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_PATH[0][1]);
+							break;
+						case 0xFFD1B57E: // Path down
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_PATH[2][1]);
+							break;
+						case 0xFFDCA548: // Path left
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_PATH[1][0]);
+							break;
+						case 0xFFF1BA5C: // Path right
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_PATH[1][2]);
+							break;
+						case 0xFFB39471: // Path top-right
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_PATH[0][2]);
+							break;
+						case 0xFFAF7B40: // Path top-left
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_PATH[0][0]);
+							break;
+						case 0xFFDEC47E: // Path down-right
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_PATH[2][2]);
+							break;
+						case 0xFFC4A97A: // Path down-left
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_PATH[2][0]);
+							break;
 						case 0xFF0E0404: // Rock
 							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_ROCK);
 							break;
 						case 0xFF0D260E: // Trees
 							Ent ent = new Ent(xx*TILE_SIZE, yy*TILE_SIZE, 32, 48);
 							ent.setMask(3, 38, 26, 10);
-							Game.entities.add(ent);
 							Game.ents.add(ent);
 							break;
 						case 0xFF0A4A0C: // Floor with collision (Tree)

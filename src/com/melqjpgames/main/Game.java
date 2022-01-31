@@ -149,6 +149,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			e.update();
 		}
 		
+
+		
+		
 		for(int i = 0; i < enemies.size(); i++) {
 			Enemy e = enemies.get(i);
 			e.update();
@@ -164,6 +167,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		for(int i = 0; i < luteFires.size(); i++) {
 			LuteFire f = luteFires.get(i);
 			f.update();
+		}
+		
+		for(int i = 0; i < ents.size(); i++) {
+			Entity e = ents.get(i);
+			e.update();
 		}
 		
 		
@@ -225,6 +233,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			e.render(g);
 		}
 		
+
+		
 		for(int i = 0; i < fireballs.size(); i++) {
 			FireballShoot f = fireballs.get(i);
 			f.render(g);
@@ -233,6 +243,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		for(int i = 0; i < luteFires.size(); i++) {
 			LuteFire f = luteFires.get(i);
 			f.render(g);
+		}
+		
+		for(int i = 0; i < ents.size(); i++) {
+			Entity e = ents.get(i);
+			e.render(g);
 		}
 		ui.render(g);
 		

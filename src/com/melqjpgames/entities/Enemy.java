@@ -123,19 +123,32 @@ public class Enemy extends Entity{
 					switch(randDir) {
 						case upDir:
 							dir = upDir;
-							y -= speed;
+							if(World.isFree((int)getX(), (int) (getY() - speed)) &&
+									!isColiding((int)getX(), (int)(getY() - speed))) {
+								y -= speed;
+							}
+							
 							break;
 						case downDir:
 							dir = downDir;
-							y += speed;
+							if(World.isFree((int)getX(), (int) (getY() + speed)) &&
+									!isColiding((int)getX(), (int)(getY() + speed))) {
+								y += speed;
+							}
 							break;
 						case rightDir:
 							dir = rightDir;
-							x += speed;
+							if(World.isFree((int)(getX() + speed), (int) getY()) &&
+									!isColiding((int)(getX() + speed), (int)getY())) {
+								x += speed;	
+							}
 							break;
 						case leftDir:
 							dir = leftDir;
-							x -= speed;
+							if(World.isFree((int)(getX() - speed), (int) getY()) &&
+									!isColiding((int)(getX() - speed), (int)getY())) {
+								x -= speed;	
+							}
 							break;
 							
 					}
