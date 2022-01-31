@@ -21,6 +21,19 @@ public class Entity {
 	protected int mwidth;
 	protected int mheight;
 	
+	static {
+		HEALTH_POTION_EN = new BufferedImage[4];
+		FIREBALL_EN = new BufferedImage[4];
+		
+		
+		for(int i = 0; i < FIREBALL_EN.length; i++) {
+			HEALTH_POTION_EN[i] = Game.spritesheet.getSprite(96 + i*16, 112, 16, 16);
+			FIREBALL_EN[i] = Game.spritesheet.getSprite(96 + i*16, 128, 16, 16);
+		}
+		
+	}
+	
+	
 	/*
 	 * The constructor of Entity receives the position and size of entity
 	 */
@@ -34,16 +47,6 @@ public class Entity {
 		this.masky = 0;
 		this.mwidth = width;
 		this.mheight = height;
-		
-		HEALTH_POTION_EN = new BufferedImage[4];
-		FIREBALL_EN = new BufferedImage[4];
-		
-		
-		for(int i = 0; i < FIREBALL_EN.length; i++) {
-			HEALTH_POTION_EN[i] = Game.spritesheet.getSprite(96 + i*16, 112, width, height);
-			FIREBALL_EN[i] = Game.spritesheet.getSprite(96 + i*16, 128, width, height);
-		}
-		
 		
 	}
 	

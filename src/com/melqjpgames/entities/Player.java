@@ -93,7 +93,7 @@ public class Player extends Entity{
 	
 	public void update() {
 		moved = false;
-		if(isRight() && World.isFree((int)(getX() + speed), (int) getY())) {
+		if(isRight() && World.isFree((int)(getX() + speed), (int) getY())){
 			setX(getX() + speed);
 			dir = rightDir;
 			moved = true;
@@ -220,7 +220,7 @@ public class Player extends Entity{
 		}
 	}
 	
-	
+
 	public void render(Graphics g) {
 		if(!isDamaged) {
 			if(dir == upDir) {

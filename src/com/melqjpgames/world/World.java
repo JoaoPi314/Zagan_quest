@@ -100,6 +100,18 @@ public class World {
 						case 0xFF6C0073: // Stone floor but is statue
 							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[1][1]);
 							break;
+						case 0xFF0E0404: // Rock
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_ROCK);
+							break;
+						case 0xFF0D260E: // Trees
+							Ent ent = new Ent(xx*TILE_SIZE, yy*TILE_SIZE, 32, 48);
+							ent.setMask(3, 38, 26, 10);
+							Game.entities.add(ent);
+							Game.ents.add(ent);
+							break;
+						case 0xFF0A4A0C: // Floor with collision (Tree)
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_GRASS[1][1]);
+							break;
 						case 0xFFF4FF00: // Health Potion
 							HealthPotion healthPotion = new HealthPotion(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 							healthPotion.setMask(4, 0, 8, 16);
@@ -112,16 +124,13 @@ public class World {
 							break;
 						case 0xFFFF0000: // Enemy
 							Enemy en = new Enemy(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-							Game.entities.add(en);
 							Game.enemies.add(en);
 							break;
 						case 0xFF0000FF: // Player
 							Game.player.setX(xx*TILE_SIZE);
 							Game.player.setY(yy*TILE_SIZE);
 							break;
-						case 0xFF0E0404: // Rock
-							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_ROCK);
-							break;
+
 						default:
 							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_GRASS[1][1]);
 							break;
@@ -166,7 +175,9 @@ public class World {
 			for(int yy = ystart; yy <= yfinal; yy++) {
 				if(xx < 0 || yy < 0 || xx >= WIDTH || yy >= HEIGHT)
 					continue;
+				Tile underFloor = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_GRASS[1][1]);
 				Tile tile = tiles[xx + (yy*WIDTH)];
+				underFloor.render(g);
 				tile.render(g);
 			}
 		}		

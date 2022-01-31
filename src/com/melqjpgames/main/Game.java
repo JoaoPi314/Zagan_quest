@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 
 import com.melqjpgames.entities.Enemy;
 import com.melqjpgames.entities.EnemyDied;
+import com.melqjpgames.entities.Ent;
 import com.melqjpgames.entities.Entity;
 import com.melqjpgames.entities.FireballShoot;
 import com.melqjpgames.entities.LuteFire;
@@ -49,6 +50,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public static List<FireballShoot> fireballs;
 	public static List<LuteFire> luteFires;
 	public static List<EnemyDied> deadEnemies;
+	public static List<Ent> ents;
 	public static Spritesheet spritesheet;
 	public static Spritesheet spritesheet1;
 	
@@ -87,6 +89,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		fireballs = new ArrayList<FireballShoot>();
 		luteFires = new ArrayList<LuteFire>();
 		deadEnemies = new ArrayList<EnemyDied>();
+		ents = new ArrayList<Ent>();
 		player = new Player(32, 32, 16, 16);
 		world = new World(level);
 		ui = new UI();
@@ -141,9 +144,13 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		if(gameState.equals("NORMAL"))
 			player.update();
 		
-		
 		for(int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
+			e.update();
+		}
+		
+		for(int i = 0; i < enemies.size(); i++) {
+			Enemy e = enemies.get(i);
 			e.update();
 		}
 		
@@ -208,11 +215,15 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		else
 			player.renderDead(g);
 		
+		for(int i = 0; i < enemies.size(); i++) {
+			Enemy e = enemies.get(i);
+			e.render(g);
+		}
+		
 		for(int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			e.render(g);
 		}
-		
 		
 		for(int i = 0; i < fireballs.size(); i++) {
 			FireballShoot f = fireballs.get(i);
@@ -262,7 +273,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 							EnemyDied en = deadEnemies.get(i);
 							Skeleton skeleton = new Skeleton((int)en.getX(), (int)en.getY(), en.getWidth(), en.getHeight(), en.getDir());
 							enemies.add(skeleton);
-							entities.add(skeleton);
 						}
 						deadEnemies.removeAll(deadEnemies);
 						currentWave++;
