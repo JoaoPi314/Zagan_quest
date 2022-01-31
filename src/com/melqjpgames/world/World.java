@@ -29,60 +29,106 @@ public class World {
 			int[] pixels = new int[WIDTH * HEIGHT];
 			tiles = new Tile[WIDTH * HEIGHT];
 			map.getRGB(0, 0, WIDTH, HEIGHT, pixels, 0, WIDTH);
-			
-			int xStatue= 0, yStatue = 0; 
-			
+			 			
 			// Sweeps map
 			for(int xx = 0; xx < WIDTH; xx++) {
 				for(int yy = 0; yy < HEIGHT; yy++) {
 					int currentPixel =pixels[xx + (yy*WIDTH)]; 
 					
-					tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_FLOOR_1);
+					tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_GRASS[1][1]);
 
+					switch(currentPixel) {
 					
-					if(currentPixel == 0xFF000000) {
-						// floor
-						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_FLOOR_1);
-					}else if(currentPixel == 0xFF555555) {
-						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_FLOOR_2);
-					}else if(currentPixel == 0xFF1D1D1D) {
-						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_FLOOR_3);
-					}else if(currentPixel == 0xFFFFFFFF) {
-						// Wall
-						tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_WALL);
-					}else if(currentPixel == 0xFF0000FF) {
-						// Player
-						Game.player.setX(xx*TILE_SIZE);
-						Game.player.setY(yy*TILE_SIZE);
-					}else if(currentPixel == 0xFFFF0000) {
-						// Enemy
-						Enemy en = new Enemy(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-						Game.entities.add(en);
-						Game.enemies.add(en);
-					}else if(currentPixel == 0xFFFF8200) {
-						// Fireball
-						Fireball fireball = new Fireball(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-						fireball.setMask(4, 0, 8, 16);
-						Game.entities.add(fireball);
-					}else if(currentPixel == 0xFF14FF00) {
-						// Health potion
-						HealthPotion healthPotion = new HealthPotion(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-						healthPotion.setMask(4, 0, 8, 16);
-						Game.entities.add(healthPotion);
-					}else if(currentPixel == 0xFF6F009F) {
-						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_RITUAL_FLOOR);
-					}else if(currentPixel == 0xFFEE03FF) {
-						xStatue = xx;
-						yStatue = yy;
-						tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_RITUAL_FLOOR);
-					}else if(currentPixel == 0xFF6C0073) {
-						tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_RITUAL_FLOOR);
+						case 0xFF9D8686: // Wall facing down
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_WALL[2][1]);
+							break;
+						case 0xFF786565: // Wall facing right
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_WALL[1][2]);
+							break;
+						case 0xFF665252: // Wall middle
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_WALL[1][1]);
+							break;
+						case 0xFF5D4848: // Wall facing left
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_WALL[1][0]);
+							break;
+						case 0xFF3A3131: // Wall facing up
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_WALL[0][1]);
+							break;
+						case 0xFF8A7575: // Wall corner down-left
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_WALL[2][0]);
+							break;
+						case 0xFFB19898: // Wall corner down-right
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_WALL[2][2]);
+							break;
+						case 0xFF4A3B3B: // Wall corner top-right
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_WALL[0][2]);
+							break;
+						case 0xFF2D2C2C: // Wall corner top-left
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_WALL[0][0]);
+							break;
+						case 0xFF999999: // Stone Floor Middle
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[1][1]);
+							break;
+						case 0xFF333333: // Stone Floor facing up
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[0][1]);
+							break;
+						case 0xFFB8B8B8: // Stone Floor facing right
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[1][2]);
+							break;
+						case 0xFFDEDCDC: // Stone Floor facing down
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[2][1]);
+							break;
+						case 0xFF777777: // Stone Floor facing left
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[1][0]);
+							break;
+						case 0xFF181717: // Stone Floor top-left
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[0][0]);
+							break;
+						case 0xFF555555: // Stone Floor top-right
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[0][2]);
+							break;
+						case 0xFFCECECE: // Stone Floor down-left
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[2][0]);
+							break;
+						case 0xFFF7F5F5: // Stone Floor down-right
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[2][2]);
+							break;
+						case 0xFFEE03FF: // Tile that statue is placed
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[1][1]);
+							statue = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_RITUAL_STATUE);
+							break;
+						case 0xFF6C0073: // Stone floor but is statue
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[1][1]);
+							break;
+						case 0xFFF4FF00: // Health Potion
+							HealthPotion healthPotion = new HealthPotion(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+							healthPotion.setMask(4, 0, 8, 16);
+							Game.entities.add(healthPotion);
+							break;
+						case 0xFFFF8200: // FireBall
+							Fireball fireball = new Fireball(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+							fireball.setMask(4, 0, 8, 16);
+							Game.entities.add(fireball);
+							break;
+						case 0xFFFF0000: // Enemy
+							Enemy en = new Enemy(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+							Game.entities.add(en);
+							Game.enemies.add(en);
+							break;
+						case 0xFF0000FF: // Player
+							Game.player.setX(xx*TILE_SIZE);
+							Game.player.setY(yy*TILE_SIZE);
+							break;
+						case 0xFF0E0404: // Rock
+							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_ROCK);
+							break;
+						default:
+							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_GRASS[1][1]);
+							break;
 					}
 				}
 			}
-			
-			statue = new WallTile(xStatue*TILE_SIZE, yStatue*TILE_SIZE, Tile.TILE_RITUAL_STATUE);
-						
+									
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

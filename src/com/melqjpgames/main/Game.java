@@ -50,6 +50,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public static List<LuteFire> luteFires;
 	public static List<EnemyDied> deadEnemies;
 	public static Spritesheet spritesheet;
+	public static Spritesheet spritesheet1;
 	
 	public static World world;
 	public static Player player;
@@ -79,6 +80,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	public void initGame(String level) {
 		spritesheet = new Spritesheet("/spritesheet.png");
+		spritesheet1 = new Spritesheet("/spritesheet1.png");
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
@@ -94,7 +96,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	
 	public void initFrame() {
-		frame = new JFrame("Game #1");
+		frame = new JFrame("Zagan Quest");
 		frame.add(this);
 		frame.setResizable(false);
 		frame.pack();
@@ -266,8 +268,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 						currentWave++;
 						break;
 					case 2: // Jumps to wave 3
+						deadEnemies.removeAll(deadEnemies);
+						currentWave++;
 						break;
-						
 					case 3: // Jumps to level 2
 						break;
 				}

@@ -13,7 +13,7 @@ public class Skeleton extends Enemy{
 		index = 0;
 		nOfSprites = 4;
 		this.dir = dir;
-		fov = 5;
+		fov = 8;
 		
 		// Initiates sprites
 		upEnemy = new BufferedImage[nOfSprites];
@@ -21,10 +21,10 @@ public class Skeleton extends Enemy{
 		rightEnemy = new BufferedImage[nOfSprites];
 		leftEnemy = new BufferedImage[nOfSprites];
 		
-		enemyDamageUp = Game.spritesheet.getSprite(64, 80, 16, 16);
-		enemyDamageDown = Game.spritesheet.getSprite(64, 96, 16, 16);
-		enemyDamageRight = Game.spritesheet.getSprite(64, 112, 16, 16);
-		enemyDamageLeft = Game.spritesheet.getSprite(64, 128, 16, 16);
+		enemyDamageUp = Game.spritesheet.getSprite(80, 80, 16, 16);
+		enemyDamageDown = Game.spritesheet.getSprite(80, 96, 16, 16);
+		enemyDamageRight = Game.spritesheet.getSprite(80, 112, 16, 16);
+		enemyDamageLeft = Game.spritesheet.getSprite(80, 128, 16, 16);
 		
 		for(int i = 0; i < nOfSprites; i++) {
 			upEnemy[i] = Game.spritesheet.getSprite(160 + i*16, 0, getWidth(), getHeight());
