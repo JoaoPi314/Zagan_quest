@@ -3,206 +3,352 @@ package com.melqjpgames.entities;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import com.melqjpgames.entities.types.Directions;
 import com.melqjpgames.main.Game;
 import com.melqjpgames.world.Camera;
 import com.melqjpgames.world.World;
 
 public class Player extends Entity{
 
-	// Directions
-	private boolean right, up, left, down;
-	private double speed;
-	private int upDir = 0, downDir = 1, rightDir = 2, leftDir = 3;
-	private int dir;
-	private boolean moved;
+	//---------------------------- Attributes ----------------------------------//	
+
+	/**
+	 * Directions of player movement
+	 */
+	private boolean right, left, up, down;
+	
+	
 	// Sprites
-	private BufferedImage[] upPlayer;
-	private BufferedImage[] downPlayer;
+	/**
+	 * Sprites of player facing right
+	 */
 	private BufferedImage[] rightPlayer;
+	/**
+	 * sprites of player facing left
+	 */
 	private BufferedImage[] leftPlayer;
-	private int nOfSprites;
+	/**
+	 * Sprites of player facing up
+	 */
+	private BufferedImage[] upPlayer;
+	/**
+	 * Sprites of player facing down
+	 */
+	private BufferedImage[] downPlayer;
 	
-	private BufferedImage playerDamageUp;
-	private BufferedImage playerDamageDown;
+	/**
+	 * Sprite of player taking damage facing right
+	 */
 	private BufferedImage playerDamageRight;
+	/**
+	 * Sprite of player taking damage facing left
+	 */
 	private BufferedImage playerDamageLeft;
-	
+	/**
+	 * Sprite of player taking damage facing up
+	 */
+	private BufferedImage playerDamageUp;
+	/**
+	 * Sprite of player taking damage facing down
+	 */
+	private BufferedImage playerDamageDown;
+
+	/**
+	 * Sprite of player dead
+	 */
 	private BufferedImage playerDead;
 	
-	// Animation of sprite
-	private int frames;
-	private final int maxFrames = 10;
-	private int index;
-	private final int maxIndex = 3;
-	
-	private double life;
-	public static double maxLife = 12;
+	/**
+	 * Flag that indicates if player has fireball power
+	 */
 	private boolean hasFireball;
+	/**
+	 * Number of fireballs remaining
+	 */
 	private int fireballs;
+	/**
+	 * Flag that indicates if player is shooting
+	 */
 	private boolean shoot;
-	
+	/**
+	 * Flag that indicates if player has shoot recently (to apply cooldown)
+	 */
 	private boolean coolDown;
+	/**
+	 * Cooldown frames (Cooldown calculus)
+	 */
 	private double framesCoolDown;
+	/**
+	 * Number of frames that cooldown must be applied (cooldown calculus)
+	 */
 	private double maxFramesCoolDown;
 	
+	//---------------------------- Methods ----------------------------------//	
+
 	
-	public boolean isDamaged = false;
-	private int damageFrames = 0;
-	private int kbSpeed = 3;
-	private  int kbDir;
-	
-	
-	
-	/*
-	 * Constructor receives the position and size of player
+	/**
+	 * The constructor creates a player with the parameters
+	 * @param x x position
+	 * @param y y position
+	 * @param width player width
+	 * @param height player height
 	 */
 	public Player(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		speed = 0.9;
-		frames = 0;
-		index = 0;
-		nOfSprites = 4;
-		dir = downDir;
-		life = 12;
-		setHasFireball(false);
-		setFireballs(0);
+		
+		this.setSpeed(0.9);
+		this.setFaceDir(Directions.DOWN); 
+		this.setLife(12);
+		
+		this.setHasFireball(false);
+		this.setFireballs(0);
+		
 		// Initiates sprites
-		upPlayer = new BufferedImage[nOfSprites];
-		downPlayer = new BufferedImage[nOfSprites];
-		rightPlayer = new BufferedImage[nOfSprites];
-		leftPlayer = new BufferedImage[nOfSprites];
+		this.rightPlayer = new BufferedImage[this.getnOfSprites()];
+		this.leftPlayer = new BufferedImage[this.getnOfSprites()];
+		this.upPlayer = new BufferedImage[this.getnOfSprites()];
+		this.downPlayer = new BufferedImage[this.getnOfSprites()];
+
+		this.playerDamageRight = Game.spritesheet.getSprite(64, 48, this.getWidth(), this.getHeight());
+		this.playerDamageLeft = Game.spritesheet.getSprite(64, 64, this.getWidth(), this.getHeight());
+		this.playerDamageUp = Game.spritesheet.getSprite(64, 16, this.getWidth(), this.getHeight());
+		this.playerDamageDown = Game.spritesheet.getSprite(64, 32, this.getWidth(), this.getHeight());
 		
-		playerDamageUp = Game.spritesheet.getSprite(64, 16, 16, 16);
-		playerDamageDown = Game.spritesheet.getSprite(64, 32, 16, 16);
-		playerDamageRight = Game.spritesheet.getSprite(64, 48, 16, 16);
-		playerDamageLeft = Game.spritesheet.getSprite(64, 64, 16, 16);
+		this.playerDead = Game.spritesheet.getSprite(16, 144, this.getWidth(), this.getHeight());
 		
-		playerDead = Game.spritesheet.getSprite(16, 144, getWidth(), getHeight());
-		
-		
-		for(int i = 0; i < nOfSprites; i++) {
-			upPlayer[i] = Game.spritesheet.getSprite(i*16, 16, getWidth(), getHeight());
-			downPlayer[i] = Game.spritesheet.getSprite(i*16, 32, getWidth(), getHeight());
-			rightPlayer[i] = Game.spritesheet.getSprite(i*16, 48, getWidth(), getHeight());
-			leftPlayer[i] = Game.spritesheet.getSprite(i*16, 64, getWidth(), getHeight());
+		for(int i = 0; i < this.getnOfSprites(); i++) {
+			this.rightPlayer[i] = Game.spritesheet.getSprite(i*16, 48, this.getWidth(), this.getHeight());
+			this.leftPlayer[i] = Game.spritesheet.getSprite(i*16, 64, this.getWidth(), this.getHeight());
+			this.upPlayer[i] = Game.spritesheet.getSprite(i*16, 16, this.getWidth(), this.getHeight());
+			this.downPlayer[i] = Game.spritesheet.getSprite(i*16, 32, this.getWidth(), this.getHeight());
 		}
 		
 	}
 	
-	// Update and render methods
 	
-	public void update() {
-		moved = false;
-		if(isRight() && World.isFree((int)(getX() + speed), (int) getY())){
-			setX(getX() + speed);
-			dir = rightDir;
-			moved = true;
-		}else if(isLeft() && World.isFree((int)(getX() - speed), (int) getY())) {
-			setX(getX() - speed);
-			dir = leftDir;
-			moved = true;
-		}
-		if(isUp() && World.isFree((int)getX(), (int) (getY() - speed))) {
-			setY(getY() - speed);
-			dir = upDir;
-			moved = true;
-		}else if(isDown() && World.isFree((int)getX(), (int) (getY() + speed))) {
-			setY(getY() + speed);
-			dir = downDir;
-			moved = true;
-		}
-		// By now, always moving
-		if(isDamaged) {
-			if(getKbDir() == rightDir && World.isFree((int)(getX() + speed*kbSpeed), (int) getY())) {
-				setX(getX() + speed*kbSpeed);
-				moved = true;
-			}else if(getKbDir() == leftDir && World.isFree((int)(getX() - speed*kbSpeed), (int) getY())) {
-				setX(getX() - speed*kbSpeed);
-				moved = true;
-			}
-			if(getKbDir() == upDir && World.isFree((int)getX(), (int) (getY() - speed*kbSpeed))) {
-				setY(getY() - speed*kbSpeed);
-				moved = true;
-			}else if(getKbDir() == downDir && World.isFree((int)getX(), (int) (getY() + speed*kbSpeed))) {
-				setY(getY() + speed*kbSpeed);
-				moved = true;
-			}
-		}
-		if(moved) {
-			frames++;
-			if(frames == maxFrames) {
-				frames = 0;
-				index++;
-				if(index > maxIndex) {
-					index = 0;
-				}
-			}
-		}
-		checkItens();
+	/**
+	 * @return the right
+	 */
+	public boolean isRight() {
+		return right;
+	}
+
+	/**
+	 * @param right the right to set
+	 */
+	public void setRight(boolean right) {
+		this.right = right;
+	}
+
+	/**
+	 * @return the left
+	 */
+	public boolean isLeft() {
+		return left;
+	}
+
+	/**
+	 * @param left the left to set
+	 */
+	public void setLeft(boolean left) {
+		this.left = left;
+	}
+
+	/**
+	 * @return the up
+	 */
+	public boolean isUp() {
+		return up;
+	}
+
+	/**
+	 * @param up the up to set
+	 */
+	public void setUp(boolean up) {
+		this.up = up;
+	}
+
+	/**
+	 * @return the down
+	 */
+	public boolean isDown() {
+		return down;
+	}
+
+	/**
+	 * @param down the down to set
+	 */
+	public void setDown(boolean down) {
+		this.down = down;
+	}
+
+	/**
+	 * @return the hasFireball
+	 */
+	public boolean isHasFireball() {
+		return hasFireball;
+	}
+
+	/**
+	 * @param hasFireball the hasFireball to set
+	 */
+	public void setHasFireball(boolean hasFireball) {
+		this.hasFireball = hasFireball;
+	}
+
+	/**
+	 * @return the fireballs
+	 */
+	public int getFireballs() {
+		return fireballs;
+	}
+
+	/**
+	 * @param fireballs the fireballs to set
+	 */
+	public void setFireballs(int fireballs) {
+		this.fireballs = fireballs;
+	}
+
+	/**
+	 * @return the shoot
+	 */
+	public boolean isShoot() {
+		return shoot;
+	}
+
+	/**
+	 * @param shoot the shoot to set
+	 */
+	public void setShoot(boolean shoot) {
+		this.shoot = shoot;
+	}
+
+	/**
+	 * @return the coolDown
+	 */
+	public boolean isCoolDown() {
+		return coolDown;
+	}
+
+	/**
+	 * @param coolDown the coolDown to set
+	 */
+	public void setCoolDown(boolean coolDown) {
+		this.coolDown = coolDown;
+	}
+
+	/**
+	 * @return the framesCoolDown
+	 */
+	public double getFramesCoolDown() {
+		return framesCoolDown;
+	}
+
+	/**
+	 * @param framesCoolDown the framesCoolDown to set
+	 */
+	public void setFramesCoolDown(double framesCoolDown) {
+		this.framesCoolDown = framesCoolDown;
+	}
+
+	/**
+	 * @return the maxFramesCoolDown
+	 */
+	public double getMaxFramesCoolDown() {
+		return maxFramesCoolDown;
+	}
+
+	/**
+	 * @param maxFramesCoolDown the maxFramesCoolDown to set
+	 */
+	public void setMaxFramesCoolDown(double maxFramesCoolDown) {
+		this.maxFramesCoolDown = maxFramesCoolDown;
+	}
+
+	/**
+	 * Method to calculate player movement based on
+	 * user inputs
+	 */
+	private void controlledMovement() {
 		
-		if(isDamaged) {
-			damageFrames++;
-			if(damageFrames ==8) {
-				damageFrames = 0;
-				isDamaged = false;
-			}
+		this.setMoving(false);
+		
+		if(this.isRight() && World.isFree((int)(this.getX() + this.getSpeed()), (int) this.getY())){
+			this.setX(this.getX() + this.getSpeed());
+			this.setFaceDir(Directions.RIGHT);
+			this.setMoving(true);
+		}else if(this.isLeft() && World.isFree((int)(this.getX() - this.getSpeed()), (int) this.getY())) {
+			this.setX(this.getX() - this.getSpeed());
+			this.setFaceDir(Directions.LEFT);
+			this.setMoving(true);
 		}
-		
-		if(isShoot() && !isCoolDown()) {
-			// FIREEEE
-			shoot = false;
-			int dx = 0;
-			int dy = 0;
-			if(dir == upDir) {
-				dy = -1;
-			}else if(dir == downDir) {
-				dy = 1;
-			}else if(dir == rightDir) {
-				dx = 1;
-			}else if(dir == leftDir) {
-				dx = -1;
-			}
-			setCoolDown(true);
-			
-			
-			if(hasFireball && fireballs > 0) {	
-				FireballShoot fire = new FireballShoot((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), dir, dx, dy);
-				Game.fireballs.add(fire);
-				this.fireballs --;
-				
-				if(fireballs <= 0)
-					hasFireball = false;
-				
-				setMaxFramesCoolDown(60);
-			}else {
-				int randFire = Game.rand.nextInt(3);
-				LuteFire fire = new LuteFire((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), dir, dx, dy, randFire);
-				Game.luteFires.add(fire);
-				setMaxFramesCoolDown(30);
-			}
-			setFramesCoolDown(getMaxFramesCoolDown());
+		if(this.isUp() && World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()))) {
+			this.setY(this.getY() - this.getSpeed());
+			this.setFaceDir(Directions.UP);
+			this.setMoving(true);
+		}else if(this.isDown() && World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()))) {
+			this.setY(this.getY() + this.getSpeed());
+			this.setFaceDir(Directions.DOWN);
+			this.setMoving(true);
 		}
-		
-		if(isCoolDown()) {
-			setFramesCoolDown(getFramesCoolDown() - 1);
-			if(getFramesCoolDown() <= 0) {
-				setCoolDown(false);
-			}
-		}
-		
-		
-		
-		// Makes camera follow player
-		Camera.x = Camera.clamp((int)getX() - (Game.WIDTH / 2), 0, World.WIDTH*16 - Game.WIDTH);
-		Camera.y = Camera.clamp((int)getY() - (Game.HEIGHT / 2), 0, World.HEIGHT*16 - Game.HEIGHT);
 		
 	}
 
+	/**
+	 * Method to calculate player movement when it is
+	 * taking damage
+	 */
+	private void damageMovement() {
+		if(this.isDamaged()) {
+			
+			switch(this.getKbDir()) {
+				case RIGHT:
+					if(World.isFree((int)(this.getX() + this.getSpeed()*this.getKbSpeed()), (int) this.getY())) {
+						this.setX(this.getX() + this.getSpeed()*this.getKbSpeed());
+						this.setMoving(true);
+					}
+					break;
+				case LEFT:
+					if(World.isFree((int)(this.getX() - this.getSpeed()*this.getKbSpeed()), (int) this.getY())) {
+						this.setX(this.getX() - this.getSpeed()*this.getKbSpeed());
+						this.setMoving(true);
+					}
+					break;
+				case UP:
+					if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()*this.getKbSpeed()))) {
+						this.setY(this.getY() - this.getSpeed()*this.getKbSpeed());
+						this.setMoving(true);						
+					}
+					break;
+				case DOWN:
+					if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()*this.getKbSpeed()))) {
+						this.setY(this.getY() + this.getSpeed()*this.getKbSpeed());
+						this.setMoving(true);						
+					}
+					break;
+				default:
+					break;
+			
+			}
+			
+			// Sprite damage calculus
+			damageFrames++;
+			if(damageFrames ==8) {
+				damageFrames = 0;
+				setDamaged(false);
+			}	
+		}
+	}
+	
+	/**
+	 * Method to check collision of player with collectibles
+	 */
 	public void checkItens() {
 		for(int i = 0; i < Game.entities.size(); i++) {
 			Entity en = Game.entities.get(i);
 			if(en instanceof HealthPotion) {
-				if(Entity.isColiding(this, en)) {
+				if(GenericEntity.isColliding(this, en)) {
 					setLife(getLife() + 6);
 					if(getLife() > 12)
 						setLife(12);
@@ -210,7 +356,7 @@ public class Player extends Entity{
 					
 				}
 			}else if(en instanceof Fireball) {
-				if(Entity.isColiding(this, en)) {
+				if(GenericEntity.isColliding(this, en)) {
 					setHasFireball(true);
 					setFireballs(getFireballs() + 5);
 					Game.entities.remove(en);
@@ -220,131 +366,141 @@ public class Player extends Entity{
 		}
 	}
 	
-
-	public void render(Graphics g) {
-		if(!isDamaged) {
-			if(dir == upDir) {
-				g.drawImage(upPlayer[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}else if(dir == downDir) {
-				g.drawImage(downPlayer[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}else if(dir == rightDir) {
-				g.drawImage(rightPlayer[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}else if(dir == leftDir) {
-				g.drawImage(leftPlayer[index],  (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+	/**
+	 * Method to compute shooting logic
+	 */
+	private void shooting() {
+		if(this.isShoot() && !this.isCoolDown()) {
+			// FIRE
+			this.setShoot(false);
+			int dx = 0;
+			int dy = 0;
+			
+			switch(this.getFaceDir()) {
+				case RIGHT:
+					dx = 1;
+					break;
+				case LEFT:
+					dx = -1;
+					break;
+				case UP:
+					dy = -1;
+					break;
+				case DOWN:
+					dy = 1;
+					break;
+				default:
+					break;
 			}
-		}else {
-			if(dir == upDir) {
-				g.drawImage(playerDamageUp, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}else if(dir == downDir) {
-				g.drawImage(playerDamageDown, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}else if(dir == rightDir) {
-				g.drawImage(playerDamageRight, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}else if(dir == leftDir) {
-				g.drawImage(playerDamageLeft,  (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+			
+			// After shoot, player must wait a cooldown
+			this.setCoolDown(true);
+			
+			// If player has fireball power and fireballs remaining
+			if(this.isHasFireball() && this.getFireballs() > 0) {	
+				FireballShoot fire = new FireballShoot((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), this.getFaceDir(), dx, dy);
+				Game.fireballs.add(fire);
+				this.setFireballs(this.getFireballs() - 1);
+				
+				if(this.getFireballs() <= 0)
+					this.setHasFireball(false);
+				
+				// Cooldown time of fireball
+				this.setMaxFramesCoolDown(60);
+			}else { // Default shoot is lute fire
+				// Choose a random note sprite
+				int randFire = Game.rand.nextInt(3);
+				LuteFire fire = new LuteFire((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), this.getFaceDir(), dx, dy, randFire);
+				Game.luteFires.add(fire);
+				
+				// Cooldown time of lute fire
+				this.setMaxFramesCoolDown(30);
+			}
+			// The initial frames is equal to max frames
+			this.setFramesCoolDown(getMaxFramesCoolDown());
+		}
+		
+		// Cooldown calculus
+		if(this.isCoolDown()) {
+			this.setFramesCoolDown(this.getFramesCoolDown() - 1);
+			if(this.getFramesCoolDown() <= 0) {
+				this.setCoolDown(false);
 			}
 		}
 	}
+
+
+	public void update() {
+		
+		// Keyboard movement
+		this.controlledMovement();
+		
+		// Damage movement
+		this.damageMovement();
+
+		// Sprite update
+		this.countFrames(moving);
+		
+		// Check collectibles
+		this.checkItens();
 	
+		// Shooting update
+		this.shooting();
+		
+		// Makes camera follow player
+		Camera.x = Camera.clamp((int)getX() - (Game.WIDTH / 2), 0, World.WIDTH*16 - Game.WIDTH);
+		Camera.y = Camera.clamp((int)getY() - (Game.HEIGHT / 2), 0, World.HEIGHT*16 - Game.HEIGHT);
+		
+	}
+
+
+	public void render(Graphics g) {
+		
+		BufferedImage currentSprite;
+		
+		switch(this.getFaceDir()) {
+			case RIGHT:
+				if(!this.isDamaged()) {
+					currentSprite = this.rightPlayer[index];
+				}else {
+					currentSprite = this.playerDamageRight;
+				}
+				break;
+			case LEFT:
+				if(!this.isDamaged()) {
+					currentSprite = this.leftPlayer[index];
+				}else {
+					currentSprite = this.playerDamageLeft;
+				}
+				break;
+			case UP:
+				if(!this.isDamaged()) {
+					currentSprite = this.upPlayer[index];
+				}else {
+					currentSprite = this.playerDamageUp;
+				}
+				break;
+			case DOWN: // If DOWN or NONE, sprite down is rendered	
+			default:
+				if(!this.isDamaged()) {
+					currentSprite = this.downPlayer[index];
+				}else {
+					currentSprite = this.playerDamageDown;
+				}
+				break;
+		}
+		
+		g.drawImage(currentSprite, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+
+	}
+	
+	/**
+	 * Method to render sprite of player dead
+	 * @param g Graphics to render sprite
+	 */
 	public void renderDead(Graphics g) {
 		g.drawImage(playerDead, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 	}
 	
-	
-	// Getter and Setters methods
-	public boolean isRight() {
-		return right;
-	}
-
-	public void setRight(boolean right) {
-		this.right = right;
-	}
-
-	public boolean isLeft() {
-		return left;
-	}
-
-	public void setLeft(boolean left) {
-		this.left = left;
-	}
-
-	public boolean isUp() {
-		return up;
-	}
-
-	public void setUp(boolean up) {
-		this.up = up;
-	}
-
-	public boolean isDown() {
-		return down;
-	}
-
-	public void setDown(boolean down) {
-		this.down = down;
-	}
-
-	public double getLife() {
-		return life;
-	}
-	
-	public void setLife(double life) {
-		this.life = life;
-	}
-
-	public boolean isHasFireball() {
-		return hasFireball;
-	}
-
-	public void setHasFireball(boolean hasFireball) {
-		this.hasFireball = hasFireball;
-	}
-
-	public int getFireballs() {
-		return fireballs;
-	}
-
-	public void setFireballs(int fireballs) {
-		this.fireballs = fireballs;
-	}
-
-	public int getKbDir() {
-		return kbDir;
-	}
-
-	public void setKbDir(int kbDir) {
-		this.kbDir = kbDir;
-	}
-
-	public boolean isShoot() {
-		return shoot;
-	}
-
-	public void setShoot(boolean shoot) {
-		this.shoot = shoot;
-	}
-
-	public double getFramesCoolDown() {
-		return framesCoolDown;
-	}
-
-	public void setFramesCoolDown(double framesCoolDown) {
-		this.framesCoolDown = framesCoolDown;
-	}
-
-	public double getMaxFramesCoolDown() {
-		return maxFramesCoolDown;
-	}
-
-	public void setMaxFramesCoolDown(double maxFramesCoolDown) {
-		this.maxFramesCoolDown = maxFramesCoolDown;
-	}
-
-	public boolean isCoolDown() {
-		return coolDown;
-	}
-
-	public void setCoolDown(boolean coolDown) {
-		this.coolDown = coolDown;
-	}
 	
 }
