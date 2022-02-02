@@ -63,10 +63,12 @@ public abstract class GenericEntity {
 	/**
 	 * Index of sprite array (Animation calculus)
 	 */
-	private int index;
+	protected int index;
 	
 	//---------------------------- Methods ----------------------------------//	
 	
+
+
 	/**
 	 * The constructor takes the fundamental parameters of an Entity
 	 * @param x: x position
@@ -80,145 +82,176 @@ public abstract class GenericEntity {
 		this.setWidth(width);
 		this.setHeight(height);
 		
-		this.setMWidth(width);
-		this.setMHeight(height);
+		this.setmWidth(width);
+		this.setmHeight(height);
 		
 		// Other initializations
 		this.maxFrames = 10;
 		this.frames = 0;
 		this.index = 0;
-		this.setNOfSprites(4);
+		this.setnOfSprites(4);
 		
 	}
+	
+	
 	/**
-	 * Getter method to x attribute
-	 * @return x position
+	 * @return the x
 	 */
 	public double getX() {
-		return this.x;
+		return x;
 	}
+
+
 	/**
-	 * Getter method to y attribute
-	 * @return y position
-	 */
-	public double getY() {
-		return this.y;
-	}
-	/**
-	 * Getter method to width attribute
-	 * @return entity width
-	 */
-	public int getWidth() {
-		return this.width;
-	}
-	/**
-	 * Getter method to height attribute
-	 * @return entity height
-	 */
-	public int getHeight() {
-		return this.height;
-	}
-	/**
-	 * Getter method to maskX attribute
-	 * @return maskX position
-	 */
-	public int getMaskX() {
-		return this.maskX;
-	}
-	/**
-	 * Getter method to maskY attribute
-	 * @return maskY position
-	 */
-	public int getMaskY() {
-		return this.maskY;
-	}
-	/**
-	 * Getter method to mWidth attribute
-	 * @return Mask width
-	 */
-	public int getMWidth() {
-		return this.mWidth;
-	}
-	/**
-	 * Getter method to mHeight attribute
-	 * @return Mask height
-	 */
-	public int getMHeight() {
-		return this.mHeight;
-	}
-	/**
-	 * Getter method to nOfSprites attribute
-	 * @return total of sprites in entity
-	 */
-	public int getNOfSprites() {
-		return this.nOfSprites;
-	}
-	
-	
-	/**
-	 * Setter method to x attribute
-	 * @param x x position
+	 * @param x the x to set
 	 */
 	public void setX(double x) {
 		this.x = x;
 	}
+
+
 	/**
-	 * Setter method to y attribute
-	 * @param y y position
+	 * @return the y
+	 */
+	public double getY() {
+		return y;
+	}
+
+
+	/**
+	 * @param y the y to set
 	 */
 	public void setY(double y) {
 		this.y = y;
 	}
+
+
 	/**
-	 * Setter method to width attribute
-	 * @param width Entity width
+	 * @return the width
+	 */
+	public int getWidth() {
+		return width;
+	}
+
+
+	/**
+	 * @param width the width to set
 	 */
 	public void setWidth(int width) {
 		this.width = width;
 	}
+
+
 	/**
-	 * Setter method to height attribute
-	 * @param height Entity height
+	 * @return the height
+	 */
+	public int getHeight() {
+		return height;
+	}
+
+
+	/**
+	 * @param height the height to set
 	 */
 	public void setHeight(int height) {
 		this.height = height;
 	}
+
+
 	/**
-	 * Setter method to maskX attribute
-	 * @param maskX x mask position
+	 * @return the maskX
+	 */
+	public int getMaskX() {
+		return maskX;
+	}
+
+
+	/**
+	 * @param maskX the maskX to set
 	 */
 	public void setMaskX(int maskX) {
 		this.maskX = maskX;
 	}
+
+
 	/**
-	 * Setter method to maskY attribute
-	 * @param maskY y mask position
+	 * @return the maskY
+	 */
+	public int getMaskY() {
+		return maskY;
+	}
+
+
+	/**
+	 * @param maskY the maskY to set
 	 */
 	public void setMaskY(int maskY) {
 		this.maskY = maskY;
 	}
+
+
 	/**
-	 * Setter method to mWidth attribute
-	 * @param mWidth mask width
+	 * @return the mWidth
 	 */
-	public void setMWidth(int mWidth) {
+	public int getmWidth() {
+		return mWidth;
+	}
+
+
+	/**
+	 * @param mWidth the mWidth to set
+	 */
+	public void setmWidth(int mWidth) {
 		this.mWidth = mWidth;
 	}
+
+
 	/**
-	 * Setter method to mHeight attribute
-	 * @param mHeight mask height
+	 * @return the mHeight
 	 */
-	public void setMHeight(int mHeight) {
+	public int getmHeight() {
+		return mHeight;
+	}
+
+
+	/**
+	 * @param mHeight the mHeight to set
+	 */
+	public void setmHeight(int mHeight) {
 		this.mHeight = mHeight;
 	}
+
+
 	/**
-	 * Setter method to nOfSprites attribute
-	 * @param nOfSprites Number of sprites in entity
+	 * @return the nOfSprites
 	 */
-	public void setNOfSprites(int nOfSprites) {
+	public int getnOfSprites() {
+		return nOfSprites;
+	}
+
+
+	/**
+	 * @param nOfSprites the nOfSprites to set
+	 */
+	public void setnOfSprites(int nOfSprites) {
 		this.nOfSprites = nOfSprites;
 	}
-	
+
+	/**
+	 * @return the index
+	 */
+	public int getIndex() {
+		return index;
+	}
+
+
+	/**
+	 * @param index the index to set
+	 */
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
 	/**
 	 * Static method to check collision between two entities
 	 * @param e1 Generic entity 1
@@ -226,8 +259,8 @@ public abstract class GenericEntity {
 	 * @return true if e1 and e2 are colliding
 	 */
 	public static boolean isColliding(GenericEntity e1, GenericEntity e2) {
-		Rectangle e1Mask = new Rectangle((int)(e1.getX() + e1.getMaskX()), (int)(e1.getY() + e1.getMaskY()), e1.getMWidth(), e1.getMHeight());
-		Rectangle e2Mask = new Rectangle((int)(e2.getX() + e2.getMaskX()), (int)(e2.getY() + e2.getMaskY()), e2.getMWidth(), e2.getMHeight());
+		Rectangle e1Mask = new Rectangle((int)(e1.getX() + e1.getMaskX()), (int)(e1.getY() + e1.getMaskY()), e1.getmWidth(), e1.getmHeight());
+		Rectangle e2Mask = new Rectangle((int)(e2.getX() + e2.getMaskX()), (int)(e2.getY() + e2.getMaskY()), e2.getmWidth(), e2.getmHeight());
 		
 		return e1Mask.intersects(e2Mask);
 	}	
@@ -242,9 +275,10 @@ public abstract class GenericEntity {
 	public void setMask(int maskX, int maskY, int mWidth, int mHeight) {
 		this.setMaskX(maskX);
 		this.setMaskY(maskY);
-		this.setMWidth(mWidth);
-		this.setMHeight(mHeight);
+		this.setmWidth(mWidth);
+		this.setmHeight(mHeight);
 	}
+	
 	/**
 	 * Method to count the frames necessary to update Entity sprite
 	 * @param count Flag that indicates if entity sprite must be updated
@@ -255,7 +289,7 @@ public abstract class GenericEntity {
 			if(this.frames == this.maxFrames) {
 				this.frames = 0;
 				this.index++;
-				if(this.index >= this.getNOfSprites()) {
+				if(this.index >= this.getnOfSprites()) {
 					this.index = 0;
 				}
 			}
