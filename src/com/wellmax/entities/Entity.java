@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
+import com.wellmax.world.Camera;
+import com.wellmax.world.World;
 
 /**
  *  The Entity class covers all entities that
@@ -60,6 +62,44 @@ public class Entity extends GenericEntity{
 	 * Knockback direction when taking damage
 	 */
 	protected Directions kbDir;
+	
+	
+	// Sprites
+	/**
+	 * Sprites of entity facing right
+	 */
+	protected BufferedImage[] enRight;
+	/**
+	 * sprites of entity facing left
+	 */
+	protected BufferedImage[] enLeft;
+	/**
+	 * Sprites of entity facing up
+	 */
+	protected BufferedImage[] enUp;
+	/**
+	 * Sprites of entity facing down
+	 */
+	protected BufferedImage[] enDown;
+	
+	/**
+	 * Sprite of entity taking damage facing right
+	 */
+	protected BufferedImage enDamageRight;
+	/**
+	 * Sprite of entity taking damage facing left
+	 */
+	protected BufferedImage enDamageLeft;
+	/**
+	 * Sprite of entity taking damage facing up
+	 */
+	protected BufferedImage enDamageUp;
+	/**
+	 * Sprite of entity taking damage facing down
+	 */
+	protected BufferedImage enDamageDown;
+
+	
 	
 	//---------------------------- Methods ----------------------------------//	
 
@@ -248,7 +288,51 @@ public class Entity extends GenericEntity{
 		this.kbDir = kbDir;
 	}
 
-
+	/**
+	 * Method to calculate player movement when it is
+	 * taking damage
+	 */
+	protected void damageMovement() {
+		if(this.isDamaged()) {
+			
+			switch(this.getKbDir()) {
+				case RIGHT:
+					if(World.isFree((int)(this.getX() + this.getSpeed()*this.getKbSpeed()), (int) this.getY())) {
+						this.setX(this.getX() + this.getSpeed()*this.getKbSpeed());
+						this.setMoving(true);
+					}
+					break;
+				case LEFT:
+					if(World.isFree((int)(this.getX() - this.getSpeed()*this.getKbSpeed()), (int) this.getY())) {
+						this.setX(this.getX() - this.getSpeed()*this.getKbSpeed());
+						this.setMoving(true);
+					}
+					break;
+				case UP:
+					if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()*this.getKbSpeed()))) {
+						this.setY(this.getY() - this.getSpeed()*this.getKbSpeed());
+						this.setMoving(true);						
+					}
+					break;
+				case DOWN:
+					if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()*this.getKbSpeed()))) {
+						this.setY(this.getY() + this.getSpeed()*this.getKbSpeed());
+						this.setMoving(true);						
+					}
+					break;
+				default:
+					break;
+			
+			}
+			
+			// Sprite damage calculus
+			damageFrames++;
+			if(damageFrames ==8) {
+				damageFrames = 0;
+				setDamaged(false);
+			}	
+		}
+	}
 	
 	@Override
 	public void update() {
@@ -259,6 +343,42 @@ public class Entity extends GenericEntity{
 	@Override
 	public void render(Graphics g) {
 		
+		BufferedImage currentSprite;
+		
+		switch(this.getFaceDir()) {
+			case RIGHT:
+				if(!this.isDamaged()) {
+					currentSprite = this.enRight[index];
+				}else {
+					currentSprite = this.enDamageRight;
+				}
+				break;
+			case LEFT:
+				if(!this.isDamaged()) {
+					currentSprite = this.enLeft[index];
+				}else {
+					currentSprite = this.enDamageLeft;
+				}
+				break;
+			case UP:
+				if(!this.isDamaged()) {
+					currentSprite = this.enUp[index];
+				}else {
+					currentSprite = this.enDamageUp;
+				}
+				break;
+			case DOWN: // If DOWN or NONE, sprite down is rendered	
+			default:
+				if(!this.isDamaged()) {
+					currentSprite = this.enDown[index];
+				}else {
+					currentSprite = this.enDamageDown;
+				}
+				break;
+		}
+		
+		g.drawImage(currentSprite, (int)(this.getX() - Camera.x), (int)(this.getY() - Camera.y), null);
+
 	}
 
 }

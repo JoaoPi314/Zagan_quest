@@ -4,48 +4,15 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import com.melqjpgames.entities.types.Directions;
-import com.melqjpgames.main.Game;
-import com.melqjpgames.world.Camera;
-import com.melqjpgames.world.World;
+import com.wellmax.entities.types.Directions;
+import com.wellmax.entities.types.Utils;
+import com.wellmax.main.Game;
+import com.wellmax.world.Camera;
+import com.wellmax.world.World;
 
 public class Enemy extends Entity{
 
 	//---------------------------- Attributes ----------------------------------//	
-
-	// Sprites
-	/**
-	 * Sprites of enemy facing right
-	 */
-	protected BufferedImage[] rightEnemy;
-	/**
-	 * Sprites of enemy facing left
-	 */
-	protected BufferedImage[] leftEnemy;
-	/**
-	 * Sprites of enemy facing up
-	 */
-	protected BufferedImage[] upEnemy;
-	/**
-	 * Sprites of enemy facing down
-	 */
-	protected BufferedImage[] downEnemy;
-	/**
-	 * Sprite of enemy taking damage facing right
-	 */
-	protected BufferedImage enemyDamageRight;
-	/**
-	 * Sprite of enemy taking damage facing left
-	 */
-	protected BufferedImage enemyDamageLeft;
-	/**
-	 * Sprite of enemy taking damage facing up
-	 */
-	protected BufferedImage enemyDamageUp;
-	/**
-	 * Sprite of enemy taking damage facing down
-	 */
-	protected BufferedImage enemyDamageDown;
 	
 	/**
 	 * Fog of view
@@ -56,7 +23,13 @@ public class Enemy extends Entity{
 	 */
 	protected boolean dying;
 	
+	/**
+	 * Damage dealed by enemy
+	 */
+	protected double damage;
+	 
 	//---------------------------- Methods ----------------------------------//	
+	
 	
 	/*
 	 * Constructor receives the position and size of player
@@ -68,28 +41,27 @@ public class Enemy extends Entity{
 		this.setFaceDir(Directions.DOWN); 
 		this.setLife(10);
 		this.setFov(5);
+		this.setDefense(1);
 		
 		// Initiates sprites
-		this.rightEnemy = new BufferedImage[this.getnOfSprites()];
-		this.leftEnemy = new BufferedImage[this.getnOfSprites()];
-		this.upEnemy = new BufferedImage[this.getnOfSprites()];
-		this.downEnemy = new BufferedImage[this.getnOfSprites()];
+		this.enRight = new BufferedImage[this.getnOfSprites()];
+		this.enLeft = new BufferedImage[this.getnOfSprites()];
+		this.enUp = new BufferedImage[this.getnOfSprites()];
+		this.enDown = new BufferedImage[this.getnOfSprites()];
 
-		this.enemyDamageRight = Game.spritesheet.getSprite(64, 112, this.getWidth(), this.getHeight());
-		this.enemyDamageLeft = Game.spritesheet.getSprite(64, 128, this.getWidth(), this.getHeight());
-		this.enemyDamageUp = Game.spritesheet.getSprite(64, 80, this.getWidth(), this.getHeight());
-		this.enemyDamageDown = Game.spritesheet.getSprite(64, 96, this.getWidth(), this.getHeight());
+		this.enDamageRight = Game.spritesheet.getSprite(64, 112, this.getWidth(), this.getHeight());
+		this.enDamageLeft = Game.spritesheet.getSprite(64, 128, this.getWidth(), this.getHeight());
+		this.enDamageUp = Game.spritesheet.getSprite(64, 80, this.getWidth(), this.getHeight());
+		this.enDamageDown = Game.spritesheet.getSprite(64, 96, this.getWidth(), this.getHeight());
 
 		for(int i = 0; i < this.getnOfSprites(); i++) {
-			this.rightEnemy[i] = Game.spritesheet.getSprite(i*16, 112, this.getWidth(), this.getHeight());
-			this.leftEnemy[i] = Game.spritesheet.getSprite(i*16, 128, this.getWidth(), this.getHeight());
-			this.upEnemy[i] = Game.spritesheet.getSprite(i*16, 80, this.getWidth(), this.getHeight());
-			this.downEnemy[i] = Game.spritesheet.getSprite(i*16, 96, this.getWidth(), this.getHeight());
-
+			this.enRight[i] = Game.spritesheet.getSprite(i*16, 112, this.getWidth(), this.getHeight());
+			this.enLeft[i] = Game.spritesheet.getSprite(i*16, 128, this.getWidth(), this.getHeight());
+			this.enUp[i] = Game.spritesheet.getSprite(i*16, 80, this.getWidth(), this.getHeight());
+			this.enDown[i] = Game.spritesheet.getSprite(i*16, 96, this.getWidth(), this.getHeight());
 		}
 		
 	}
-	
 	
 	/**
 	 * @return the fov
@@ -119,6 +91,22 @@ public class Enemy extends Entity{
 	public void setDying(boolean dying) {
 		this.dying = dying;
 	}
+	
+	/**
+	 * @return the damage
+	 */
+	public double getDamage() {
+		return damage;
+	}
+
+
+	/**
+	 * @param damage the damage to set
+	 */
+	public void setDamage(double damage) {
+		this.damage = damage;
+	}
+
 
 	/**
 	 * Method to check if the player is near enemy
@@ -127,7 +115,7 @@ public class Enemy extends Entity{
 	private boolean nearPlayer() {
 		
 		boolean xAxisNear = (Math.abs(this.getX() - Game.player.getX()) <= this.getWidth()*this.getFov());
-		boolean yAxisNear = (Math.abs(this.getY() - Game.player.getY()) <= this.getHeight()*this.getFov()_;
+		boolean yAxisNear = (Math.abs(this.getY() - Game.player.getY()) <= this.getHeight()*this.getFov());
 		boolean movingChance = (Game.rand.nextInt(100) < 75);
 		boolean playerAlive = (Game.player.getLife() > 0);
 		
@@ -135,210 +123,19 @@ public class Enemy extends Entity{
 	}
 	
 	/**
-	 * Method to execute enemy IA
+	 * Method to check if the enemy will collide with another enemies
+	 * @param xx Next x position
+	 * @param yy Next y position
+	 * @return true if enemy collides with another enemy
 	 */
-	protected void enemyIA() {
-		
-	}
-	
-	
-	public void update() {
-		
-		this.setMoving(false);
-		
-		if(!this.isColidingWithPlayer() || Game.player.getLife() <= 0) {
-			if(nearPlayer()) {
-				if((int)x < (int)Game.player.getX() && World.isFree((int)(getX() + speed), (int) getY()) &&
-						!isColiding((int)(getX() + speed), (int)getY())) {
-					x += speed;
-					dir = rightDir;
-					moved = true;
-				}else if((int)x > (int)Game.player.getX() && World.isFree((int)(getX() - speed), (int) getY()) &&
-						!isColiding((int)(getX() - speed), (int)getY())) {
-					x -= speed;
-					dir = leftDir;
-					moved = true;
-				}else if((int)y < (int)Game.player.getY() && World.isFree((int)getX(), (int) (getY() + speed)) &&
-						!isColiding((int)getX(), (int)(getY() + speed))) {
-					y += speed;
-					dir = downDir;
-					moved = true;
-				}else if((int)y > (int)Game.player.getY() && World.isFree((int)getX(), (int) (getY() - speed)) &&
-						!isColiding((int)getX(), (int)(getY() - speed))) {
-					y -= speed;
-					dir = upDir;
-					moved = true;
-				}
-			}else {
-				int randDir;
-				
-				randDir = Game.rand.nextInt(4);
-				
-				if(Game.rand.nextInt(100) < 5) {
-					switch(randDir) {
-						case upDir:
-							dir = upDir;
-							if(World.isFree((int)getX(), (int) (getY() - speed)) &&
-									!isColiding((int)getX(), (int)(getY() - speed))) {
-								y -= speed;
-							}
-							
-							break;
-						case downDir:
-							dir = downDir;
-							if(World.isFree((int)getX(), (int) (getY() + speed)) &&
-									!isColiding((int)getX(), (int)(getY() + speed))) {
-								y += speed;
-							}
-							break;
-						case rightDir:
-							dir = rightDir;
-							if(World.isFree((int)(getX() + speed), (int) getY()) &&
-									!isColiding((int)(getX() + speed), (int)getY())) {
-								x += speed;	
-							}
-							break;
-						case leftDir:
-							dir = leftDir;
-							if(World.isFree((int)(getX() - speed), (int) getY()) &&
-									!isColiding((int)(getX() - speed), (int)getY())) {
-								x -= speed;	
-							}
-							break;
-							
-					}
-				}
-			}
-		}else {
-			// Attacking player
-			Game.player.setKbDir(dir);
-			if(Game.rand.nextInt(100) < 10) {
-				Game.player.setLife(Game.player.getLife() - 1);
-				Game.player.isDamaged = true;
-			}
-		}
-		
-		if(isDamaged) {
-			if(getKbDir() == rightDir && World.isFree((int)(getX() + speed*kbSpeed), (int) getY()) &&
-					!isColiding((int)(getX() + speed*kbSpeed), (int)getY())) {
-				setX(getX() + speed*kbSpeed);
-				moved = true;
-			}else if(getKbDir() == leftDir && World.isFree((int)(getX() - speed*kbSpeed), (int) getY()) &&
-					!isColiding((int)(getX() - speed*kbSpeed), (int)getY())) {
-				setX(getX() - speed*kbSpeed);
-				moved = true;
-			}
-			if(getKbDir() == upDir && World.isFree((int)getX(), (int) (getY() - speed*kbSpeed)) &&
-					!isColiding((int)getX(), (int)(getY() - speed*kbSpeed))) {
-				setY(getY() - speed*kbSpeed);
-				moved = true;
-			}else if(getKbDir() == downDir && World.isFree((int)getX(), (int) (getY() + speed*kbSpeed)) &&
-					!isColiding((int)getX(), (int)(getY() + speed*kbSpeed))) {
-				setY(getY() + speed*kbSpeed);
-				moved = true;
-			}
-		}
-		
-		if(isDamaged) {
-			damageFrames++;
-			if(damageFrames ==8) {
-				damageFrames = 0;
-				isDamaged = false;
-			}
-		}
-		
-		this.countFrames(moved);
-		
-		colidingBullet();
-		
-		if(this.life <= 0) {
-			selfDestruction();
-		}
-		
-	}
-	
-	public void render(Graphics g) {
-		
-		if(!isDamaged) {
-			if(dir == upDir) {
-				g.drawImage(upEnemy[index],  (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}else if(dir == downDir) {
-				g.drawImage(downEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}else if(dir == rightDir) {
-				g.drawImage(rightEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}else if(dir == leftDir) {
-				g.drawImage(leftEnemy[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}
-		}else {
-			if(dir == upDir) {
-				g.drawImage(enemyDamageUp, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}else if(dir == downDir) {
-				g.drawImage(enemyDamageDown, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}else if(dir == rightDir) {
-				g.drawImage(enemyDamageRight, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}else if(dir == leftDir) {
-				g.drawImage(enemyDamageLeft,  (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-			}
-
-		}
-	}
-	public void selfDestruction() {
-		Game.deadEnemies.add(new EnemyDied((int)getX(), (int)getY(), getWidth(), getHeight(), dir));
-		Game.entities.remove(this);
-		Game.enemies.remove(this);
-	}
-
-	public void colidingBullet() {
-		for(int i = 0; i < Game.fireballs.size(); i++) {
-			FireballShoot e = Game.fireballs.get(i);
-			
-			if(GenericEntity.isColliding(this, e)) {
-				this.kbDir = e.getDir();
-				this.kbSpeed = 3;
-				this.isDamaged = true;
-				this.life -= 5;
-				Game.fireballs.remove(i);
-				return;
-			}
-			
-		}
-		
-		for(int i = 0; i < Game.luteFires.size(); i++) {
-			LuteFire e = Game.luteFires.get(i);
-			
-			if(GenericEntity.isColliding(this, e)) {
-				this.isDamaged = true;
-				this.kbDir = e.getDir();
-				this.kbSpeed = 1;
-				this.life -= 2;
-				Game.luteFires.remove(i);
-				return;
-			}
-			
-		}
-		
-	}
-	
-	
-	public boolean isColidingWithPlayer() {
-		
-		Rectangle enemyCurrent = new Rectangle((int)(getX() + maskx), (int)(getY() + masky), maskw, maskh);
-		Rectangle player = new Rectangle((int)Game.player.getX(), (int)Game.player.getY(), 16, 16);
-		
-		return enemyCurrent.intersects(player);
-	}
-	
-	
-	public boolean isColiding(int xx, int yy) {
-		Rectangle enemyCurrent = new Rectangle(xx + maskx, yy + masky, maskw, maskh);
+	protected boolean isCollidingwithEnemies(int xx, int yy) {
 		
 		for(int i = 0; i < Game.enemies.size(); i++) {
 			Enemy e = Game.enemies.get(i);
 			if(e == this) {
 				continue;
 			}
-			Rectangle enemyTarget = new Rectangle((int)(e.getX() + maskx), (int)(e.getY() + masky), maskw, maskh);
-			if(enemyCurrent.intersects(enemyTarget)){
+			if(GenericEntity.isColliding(this, e)){
 				return true;
 			}
 		}
@@ -347,4 +144,151 @@ public class Enemy extends Entity{
 	}
 	
 
+	/**
+	 * Method to execute enemy IA
+	 */
+	protected void enemyIA() {
+		
+		if(!GenericEntity.isColliding(this, Game.player) || Game.player.getLife() <= 0) {
+			if(this.nearPlayer()) { // Enemy is near player
+				// Enemy to the player's left - Moves right
+				if((int)this.getX() < (int)Game.player.getX() && World.isFree((int)(this.getX() + this.getSpeed()), (int) this.getY()) &&
+						!this.isCollidingwithEnemies((int)(this.getX() + this.getSpeed()), (int)this.getY())) {
+					this.setX(this.getX() + this.getSpeed());
+					this.setFaceDir(Directions.RIGHT);
+					this.setMoving(true);
+				// Enemy to the player's right - Moves left
+				}else if((int)this.getX() > (int)Game.player.getX() && World.isFree((int)(this.getX() - this.getSpeed()), (int) this.getY()) &&
+						!this.isCollidingwithEnemies((int)(this.getX() - this.getSpeed()), (int)this.getY())) {
+					this.setX(this.getX() - this.getSpeed());
+					this.setFaceDir(Directions.LEFT);
+					this.setMoving(true);
+				// Enemy above player - Moves down
+				}else if((int)this.getY() < (int)Game.player.getY() && World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed())) &&
+						!this.isCollidingwithEnemies((int)this.getX(), (int)(this.getY() + this.getSpeed()))) {
+					this.setY(this.getY() + this.getSpeed());
+					this.setFaceDir(Directions.DOWN);
+					this.setMoving(true);
+				// Enemy below player - Moves up
+				}else if((int)this.getY() > (int)Game.player.getY() && World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed())) &&
+						!this.isCollidingwithEnemies((int)this.getX(), (int)(this.getY() - this.getSpeed()))) {
+					this.setY(this.getY() - this.getSpeed());
+					this.setFaceDir(Directions.UP);
+					this.setMoving(true);
+				}
+			}else { // Enemy is idle - Moves randomly and slowly
+				
+				Directions randDir;
+				randDir = Utils.randomEnum(Directions.class);
+				
+				// Enemy has a chance of 5% to move
+				if(Game.rand.nextInt(100) < 5) {
+					switch(randDir) {
+						case RIGHT:
+							this.setFaceDir(Directions.RIGHT);
+							if(World.isFree((int)(this.getX() + this.getSpeed()), (int) this.getY()) &&
+									!this.isCollidingwithEnemies((int)(this.getX() + this.getSpeed()), (int)this.getY())) {
+								this.setX(this.getX() + this.getSpeed());
+							}
+							break;
+						case LEFT:
+							this.setFaceDir(Directions.LEFT);
+							if(World.isFree((int)(this.getX() - this.getSpeed()), (int) this.getY()) &&
+									!this.isCollidingwithEnemies((int)(this.getX() - this.getSpeed()), (int)this.getY())) {
+								this.setX(this.getX() - this.getSpeed());	
+							}
+							break;
+						case UP:
+							this.setFaceDir(Directions.UP);
+							if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed())) &&
+									!this.isCollidingwithEnemies((int)this.getX(), (int)(this.getY() - this.getSpeed()))) {
+								this.setY(this.getY() - this.getSpeed());	
+							}
+							break;
+						case DOWN: // Default movement is down
+						default:
+							this.setFaceDir(Directions.DOWN);
+							if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed())) &&
+									!this.isCollidingwithEnemies((int)this.getX(), (int)(this.getY() + this.getSpeed()))) {
+								this.setY(this.getY() + this.getSpeed());	
+							}
+							break;
+							
+					}
+				}
+			}
+		}else if(Game.player.getLife() > 0) { // If enemy is colliding with player, and player is alive
+			// Attacking player
+			Game.player.setKbDir(this.getFaceDir());
+			if(Game.rand.nextInt(100) < 5) { // When in contact, enemy has a chance of 5% to deal damage
+				Game.player.setLife(Game.player.getLife() - this.getDamage()/Game.player.getDefense());
+				Game.player.setDamaged(true);
+			}
+		}
+		
+	}
+	
+	/**
+	 * Method to compute if a projectile hits enemy
+	 */
+	protected void collidingProjectile() {
+		// Search for fireballs
+		for(int i = 0; i < Game.fireballs.size(); i++) {
+			FireballShoot e = Game.fireballs.get(i);
+			
+			if(GenericEntity.isColliding(this, e)) {
+				this.setKbDir(e.getFaceDir());
+				this.setKbspeed(3);
+				this.setDamaged(true);
+				this.setLife(this.getLife() - 5/this.getDamage());
+				Game.fireballs.remove(i);
+				return;
+			}
+			
+		}
+		// Search for LuteFires
+		for(int i = 0; i < Game.luteFires.size(); i++) {
+			LuteFire e = Game.luteFires.get(i);
+			
+			if(GenericEntity.isColliding(this, e)) {
+				this.setKbDir(e.getFaceDir());
+				this.setKbspeed(1);
+				this.setDamaged(true);
+				this.setLife(this.getLife() - 2/this.getDamage());
+				Game.luteFires.remove(i);
+				return;
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * Method called when enemy dies
+	 */
+	protected void enemyDeath() {
+		Game.deadEnemies.add(new DeadEnemy((int)getX(), (int)getY(), getWidth(), getHeight(), this.getFaceDir()));
+		Game.enemies.remove(this);
+	}
+
+	
+	
+	public void update() {
+		
+		this.setMoving(false);
+		
+		this.enemyIA();
+		
+		this.damageMovement();
+		
+		this.countFrames(this.isMoving());
+		
+		this.collidingProjectile();
+		
+		if(this.life <= 0) {
+			this.enemyDeath();
+		}
+		
+	}
 }
+	
