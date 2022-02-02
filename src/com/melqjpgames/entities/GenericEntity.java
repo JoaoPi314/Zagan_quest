@@ -3,6 +3,8 @@ package com.melqjpgames.entities;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import com.melqjpgames.entities.types.Directions;
+
 /**
  * Generic Entity class. The Entity, projectile and Collectible classes
  * will inheritate this class
@@ -77,6 +79,16 @@ public abstract class GenericEntity {
 		this.setY(y);
 		this.setWidth(width);
 		this.setHeight(height);
+		
+		this.setMWidth(width);
+		this.setMHeight(height);
+		
+		// Other initializations
+		this.maxFrames = 10;
+		this.frames = 0;
+		this.index = 0;
+		this.setNOfSprites(4);
+		
 	}
 	/**
 	 * Getter method to x attribute
@@ -134,6 +146,14 @@ public abstract class GenericEntity {
 	public int getMHeight() {
 		return this.mHeight;
 	}
+	/**
+	 * Getter method to nOfSprites attribute
+	 * @return total of sprites in entity
+	 */
+	public int getNOfSprites() {
+		return this.nOfSprites;
+	}
+	
 	
 	/**
 	 * Setter method to x attribute
@@ -191,6 +211,13 @@ public abstract class GenericEntity {
 	public void setMHeight(int mHeight) {
 		this.mHeight = mHeight;
 	}
+	/**
+	 * Setter method to nOfSprites attribute
+	 * @param nOfSprites Number of sprites in entity
+	 */
+	public void setNOfSprites(int nOfSprites) {
+		this.nOfSprites = nOfSprites;
+	}
 	
 	/**
 	 * Static method to check collision between two entities
@@ -218,16 +245,32 @@ public abstract class GenericEntity {
 		this.setMWidth(mWidth);
 		this.setMHeight(mHeight);
 	}
+	/**
+	 * Method to count the frames necessary to update Entity sprite
+	 * @param count Flag that indicates if entity sprite must be updated
+	 */
+	protected void countFrames(boolean count) {
+		if(count) {
+			this.frames++;
+			if(this.frames == this.maxFrames) {
+				this.frames = 0;
+				this.index++;
+				if(this.index >= this.getNOfSprites()) {
+					this.index = 0;
+				}
+			}
+		}
+	}
 	
 	/**
 	 * Abstract method to evaluate entity logic at each frame
 	 */
-	abstract void update();
+	public abstract void update();
 	/**
 	 * Abstract method to render entity at each frame
 	 * @param g Graphic object to render entity
 	 */
-	abstract void render(Graphics g);
+	public abstract void render(Graphics g);
 	
 
 }
