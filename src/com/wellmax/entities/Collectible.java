@@ -1,5 +1,6 @@
 package com.wellmax.entities;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.wellmax.main.Game;
@@ -9,7 +10,7 @@ import com.wellmax.main.Game;
  * @author joao.gomes
  *
  */
-public class Collectible extends Entity{
+public class Collectible extends GenericEntity{
 	
 	
 	//---------------------------- Attributes ----------------------------------//	
@@ -54,6 +55,18 @@ public class Collectible extends Entity{
 	 * Method with collectible effect
 	 */
 	protected void effect() {
+		
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void render(Graphics g) {
+		// TODO Auto-generated method stub
 		
 	}
 	

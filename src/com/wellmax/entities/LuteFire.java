@@ -8,69 +8,104 @@ import com.wellmax.main.Game;
 import com.wellmax.world.Camera;
 import com.wellmax.world.World;
 
-public class LuteFire extends Entity{
+/**
+ * The luteFire is the base projectile launched
+ * by player. It deals normal damage and causes
+ * normal knockback
+ * @author joao.gomes
+ *
+ */
+public class LuteFire extends Projectile{
 
+	//---------------------------- Attributes ----------------------------------//	
 	
-	private int dx;
-	private int dy;
-	private int dir;
-	private double speed;
-	private int indexNote = 0;
+	/**
+	 * Array with all luteFire sprites
+	 */
 	private BufferedImage[][] notes;
-
+	/**
+	 * Index of note sprite at notes array
+	 */
+	private int indexNote;
+	/**
+	 * Number of notes existing in notes array
+	 */
+	private int nOfNotes;
 	
-	private int nOfSprites = 4;
-	private int nOfNotes = 3;
-	// Animation of sprite
-	private int frames;
-	private final int maxFrames = 10;
-	private int index;
-	private final int maxIndex = 3;
-	
-	private int totalTime = 30; 
-	private int timeRemain = 0;
-	
-	
+	//---------------------------- Methods ----------------------------------//	
+	/**
+	 * Constructor
+	 * @param x x position
+	 * @param y y position
+	 * @param width LuteFire width
+	 * @param height LuteFire height
+	 * @param dx x axis multiplier
+	 * @param dy y axis multiplier
+	 * @param indexNote Note sprite to be rendered
+	 */
 	public LuteFire(int x, int y, int width, int height, Directions dir, int dx, int dy, int indexNote) {
-		super(x, y, width, height);
+		super(x, y, width, height, dx, dy);
 		
-		this.dx = dx;
-		this.dy = dy;
+		this.setIndexNote(indexNote);
+		this.setnOfNotes(3);
+		this.setTotalTime(45);
+		this.setTimeRemain(0);
 		this.setFaceDir(dir);
-		this.indexNote = indexNote;
-		notes = new BufferedImage[3][4];
-			
-		speed = 2;
+		this.setDamage(2);
 		
-		for(int i = 0; i < nOfNotes; i++) {
-			for(int j = 0; j < nOfSprites; j++) {
-				notes[i][j] = Game.spritesheet.getSprite(96 + j*16, 64 + i*16, width, height);
+		this.notes = new BufferedImage[this.getnOfNotes()][this.getnOfSprites()];
+			
+		this.setSpeed(2);	
+		
+		for(int i = 0; i < this.getnOfNotes(); i++) {
+			for(int j = 0; j < this.getnOfSprites(); j++) {
+				this.notes[i][j] = Game.spritesheet.getSprite(96 + j*16, 64 + i*16, this.getWidth(), this.getHeight());
 			}
 		}
 		
 	}
 	
+	
+	/**
+	 * @return the indexNote
+	 */
+	public int getIndexNote() {
+		return indexNote;
+	}
+
+	/**
+	 * @param indexNote the indexNote to set
+	 */
+	public void setIndexNote(int indexNote) {
+		this.indexNote = indexNote;
+	}
+
+	/**
+	 * @return the nOfNotes
+	 */
+	public int getnOfNotes() {
+		return nOfNotes;
+	}
+
+	/**
+	 * @param nOfNotes the nOfNotes to set
+	 */
+	public void setnOfNotes(int nOfNotes) {
+		this.nOfNotes = nOfNotes;
+	}
+
 	public void update() {
+		
 		if(World.isFree((int)(x + dx*speed),(int)(y + dy*speed))) {
 			x += dx*speed;
 			y += dy*speed;
 		}else {
-			Game.luteFires.remove(this);
+			Game.projectiles.remove(this);
 		}
-		frames++;
-		if(frames == maxFrames) {
-			frames = 0;
-			index++;
-			if(index > maxIndex) {
-				index = 0;
-			}
-		}
+
+		this.countFrames(true);
 		
-		timeRemain++;
-		if(timeRemain >= totalTime) {
-			Game.luteFires.remove(this);
-			return;
-		}
+		this.projectileLifeTime();
 		
 	}
 	
@@ -78,13 +113,5 @@ public class LuteFire extends Entity{
 		g.drawImage(notes[indexNote][index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 	}
 
-	public int getDir() {
-		return dir;
-	}
-
-	public void setDir(int dir) {
-		this.dir = dir;
-	}
-	
 	
 }

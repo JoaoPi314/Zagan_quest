@@ -16,13 +16,15 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import com.wellmax.entities.Enemy;
 import com.wellmax.entities.DeadEnemy;
+import com.wellmax.entities.Enemy;
 import com.wellmax.entities.Ent;
 import com.wellmax.entities.Entity;
 import com.wellmax.entities.FireballShoot;
+import com.wellmax.entities.GenericEntity;
 import com.wellmax.entities.LuteFire;
 import com.wellmax.entities.Player;
+import com.wellmax.entities.Projectile;
 import com.wellmax.entities.Skeleton;
 import com.wellmax.graphics.Spritesheet;
 import com.wellmax.graphics.UI;
@@ -45,10 +47,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	private BufferedImage image;
 
-	public static List<Entity> entities;
+	public static List<GenericEntity> entities;
 	public static List<Enemy> enemies;
-	public static List<FireballShoot> fireballs;
-	public static List<LuteFire> luteFires;
+	public static List<Projectile> projectiles;
 	public static List<DeadEnemy> deadEnemies;
 	public static List<Ent> ents;
 	public static Spritesheet spritesheet;
@@ -84,17 +85,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		spritesheet = new Spritesheet("/spritesheet.png");
 		spritesheet1 = new Spritesheet("/spritesheet1.png");
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-		entities = new ArrayList<Entity>();
+		entities = new ArrayList<GenericEntity>();
 		enemies = new ArrayList<Enemy>();
-		fireballs = new ArrayList<FireballShoot>();
-		luteFires = new ArrayList<LuteFire>();
+		projectiles = new ArrayList<Projectile>();
 		deadEnemies = new ArrayList<DeadEnemy>();
 		ents = new ArrayList<Ent>();
 		player = new Player(32, 32, 16, 16);
 		world = new World(level);
 		ui = new UI();
-
-		
 	}
 	
 	
@@ -145,7 +143,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			player.update();
 		
 		for(int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
+			GenericEntity e = entities.get(i);
 			e.update();
 		}
 	
@@ -156,15 +154,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		ui.update();
 		
-		for(int i = 0; i < fireballs.size(); i++) {
-			FireballShoot f = fireballs.get(i);
-			f.update();
+		for(int i = 0; i < projectiles.size(); i++) {
+			Projectile p = projectiles.get(i);
+			p.update();
 		}
 		
-		for(int i = 0; i < luteFires.size(); i++) {
-			LuteFire f = luteFires.get(i);
-			f.update();
-		}
 		
 		for(int i = 0; i < ents.size(); i++) {
 			Entity e = ents.get(i);
@@ -226,20 +220,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		}
 		
 		for(int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
+			GenericEntity e = entities.get(i);
 			e.render(g);
 		}
 		
-
 		
-		for(int i = 0; i < fireballs.size(); i++) {
-			FireballShoot f = fireballs.get(i);
-			f.render(g);
-		}
-		
-		for(int i = 0; i < luteFires.size(); i++) {
-			LuteFire f = luteFires.get(i);
-			f.render(g);
+		for(int i = 0; i < projectiles.size(); i++) {
+			Projectile p = projectiles.get(i);
+			p.render(g);
 		}
 		
 		for(int i = 0; i < ents.size(); i++) {

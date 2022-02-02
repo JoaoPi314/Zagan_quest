@@ -15,10 +15,19 @@ import com.wellmax.world.Camera;
 public class Fireball extends Collectible{
 
 	//---------------------------- Attributes ----------------------------------//	
-
+	/**
+	 * Number of fireballs that the collectible gives
+	 */
 	private int nOfFireballs;
 	//---------------------------- Methods ----------------------------------//	
-
+	
+	/**
+	 * Constructor
+	 * @param x x position
+	 * @param y y position
+	 * @param width fireball width
+	 * @param height fireball height
+	 */
 	public Fireball(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.setnOfFireballs(5);
@@ -50,7 +59,7 @@ public class Fireball extends Collectible{
 	
 	
 	public void render(Graphics g) {
-		g.drawImage(FIREBALL[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+		g.drawImage(FIREBALL[index], (int)(this.getX() - Camera.x), (int)(this.getY() - Camera.y), null);
 	}
 	
 }

@@ -14,10 +14,19 @@ import com.wellmax.world.Camera;
 public class HealthPotion extends Collectible{
 
 	//---------------------------- Attributes ----------------------------------//	
-
+	/**
+	 * Life healed by collectible
+	 */
 	private int lifeHealed;
-	//---------------------------- Methods ----------------------------------//	
-
+	//---------------------------- Methods ----------------------------------//
+	
+	/**
+	 * Constructor
+	 * @param x x position
+	 * @param y y position
+	 * @param width Healthpotion width
+	 * @param height Healthpotion height
+	 */
 	public HealthPotion(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.setLifeHealed(6);
@@ -52,7 +61,7 @@ public class HealthPotion extends Collectible{
 	
 	
 	public void render(Graphics g) {
-		g.drawImage(HEALTH_POTION[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+		g.drawImage(HEALTH_POTION[index], (int)(this.getX() - Camera.x), (int)(this.getY() - Camera.y), null);
 	}
 	
 }

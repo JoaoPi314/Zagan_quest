@@ -267,7 +267,7 @@ public class Player extends Entity{
 	 */
 	public void checkItens() {
 		for(int i = 0; i < Game.entities.size(); i++) {
-			Entity en = Game.entities.get(i);
+			GenericEntity en = Game.entities.get(i);
 			if(en instanceof HealthPotion) {
 				if(GenericEntity.isColliding(this, en)) {
 					((HealthPotion) en).effect();
@@ -314,11 +314,10 @@ public class Player extends Entity{
 			
 			// After shoot, player must wait a cooldown
 			this.setCoolDown(true);
-			
 			// If player has fireball power and fireballs remaining
 			if(this.isHasFireball() && this.getFireballs() > 0) {	
 				FireballShoot fire = new FireballShoot((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), this.getFaceDir(), dx, dy);
-				Game.fireballs.add(fire);
+				Game.projectiles.add(fire);
 				this.setFireballs(this.getFireballs() - 1);
 				
 				if(this.getFireballs() <= 0)
@@ -330,7 +329,7 @@ public class Player extends Entity{
 				// Choose a random note sprite
 				int randFire = Game.rand.nextInt(3);
 				LuteFire fire = new LuteFire((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(), this.getFaceDir(), dx, dy, randFire);
-				Game.luteFires.add(fire);
+				Game.projectiles.add(fire);
 				
 				// Cooldown time of lute fire
 				this.setMaxFramesCoolDown(30);
@@ -372,7 +371,6 @@ public class Player extends Entity{
 		
 	}
 
-	
 	/**
 	 * Method to render sprite of player dead
 	 * @param g Graphics to render sprite

@@ -258,35 +258,29 @@ public class Enemy extends Entity{
 	 * Method to compute if a projectile hits enemy
 	 */
 	protected void collidingProjectile() {
-		// Search for fireballs
-		for(int i = 0; i < Game.fireballs.size(); i++) {
-			FireballShoot e = Game.fireballs.get(i);
-			
-			if(GenericEntity.isColliding(this, e)) {
-				this.setKbDir(e.getFaceDir());
-				this.setKbspeed(3);
-				this.setDamaged(true);
-				this.setLife(this.getLife() - 5/this.getDefense());
-				Game.fireballs.remove(i);
-				return;
+		// Search for projectiles
+		for(int i = 0; i < Game.projectiles.size(); i++) {
+			Projectile e = Game.projectiles.get(i);
+			if(e instanceof FireballShoot) { //Fireballs
+				if(GenericEntity.isColliding(this, e)) {
+					this.setKbDir(((FireballShoot) e).getFaceDir());
+					this.setKbspeed(3);
+					this.setDamaged(true);
+					this.setLife(this.getLife() - e.getDamage()/this.getDefense());
+					Game.projectiles.remove(i);
+					return;
+				}
+			}else if(e instanceof LuteFire) { // LuteFires
+				if(GenericEntity.isColliding(this, e)) {
+					this.setKbDir(((LuteFire) e).getFaceDir());
+					this.setKbspeed(1);
+					this.setDamaged(true);
+					this.setLife(this.getLife() - e.getDamage()/this.getDefense());
+					Game.projectiles.remove(i);
+					return;
+				}
 			}
-			
 		}
-		// Search for LuteFires
-		for(int i = 0; i < Game.luteFires.size(); i++) {
-			LuteFire e = Game.luteFires.get(i);
-			
-			if(GenericEntity.isColliding(this, e)) {
-				this.setKbDir(e.getFaceDir());
-				this.setKbspeed(1);
-				this.setDamaged(true);
-				this.setLife(this.getLife() - 2/this.getDefense());
-				Game.luteFires.remove(i);
-				return;
-			}
-			
-		}
-		
 	}
 	
 	/**
