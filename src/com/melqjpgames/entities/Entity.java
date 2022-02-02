@@ -1,26 +1,68 @@
 package com.melqjpgames.entities;
 
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import com.melqjpgames.entities.types.Directions;
 import com.melqjpgames.main.Game;
 
-public class Entity {
+/**
+ *  The Entity class covers all entities that
+ *  has an intelligence (include player)
+ * @author joao.gomes
+ *
+ */
+public class Entity extends GenericEntity{
 
-	protected double x;
-	protected double y;
-	protected int width;
-	protected int height;
+	//---------------------------- Attributes ----------------------------------//	
+
+	/**
+	 * Direction the entity wants to move
+	 */
+	protected Directions moveDir;
+	/**
+	 * Direction the entity faces
+	 */
+	protected Directions faceDir;
+	/**
+	 * Entity speed
+	 */
+	protected double speed;
+	/**
+	 * Flag that indicates if entity is moving
+	 */
+	protected boolean moving;
+	/**
+	 * Entity life
+	 */
+	protected double life;
+	/**
+	 * Entity defense
+	 */
+	protected double defense;
+	/**
+	 * Flag that indicates if entity took damage recently
+	 */
+	protected boolean damaged;
+	/**
+	 * Number of frames the damage sprite should be rendered 
+	 */
+	protected int damageFrames;
+	/**
+	 * Knockback speed when taking damage
+	 */
+	protected int kbSpeed;
+	/**
+	 * Knockback direction when taking damage
+	 */
+	protected Directions kbDir;
+	
+	//---------------------------- Methods ----------------------------------//	
 
 	
 	public static BufferedImage []HEALTH_POTION_EN;
 	public static BufferedImage []FIREBALL_EN;
-	protected int maskx;
-	protected int masky;
-	protected int mwidth;
-	protected int mheight;
-	
+
 	static {
 		HEALTH_POTION_EN = new BufferedImage[4];
 		FIREBALL_EN = new BufferedImage[4];
@@ -33,84 +75,172 @@ public class Entity {
 		
 	}
 	
-	
-	/*
-	 * The constructor of Entity receives the position and size of entity
+	/**
+	 * The constructor takes the fundamental parameters of an Entity
+	 * @param x: x position
+	 * @param y: y position
+	 * @param width: Entity width
+	 * @param height: Entity heighy
 	 */
 	public Entity(int x, int y, int width, int height) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
+		super(x, y, width, height);
 		
-		this.maskx = 0;
-		this.masky = 0;
-		this.mwidth = width;
-		this.mheight = height;
-		
-	}
-	
-	
-	// Getter Methods
-	
-	public double getX() {
-		return x;
-	}
-	
-	public double getY() {
-		return y;
-	}
-	
-	public int getWidth() {
-		return width;
 	}
 
-	public int getHeight() {
-		return height;
+	
+	
+
+	/**
+	 * @return the moveDir
+	 */
+	public Directions getMoveDir() {
+		return moveDir;
 	}
 	
-	// Setter Methods
-	
-	public void setX(double x) {
-		this.x = x;
+	/**
+	 * @param moveDir the moveDir to set
+	 */
+	public void setMoveDir(Directions moveDir) {
+		this.moveDir = moveDir;
 	}
 	
-	public void setY(double y) {
-		this.y = y;
+	/**
+	 * @return the faceDir
+	 */
+	public Directions getFaceDir() {
+		return faceDir;
 	}
 	
-	public void setWidth(int width) {
-		this.width = width;
+	/**
+	 * @param faceDir the faceDir to set
+	 */
+	public void setFaceDir(Directions faceDir) {
+		this.faceDir = faceDir;
 	}
 	
-	public void setHeight(int height) {
-		this.height = height;
+	/**
+	 * @return the speed
+	 */
+	public double getSpeed() {
+		return speed;
 	}
 	
-	// Update and render methods
-	
-	public static boolean isColiding(Entity e1, Entity e2) {
-		Rectangle e1Mask = new Rectangle((int)(e1.getX() + e1.maskx), (int)(e1.getY() + e1.masky), e1.mwidth, e1.mheight);
-		Rectangle e2Mask = new Rectangle((int)(e2.getX() + e2.maskx), (int)(e2.getY() + e2.masky), e2.mwidth, e2.mheight);
-		
-		return e1Mask.intersects(e2Mask);
+	/**
+	 * @param speed the speed to set
+	 */
+	public void setSpeed(double speed) {
+		this.speed = speed;
 	}
 	
-	public void setMask(int maskx, int masky, int mwidth, int mheight) {
-		this.maskx = maskx;
-		this.masky = masky;
-		this.mwidth = mwidth;
-		this.mheight = mheight;
+	/**
+	 * @return the moving
+	 */
+	public boolean isMoving() {
+		return moving;
 	}
 	
+	/**
+	 * @param moving the moving to set
+	 */
+	public void setMoving(boolean moving) {
+		this.moving = moving;
+	}
+	
+	/**
+	 * @return the life
+	 */
+	public double getLife() {
+		return life;
+	}
+	
+	/**
+	 * @param life the life to set
+	 */
+	public void setLife(double life) {
+		this.life = life;
+	}
+	
+	/**
+	 * @return the defense
+	 */
+	public double getDefense() {
+		return defense;
+	}
+	
+	/**
+	 * @param defense the defense to set
+	 */
+	public void setDefense(double defense) {
+		this.defense = defense;
+	}
+	
+	/**
+	 * @return the damaged
+	 */
+	public boolean isDamaged() {
+		return damaged;
+	}
+	
+	/**
+	 * @param damaged the damaged to set
+	 */
+	public void setDamaged(boolean damaged) {
+		this.damaged = damaged;
+	}
+	
+	/**
+	 * @return the damageFrames
+	 */
+	public int getDamageFrames() {
+		return damageFrames;
+	}
+	
+	/**
+	 * @param damageFrames the damageFrames to set
+	 */
+	public void setDamageFrames(int damageFrames) {
+		this.damageFrames = damageFrames;
+	}
+	
+	/**
+	 * @return the kbspeed
+	 */
+	public int getKbSpeed() {
+		return kbSpeed;
+	}
+	
+	/**
+	 * @param kbspeed the kbspeed to set
+	 */
+	public void setKbspeed(int kbSpeed) {
+		this.kbSpeed = kbSpeed;
+	}
+	
+	/**
+	 * @return the kbdir
+	 */
+	public Directions getKbDir() {
+		return kbDir;
+	}
+	
+	/**
+	 * @param kbdir the kbdir to set
+	 */
+	public void setKbDir(Directions kbDir) {
+		this.kbDir = kbDir;
+	}
+
+
+	
+	@Override
 	public void update() {
 		
 	}
-	
-	
-	public void render(Graphics g) {
 
+
+	@Override
+	public void render(Graphics g) {
+		
 	}
-	
-	
+
 }
