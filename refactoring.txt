@@ -1,0 +1,28 @@
+TODO refactoring
+
+. Change all greater if/else to switch
+------------------------- Entity -------------------------------------
+
+. Remove health and fireball from entity class (It is not generic)
+. Adjust maskx and masky to maskX and maskY
+. Adds getter and setter to mask attributes
+. Every access to player attributes should be done by getter and setter methods
+. The Entity class and its methods should be abstract
+. The logic of updating image should be done at Entity
+. All attributes must be initiated at constructor
+
+------------------------- Player ---------------------------------------
+
+. the logic of movement directions and facing directions should be done with enum
+. moved should be moving
+. Remove count frames logic (Already in entity)
+. maxLife should be private
+. isDamaged should be private
+. kbDir should be of Directions type (enum)
+. All attributes must be initiated at constructor
+. Separate update() in more methods
+. checkItens() should be private
+. isDamaged should be damaged
+. Adds getter and setter methods to all private attributes
+
+------------------------- Enemy ----------------------------------------
