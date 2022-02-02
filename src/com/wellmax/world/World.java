@@ -1,4 +1,4 @@
-package com.melqjpgames.world;
+package com.wellmax.world;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.melqjpgames.entities.*;
-import com.melqjpgames.main.Game;
+import com.wellmax.entities.*;
+import com.wellmax.main.Game;
 
 public class World {
 	
@@ -149,7 +149,7 @@ public class World {
 							Game.entities.add(fireball);
 							break;
 						case 0xFFFF0000: // Enemy
-							Enemy en = new Enemy(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+							Orc en = new Orc(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 							Game.enemies.add(en);
 							break;
 						case 0xFF0000FF: // Player

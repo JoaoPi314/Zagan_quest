@@ -1,12 +1,12 @@
-package com.melqjpgames.graphics;
+package com.wellmax.graphics;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import com.melqjpgames.main.Game;
-import com.melqjpgames.world.World;
+import com.wellmax.main.Game;
+import com.wellmax.world.World;
 
 public class UI {
 	

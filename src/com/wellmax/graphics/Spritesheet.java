@@ -1,4 +1,4 @@
-package com.melqjpgames.graphics;
+package com.wellmax.graphics;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

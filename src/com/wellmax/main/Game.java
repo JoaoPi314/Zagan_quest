@@ -1,4 +1,4 @@
-package com.melqjpgames.main;
+package com.wellmax.main;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -16,17 +16,19 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import com.melqjpgames.entities.Enemy;
-import com.melqjpgames.entities.EnemyDied;
-import com.melqjpgames.entities.Ent;
-import com.melqjpgames.entities.Entity;
-import com.melqjpgames.entities.FireballShoot;
-import com.melqjpgames.entities.LuteFire;
-import com.melqjpgames.entities.Player;
-import com.melqjpgames.entities.Skeleton;
-import com.melqjpgames.graphics.Spritesheet;
-import com.melqjpgames.graphics.UI;
-import com.melqjpgames.world.World;
+import com.wellmax.entities.DeadEnemy;
+import com.wellmax.entities.Enemy;
+import com.wellmax.entities.Ent;
+import com.wellmax.entities.Entity;
+import com.wellmax.entities.FireballShoot;
+import com.wellmax.entities.GenericEntity;
+import com.wellmax.entities.LuteFire;
+import com.wellmax.entities.Player;
+import com.wellmax.entities.Projectile;
+import com.wellmax.entities.Skeleton;
+import com.wellmax.graphics.Spritesheet;
+import com.wellmax.graphics.UI;
+import com.wellmax.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener{
 
@@ -45,11 +47,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	private BufferedImage image;
 
-	public static List<Entity> entities;
+	public static List<GenericEntity> entities;
 	public static List<Enemy> enemies;
-	public static List<FireballShoot> fireballs;
-	public static List<LuteFire> luteFires;
-	public static List<EnemyDied> deadEnemies;
+	public static List<Projectile> projectiles;
+	public static List<DeadEnemy> deadEnemies;
 	public static List<Ent> ents;
 	public static Spritesheet spritesheet;
 	public static Spritesheet spritesheet1;
@@ -84,17 +85,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		spritesheet = new Spritesheet("/spritesheet.png");
 		spritesheet1 = new Spritesheet("/spritesheet1.png");
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-		entities = new ArrayList<Entity>();
+		entities = new ArrayList<GenericEntity>();
 		enemies = new ArrayList<Enemy>();
-		fireballs = new ArrayList<FireballShoot>();
-		luteFires = new ArrayList<LuteFire>();
-		deadEnemies = new ArrayList<EnemyDied>();
+		projectiles = new ArrayList<Projectile>();
+		deadEnemies = new ArrayList<DeadEnemy>();
 		ents = new ArrayList<Ent>();
 		player = new Player(32, 32, 16, 16);
 		world = new World(level);
 		ui = new UI();
-
-		
 	}
 	
 	
@@ -137,7 +135,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			reset = false;
 		}
 		for(int i = 0; i < deadEnemies.size(); i++) {
-			EnemyDied e = deadEnemies.get(i);
+			DeadEnemy e = deadEnemies.get(i);
 			e.update();
 		}
 		
@@ -145,13 +143,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			player.update();
 		
 		for(int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
+			GenericEntity e = entities.get(i);
 			e.update();
 		}
-		
-
-		
-		
+	
 		for(int i = 0; i < enemies.size(); i++) {
 			Enemy e = enemies.get(i);
 			e.update();
@@ -159,15 +154,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		ui.update();
 		
-		for(int i = 0; i < fireballs.size(); i++) {
-			FireballShoot f = fireballs.get(i);
-			f.update();
+		for(int i = 0; i < projectiles.size(); i++) {
+			Projectile p = projectiles.get(i);
+			p.update();
 		}
 		
-		for(int i = 0; i < luteFires.size(); i++) {
-			LuteFire f = luteFires.get(i);
-			f.update();
-		}
 		
 		for(int i = 0; i < ents.size(); i++) {
 			Entity e = ents.get(i);
@@ -214,7 +205,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		world.render(g);
 		for(int i = 0; i < deadEnemies.size(); i++) {
-			EnemyDied e = deadEnemies.get(i);
+			DeadEnemy e = deadEnemies.get(i);
 			e.render(g);
 		}
 		
@@ -229,20 +220,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		}
 		
 		for(int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
+			GenericEntity e = entities.get(i);
 			e.render(g);
 		}
 		
-
 		
-		for(int i = 0; i < fireballs.size(); i++) {
-			FireballShoot f = fireballs.get(i);
-			f.render(g);
-		}
-		
-		for(int i = 0; i < luteFires.size(); i++) {
-			LuteFire f = luteFires.get(i);
-			f.render(g);
+		for(int i = 0; i < projectiles.size(); i++) {
+			Projectile p = projectiles.get(i);
+			p.render(g);
 		}
 		
 		for(int i = 0; i < ents.size(); i++) {
@@ -285,8 +270,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 				switch(currentWave) {
 					case 1: // Jumps to wave 2
 						for(int i = 0; i < deadEnemies.size(); i++) {
-							EnemyDied en = deadEnemies.get(i);
-							Skeleton skeleton = new Skeleton((int)en.getX(), (int)en.getY(), en.getWidth(), en.getHeight(), en.getDir());
+							DeadEnemy en = deadEnemies.get(i);
+							Skeleton skeleton = new Skeleton((int)en.getX(), (int)en.getY(), en.getWidth(), en.getHeight(), en.getFaceDir());
 							enemies.add(skeleton);
 						}
 						deadEnemies.removeAll(deadEnemies);
