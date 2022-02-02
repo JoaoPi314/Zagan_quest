@@ -2,35 +2,57 @@ package com.wellmax.entities;
 
 import java.awt.Graphics;
 
+import com.wellmax.main.Game;
 import com.wellmax.world.Camera;
 
-public class HealthPotion extends Entity{
+/**
+ * The heatlhPotion heals the player when
+ * collected
+ * @author joao.gomes
+ *
+ */
+public class HealthPotion extends Collectible{
 
-	
-	private int frames;
-	private final int maxFrames = 10;
-	private int index;
-	private final int maxIndex = 3;
-	
+	//---------------------------- Attributes ----------------------------------//	
+
+	private int lifeHealed;
+	//---------------------------- Methods ----------------------------------//	
+
 	public HealthPotion(int x, int y, int width, int height) {
 		super(x, y, width, height);
+		this.setLifeHealed(6);
+	}
+
+	/**
+	 * @return the lifeHealed
+	 */
+	public int getLifeHealed() {
+		return lifeHealed;
+	}
+
+	/**
+	 * @param lifeHealed the lifeHealed to set
+	 */
+	public void setLifeHealed(int lifeHealed) {
+		this.lifeHealed = lifeHealed;
+	}
+
+
+
+	public void effect() {
+		Game.player.setLife(Game.player.getLife() + this.getLifeHealed());
+		if(Game.player.getLife() > Game.player.getMaxLife())
+			Game.player.setLife(Game.player.getMaxLife());
 	}
 	
 	
 	public void update() {
-		frames++;
-		if(frames == maxFrames) {
-			frames = 0;
-			index++;
-			if(index > maxIndex) {
-				index = 0;
-			}
-		}
+		this.countFrames(true);
 	}
+	
 	
 	public void render(Graphics g) {
-		g.drawImage(HEALTH_POTION_EN[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+		g.drawImage(HEALTH_POTION[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 	}
-	
 	
 }

@@ -5,8 +5,22 @@ import java.awt.image.BufferedImage;
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
 
+/**
+ * Skeleton class. The skeleton fires bones when player is near. 
+ * It also is stronger than orcs
+ * @author joao.gomes
+ *
+ */
 public class Skeleton extends Enemy{
 	
+	/**
+	 * Constructor
+	 * @param x x position
+	 * @param y y position
+	 * @param width Skeleton width
+	 * @param height Skeleton height
+	 * @param dir Skeleton initial faceDir
+	 */
 	public Skeleton(int x, int y, int width, int height, Directions dir) {
 		super(x, y, width, height);
 		this.setSpeed(1);

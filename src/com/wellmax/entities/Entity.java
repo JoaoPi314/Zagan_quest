@@ -102,22 +102,6 @@ public class Entity extends GenericEntity{
 	
 	
 	//---------------------------- Methods ----------------------------------//	
-
-	
-	public static BufferedImage []HEALTH_POTION_EN;
-	public static BufferedImage []FIREBALL_EN;
-
-	static {
-		HEALTH_POTION_EN = new BufferedImage[4];
-		FIREBALL_EN = new BufferedImage[4];
-		
-		
-		for(int i = 0; i < FIREBALL_EN.length; i++) {
-			HEALTH_POTION_EN[i] = Game.spritesheet.getSprite(96 + i*16, 112, 16, 16);
-			FIREBALL_EN[i] = Game.spritesheet.getSprite(96 + i*16, 128, 16, 16);
-		}
-		
-	}
 	
 	/**
 	 * The constructor takes the fundamental parameters of an Entity

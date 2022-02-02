@@ -63,6 +63,7 @@ public class Player extends Entity{
 		this.setSpeed(0.9);
 		this.setFaceDir(Directions.DOWN); 
 		this.setLife(12);
+		this.setMaxLife(12);
 		this.setDefense(1);
 		
 		this.setHasFireball(false);
@@ -269,16 +270,14 @@ public class Player extends Entity{
 			Entity en = Game.entities.get(i);
 			if(en instanceof HealthPotion) {
 				if(GenericEntity.isColliding(this, en)) {
-					setLife(getLife() + 6);
-					if(getLife() > 12)
-						setLife(12);
+					((HealthPotion) en).effect();
 					Game.entities.remove(en);
 					
 				}
 			}else if(en instanceof Fireball) {
 				if(GenericEntity.isColliding(this, en)) {
 					setHasFireball(true);
-					setFireballs(getFireballs() + 5);
+					((Fireball) en).effect();
 					Game.entities.remove(en);
 				}
 				

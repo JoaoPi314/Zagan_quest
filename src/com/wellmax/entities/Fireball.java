@@ -2,35 +2,55 @@ package com.wellmax.entities;
 
 import java.awt.Graphics;
 
+import com.wellmax.main.Game;
 import com.wellmax.world.Camera;
 
-public class Fireball extends Entity{
+/**
+ * The fireball is a projectile stronger than
+ * luteFire, dealing double damage. But it has a
+ * greater coolDown.
+ * @author joao.gomes
+ *
+ */
+public class Fireball extends Collectible{
 
-	
-	private int frames;
-	private final int maxFrames = 10;
-	private int index;
-	private final int maxIndex = 3;
-	
-	
+	//---------------------------- Attributes ----------------------------------//	
+
+	private int nOfFireballs;
+	//---------------------------- Methods ----------------------------------//	
+
 	public Fireball(int x, int y, int width, int height) {
 		super(x, y, width, height);
+		this.setnOfFireballs(5);
 	}
 
+	/**
+	 * @return the nOfFireballs
+	 */
+	public int getnOfFireballs() {
+		return nOfFireballs;
+	}
+
+	/**
+	 * @param nOfFireballs the nOfFireballs to set
+	 */
+	public void setnOfFireballs(int nOfFireballs) {
+		this.nOfFireballs = nOfFireballs;
+	}
+	
+
+	public void effect() {
+		Game.player.setFireballs(Game.player.getFireballs() + this.getnOfFireballs());
+	}
+	
+	
 	public void update() {
-		frames++;
-		if(frames == maxFrames) {
-			frames = 0;
-			index++;
-			if(index > maxIndex) {
-				index = 0;
-			}
-		}
+		this.countFrames(true);
 	}
 	
 	
 	public void render(Graphics g) {
-		g.drawImage(FIREBALL_EN[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+		g.drawImage(FIREBALL[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 	}
 	
 }

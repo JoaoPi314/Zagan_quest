@@ -5,8 +5,20 @@ import java.awt.image.BufferedImage;
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
 
+/**
+ * The orc is the base enemy. All logic is already impolemented at Enemy
+ * @author joao.gomes
+ *
+ */
 public class Orc extends Enemy{
 	
+	/**
+	 * Constructor
+	 * @param x position
+	 * @param y position
+	 * @param width Orc width
+	 * @param height Orc height
+	 */
 	public Orc(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.setSpeed(1);
