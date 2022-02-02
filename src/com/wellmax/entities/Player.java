@@ -17,42 +17,6 @@ public class Player extends Entity{
 	 */
 	private boolean right, left, up, down;
 	
-	
-	// Sprites
-	/**
-	 * Sprites of player facing right
-	 */
-	private BufferedImage[] rightPlayer;
-	/**
-	 * sprites of player facing left
-	 */
-	private BufferedImage[] leftPlayer;
-	/**
-	 * Sprites of player facing up
-	 */
-	private BufferedImage[] upPlayer;
-	/**
-	 * Sprites of player facing down
-	 */
-	private BufferedImage[] downPlayer;
-	
-	/**
-	 * Sprite of player taking damage facing right
-	 */
-	private BufferedImage playerDamageRight;
-	/**
-	 * Sprite of player taking damage facing left
-	 */
-	private BufferedImage playerDamageLeft;
-	/**
-	 * Sprite of player taking damage facing up
-	 */
-	private BufferedImage playerDamageUp;
-	/**
-	 * Sprite of player taking damage facing down
-	 */
-	private BufferedImage playerDamageDown;
-
 	/**
 	 * Sprite of player dead
 	 */
@@ -99,28 +63,29 @@ public class Player extends Entity{
 		this.setSpeed(0.9);
 		this.setFaceDir(Directions.DOWN); 
 		this.setLife(12);
+		this.setDefense(1);
 		
 		this.setHasFireball(false);
 		this.setFireballs(0);
 		
 		// Initiates sprites
-		this.rightPlayer = new BufferedImage[this.getnOfSprites()];
-		this.leftPlayer = new BufferedImage[this.getnOfSprites()];
-		this.upPlayer = new BufferedImage[this.getnOfSprites()];
-		this.downPlayer = new BufferedImage[this.getnOfSprites()];
+		this.enRight = new BufferedImage[this.getnOfSprites()];
+		this.enLeft = new BufferedImage[this.getnOfSprites()];
+		this.enUp = new BufferedImage[this.getnOfSprites()];
+		this.enDown = new BufferedImage[this.getnOfSprites()];
 
-		this.playerDamageRight = Game.spritesheet.getSprite(64, 48, this.getWidth(), this.getHeight());
-		this.playerDamageLeft = Game.spritesheet.getSprite(64, 64, this.getWidth(), this.getHeight());
-		this.playerDamageUp = Game.spritesheet.getSprite(64, 16, this.getWidth(), this.getHeight());
-		this.playerDamageDown = Game.spritesheet.getSprite(64, 32, this.getWidth(), this.getHeight());
+		this.enDamageRight = Game.spritesheet.getSprite(64, 48, this.getWidth(), this.getHeight());
+		this.enDamageLeft = Game.spritesheet.getSprite(64, 64, this.getWidth(), this.getHeight());
+		this.enDamageUp = Game.spritesheet.getSprite(64, 16, this.getWidth(), this.getHeight());
+		this.enDamageDown = Game.spritesheet.getSprite(64, 32, this.getWidth(), this.getHeight());
 		
 		this.playerDead = Game.spritesheet.getSprite(16, 144, this.getWidth(), this.getHeight());
 		
 		for(int i = 0; i < this.getnOfSprites(); i++) {
-			this.rightPlayer[i] = Game.spritesheet.getSprite(i*16, 48, this.getWidth(), this.getHeight());
-			this.leftPlayer[i] = Game.spritesheet.getSprite(i*16, 64, this.getWidth(), this.getHeight());
-			this.upPlayer[i] = Game.spritesheet.getSprite(i*16, 16, this.getWidth(), this.getHeight());
-			this.downPlayer[i] = Game.spritesheet.getSprite(i*16, 32, this.getWidth(), this.getHeight());
+			this.enRight[i] = Game.spritesheet.getSprite(i*16, 48, this.getWidth(), this.getHeight());
+			this.enLeft[i] = Game.spritesheet.getSprite(i*16, 64, this.getWidth(), this.getHeight());
+			this.enUp[i] = Game.spritesheet.getSprite(i*16, 16, this.getWidth(), this.getHeight());
+			this.enDown[i] = Game.spritesheet.getSprite(i*16, 32, this.getWidth(), this.getHeight());
 		}
 		
 	}
@@ -295,51 +260,6 @@ public class Player extends Entity{
 		
 	}
 
-	/**
-	 * Method to calculate player movement when it is
-	 * taking damage
-	 */
-	private void damageMovement() {
-		if(this.isDamaged()) {
-			
-			switch(this.getKbDir()) {
-				case RIGHT:
-					if(World.isFree((int)(this.getX() + this.getSpeed()*this.getKbSpeed()), (int) this.getY())) {
-						this.setX(this.getX() + this.getSpeed()*this.getKbSpeed());
-						this.setMoving(true);
-					}
-					break;
-				case LEFT:
-					if(World.isFree((int)(this.getX() - this.getSpeed()*this.getKbSpeed()), (int) this.getY())) {
-						this.setX(this.getX() - this.getSpeed()*this.getKbSpeed());
-						this.setMoving(true);
-					}
-					break;
-				case UP:
-					if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()*this.getKbSpeed()))) {
-						this.setY(this.getY() - this.getSpeed()*this.getKbSpeed());
-						this.setMoving(true);						
-					}
-					break;
-				case DOWN:
-					if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()*this.getKbSpeed()))) {
-						this.setY(this.getY() + this.getSpeed()*this.getKbSpeed());
-						this.setMoving(true);						
-					}
-					break;
-				default:
-					break;
-			
-			}
-			
-			// Sprite damage calculus
-			damageFrames++;
-			if(damageFrames ==8) {
-				damageFrames = 0;
-				setDamaged(false);
-			}	
-		}
-	}
 	
 	/**
 	 * Method to check collision of player with collectibles
@@ -453,46 +373,6 @@ public class Player extends Entity{
 		
 	}
 
-
-	public void render(Graphics g) {
-		
-		BufferedImage currentSprite;
-		
-		switch(this.getFaceDir()) {
-			case RIGHT:
-				if(!this.isDamaged()) {
-					currentSprite = this.rightPlayer[index];
-				}else {
-					currentSprite = this.playerDamageRight;
-				}
-				break;
-			case LEFT:
-				if(!this.isDamaged()) {
-					currentSprite = this.leftPlayer[index];
-				}else {
-					currentSprite = this.playerDamageLeft;
-				}
-				break;
-			case UP:
-				if(!this.isDamaged()) {
-					currentSprite = this.upPlayer[index];
-				}else {
-					currentSprite = this.playerDamageUp;
-				}
-				break;
-			case DOWN: // If DOWN or NONE, sprite down is rendered	
-			default:
-				if(!this.isDamaged()) {
-					currentSprite = this.downPlayer[index];
-				}else {
-					currentSprite = this.playerDamageDown;
-				}
-				break;
-		}
-		
-		g.drawImage(currentSprite, (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-
-	}
 	
 	/**
 	 * Method to render sprite of player dead

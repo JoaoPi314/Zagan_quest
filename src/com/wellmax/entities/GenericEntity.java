@@ -55,11 +55,11 @@ public abstract class GenericEntity {
 	/**
 	 * Frames of actual sprite (Animation calculus)
 	 */
-	private int frames;
+	protected int frames;
 	/**
 	 * Max number of frames to change sprite (Animation calculus)
 	 */
-	private int maxFrames;
+	protected int maxFrames;
 	/**
 	 * Index of sprite array (Animation calculus)
 	 */
