@@ -1,4 +1,4 @@
-package com.melqjpgames.world;
+package com.wellmax.world;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.melqjpgames.entities.*;
-import com.melqjpgames.main.Game;
+import com.wellmax.entities.*;
+import com.wellmax.main.Game;
 
 public class World {
 	

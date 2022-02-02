@@ -1,9 +1,9 @@
-package com.melqjpgames.entities;
+package com.wellmax.entities;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import com.melqjpgames.entities.types.Directions;
+import com.wellmax.entities.types.Directions;
 
 /**
  * Generic Entity class. The Entity, projectile and Collectible classes

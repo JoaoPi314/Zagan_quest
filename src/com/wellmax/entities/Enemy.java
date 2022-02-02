@@ -1,98 +1,153 @@
-package com.melqjpgames.entities;
+package com.wellmax.entities;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import com.melqjpgames.entities.types.Directions;
 import com.melqjpgames.main.Game;
 import com.melqjpgames.world.Camera;
 import com.melqjpgames.world.World;
 
 public class Enemy extends Entity{
 
-	// Directions
-	protected boolean right, up, left, down;
-	protected double speed;
-	protected final int upDir = 0, downDir = 1, rightDir = 2, leftDir = 3;
-	protected int dir;
-	protected boolean moved;
-	// Sprites
-	protected BufferedImage[] upEnemy;
-	protected BufferedImage[] downEnemy;
-	protected BufferedImage[] rightEnemy;
-	protected BufferedImage[] leftEnemy;
-	protected int nOfSprites;
-	
-	protected BufferedImage enemyDamageUp;
-	protected BufferedImage enemyDamageDown;
-	protected BufferedImage enemyDamageRight;
-	protected BufferedImage enemyDamageLeft;
+	//---------------------------- Attributes ----------------------------------//	
 
+	// Sprites
+	/**
+	 * Sprites of enemy facing right
+	 */
+	protected BufferedImage[] rightEnemy;
+	/**
+	 * Sprites of enemy facing left
+	 */
+	protected BufferedImage[] leftEnemy;
+	/**
+	 * Sprites of enemy facing up
+	 */
+	protected BufferedImage[] upEnemy;
+	/**
+	 * Sprites of enemy facing down
+	 */
+	protected BufferedImage[] downEnemy;
+	/**
+	 * Sprite of enemy taking damage facing right
+	 */
+	protected BufferedImage enemyDamageRight;
+	/**
+	 * Sprite of enemy taking damage facing left
+	 */
+	protected BufferedImage enemyDamageLeft;
+	/**
+	 * Sprite of enemy taking damage facing up
+	 */
+	protected BufferedImage enemyDamageUp;
+	/**
+	 * Sprite of enemy taking damage facing down
+	 */
+	protected BufferedImage enemyDamageDown;
 	
-	// Animation of sprite
-	protected int frames;
-	protected final int maxFrames = 10;
-	protected int index;
-	protected final int maxIndex = 3;
-	
-	
+	/**
+	 * Fog of view
+	 */
 	protected int fov;
-	public final int maskx = 0;
-	public final int masky = 0;
-	public final int maskw = 16;
-	public final int maskh = 16;
+	/**
+	 * Flag that indicates if enemy is dying
+	 */
+	protected boolean dying;
 	
-	private int life = 10;
-	
-	public boolean isDamaged = false;
-	private int damageFrames = 0;
-	private int kbSpeed = 3;
-	private  int kbDir;
-	private boolean isDying;
-	
+	//---------------------------- Methods ----------------------------------//	
 	
 	/*
 	 * Constructor receives the position and size of player
 	 */
 	public Enemy(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		speed = 1;
-		frames = 0;
-		index = 0;
-		nOfSprites = 4;
-		dir = downDir;
-		fov = 5;
+		
+		this.setSpeed(1);
+		this.setFaceDir(Directions.DOWN); 
+		this.setLife(10);
+		this.setFov(5);
 		
 		// Initiates sprites
-		upEnemy = new BufferedImage[nOfSprites];
-		downEnemy = new BufferedImage[nOfSprites];
-		rightEnemy = new BufferedImage[nOfSprites];
-		leftEnemy = new BufferedImage[nOfSprites];
-		
-		enemyDamageUp = Game.spritesheet.getSprite(64, 80, 16, 16);
-		enemyDamageDown = Game.spritesheet.getSprite(64, 96, 16, 16);
-		enemyDamageRight = Game.spritesheet.getSprite(64, 112, 16, 16);
-		enemyDamageLeft = Game.spritesheet.getSprite(64, 128, 16, 16);
-		
-		for(int i = 0; i < nOfSprites; i++) {
-			upEnemy[i] = Game.spritesheet.getSprite(i*16, 80, getWidth(), getHeight());
-			downEnemy[i] = Game.spritesheet.getSprite(i*16, 96, getWidth(), getHeight());
-			rightEnemy[i] = Game.spritesheet.getSprite(i*16, 112, getWidth(), getHeight());
-			leftEnemy[i] = Game.spritesheet.getSprite(i*16, 128, getWidth(), getHeight());
-			
+		this.rightEnemy = new BufferedImage[this.getnOfSprites()];
+		this.leftEnemy = new BufferedImage[this.getnOfSprites()];
+		this.upEnemy = new BufferedImage[this.getnOfSprites()];
+		this.downEnemy = new BufferedImage[this.getnOfSprites()];
+
+		this.enemyDamageRight = Game.spritesheet.getSprite(64, 112, this.getWidth(), this.getHeight());
+		this.enemyDamageLeft = Game.spritesheet.getSprite(64, 128, this.getWidth(), this.getHeight());
+		this.enemyDamageUp = Game.spritesheet.getSprite(64, 80, this.getWidth(), this.getHeight());
+		this.enemyDamageDown = Game.spritesheet.getSprite(64, 96, this.getWidth(), this.getHeight());
+
+		for(int i = 0; i < this.getnOfSprites(); i++) {
+			this.rightEnemy[i] = Game.spritesheet.getSprite(i*16, 112, this.getWidth(), this.getHeight());
+			this.leftEnemy[i] = Game.spritesheet.getSprite(i*16, 128, this.getWidth(), this.getHeight());
+			this.upEnemy[i] = Game.spritesheet.getSprite(i*16, 80, this.getWidth(), this.getHeight());
+			this.downEnemy[i] = Game.spritesheet.getSprite(i*16, 96, this.getWidth(), this.getHeight());
 
 		}
 		
 	}
 	
-	// Update and render methods
+	
+	/**
+	 * @return the fov
+	 */
+	public int getFov() {
+		return fov;
+	}
+
+
+	/**
+	 * @param fov the fov to set
+	 */
+	public void setFov(int fov) {
+		this.fov = fov;
+	}
+
+	/**
+	 * @return the dying
+	 */
+	public boolean isDying() {
+		return dying;
+	}
+
+	/**
+	 * @param dying the dying to set
+	 */
+	public void setDying(boolean dying) {
+		this.dying = dying;
+	}
+
+	/**
+	 * Method to check if the player is near enemy
+	 * @return true if player is inside the fov of enemy and the player is alive
+	 */
+	private boolean nearPlayer() {
+		
+		boolean xAxisNear = (Math.abs(this.getX() - Game.player.getX()) <= this.getWidth()*this.getFov());
+		boolean yAxisNear = (Math.abs(this.getY() - Game.player.getY()) <= this.getHeight()*this.getFov()_;
+		boolean movingChance = (Game.rand.nextInt(100) < 75);
+		boolean playerAlive = (Game.player.getLife() > 0);
+		
+		return (xAxisNear && yAxisNear && movingChance && playerAlive);
+	}
+	
+	/**
+	 * Method to execute enemy IA
+	 */
+	protected void enemyIA() {
+		
+	}
+	
 	
 	public void update() {
-		moved = false;
+		
+		this.setMoving(false);
+		
 		if(!this.isColidingWithPlayer() || Game.player.getLife() <= 0) {
-			if(Math.abs(x - Game.player.getX()) <= width*fov &&
-			   Math.abs(y - Game.player.getY()) <= height*fov &&
-			   Game.rand.nextInt(100) < 75 && Game.player.getLife() > 0) {
+			if(nearPlayer()) {
 				if((int)x < (int)Game.player.getX() && World.isFree((int)(getX() + speed), (int) getY()) &&
 						!isColiding((int)(getX() + speed), (int)getY())) {
 					x += speed;
@@ -183,6 +238,7 @@ public class Enemy extends Entity{
 				moved = true;
 			}
 		}
+		
 		if(isDamaged) {
 			damageFrames++;
 			if(damageFrames ==8) {
@@ -191,16 +247,7 @@ public class Enemy extends Entity{
 			}
 		}
 		
-		if(moved) {
-			frames++;
-			if(frames == maxFrames) {
-				frames = 0;
-				index++;
-				if(index > maxIndex) {
-					index = 0;
-				}
-			}
-		}
+		this.countFrames(moved);
 		
 		colidingBullet();
 		
@@ -245,7 +292,7 @@ public class Enemy extends Entity{
 		for(int i = 0; i < Game.fireballs.size(); i++) {
 			FireballShoot e = Game.fireballs.get(i);
 			
-			if(Entity.isColiding(this, e)) {
+			if(GenericEntity.isColliding(this, e)) {
 				this.kbDir = e.getDir();
 				this.kbSpeed = 3;
 				this.isDamaged = true;
@@ -259,7 +306,7 @@ public class Enemy extends Entity{
 		for(int i = 0; i < Game.luteFires.size(); i++) {
 			LuteFire e = Game.luteFires.get(i);
 			
-			if(Entity.isColiding(this, e)) {
+			if(GenericEntity.isColliding(this, e)) {
 				this.isDamaged = true;
 				this.kbDir = e.getDir();
 				this.kbSpeed = 1;
@@ -299,44 +346,5 @@ public class Enemy extends Entity{
 		return false;
 	}
 	
-	// Getter and Setters methods
-	public boolean isRight() {
-		return right;
-	}
 
-	public void setRight(boolean right) {
-		this.right = right;
-	}
-
-	public boolean isLeft() {
-		return left;
-	}
-
-	public void setLeft(boolean left) {
-		this.left = left;
-	}
-
-	public boolean isUp() {
-		return up;
-	}
-
-	public void setUp(boolean up) {
-		this.up = up;
-	}
-
-	public boolean isDown() {
-		return down;
-	}
-
-	public void setDown(boolean down) {
-		this.down = down;
-	}
-
-	public int getKbDir() {
-		return kbDir;
-	}
-
-	public void setKbDir(int kbDir) {
-		this.kbDir = kbDir;
-	}
 }

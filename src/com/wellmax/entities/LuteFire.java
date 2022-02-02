@@ -1,11 +1,12 @@
-package com.melqjpgames.entities;
+package com.wellmax.entities;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import com.melqjpgames.main.Game;
-import com.melqjpgames.world.Camera;
-import com.melqjpgames.world.World;
+import com.wellmax.entities.types.Directions;
+import com.wellmax.main.Game;
+import com.wellmax.world.Camera;
+import com.wellmax.world.World;
 
 public class LuteFire extends Entity{
 
@@ -30,12 +31,12 @@ public class LuteFire extends Entity{
 	private int timeRemain = 0;
 	
 	
-	public LuteFire(int x, int y, int width, int height, int dir, int dx, int dy, int indexNote) {
+	public LuteFire(int x, int y, int width, int height, Directions dir, int dx, int dy, int indexNote) {
 		super(x, y, width, height);
 		
 		this.dx = dx;
 		this.dy = dy;
-		this.setDir(dir);
+		this.setFaceDir(dir);
 		this.indexNote = indexNote;
 		notes = new BufferedImage[3][4];
 			

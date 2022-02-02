@@ -1,11 +1,12 @@
-package com.melqjpgames.entities;
+package com.wellmax.entities;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import com.melqjpgames.main.Game;
-import com.melqjpgames.world.Camera;
-import com.melqjpgames.world.World;
+import com.wellmax.entities.types.Directions;
+import com.wellmax.main.Game;
+import com.wellmax.world.Camera;
+import com.wellmax.world.World;
 
 public class FireballShoot extends Entity{
 
@@ -32,10 +33,10 @@ public class FireballShoot extends Entity{
 	private int timeRemain = 0;
 	
 	
-	public FireballShoot(int x, int y, int width, int height, int dir, int dx, int dy) {
+	public FireballShoot(int x, int y, int width, int height, Directions dir, int dx, int dy) {
 		super(x, y, width, height);
 		
-		this.setDir(dir);
+		this.setFaceDir(dir);
 		this.dx = dx;
 		this.dy = dy;
 		fireUp = new BufferedImage[4];
@@ -80,17 +81,17 @@ public class FireballShoot extends Entity{
 	}
 	
 	public void render(Graphics g) {
-		switch(getDir()) {
-			case upDir:
+		switch(this.getFaceDir()) {
+			case UP:
 				g.drawImage(fireUp[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 				break;
-			case downDir:
+			case DOWN:
 				g.drawImage(fireDown[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 				break;
-			case rightDir:
+			case RIGHT:
 				g.drawImage(fireRight[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 				break;
-			case leftDir:
+			case LEFT:
 				g.drawImage(fireLeft[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 				break;
 			default:

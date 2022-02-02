@@ -1,4 +1,4 @@
-package com.melqjpgames.entities.types;
+package com.wellmax.entities.types;
 
 public enum Directions {
 	RIGHT,

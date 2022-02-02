@@ -1,12 +1,12 @@
-package com.melqjpgames.entities;
+package com.wellmax.entities;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import com.melqjpgames.entities.types.Directions;
-import com.melqjpgames.main.Game;
-import com.melqjpgames.world.Camera;
-import com.melqjpgames.world.World;
+import com.wellmax.entities.types.Directions;
+import com.wellmax.main.Game;
+import com.wellmax.world.Camera;
+import com.wellmax.world.World;
 
 public class Player extends Entity{
 

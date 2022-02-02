@@ -1,10 +1,10 @@
-package com.melqjpgames.entities;
+package com.wellmax.entities;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import com.melqjpgames.main.Game;
-import com.melqjpgames.world.Camera;
+import com.wellmax.main.Game;
+import com.wellmax.world.Camera;
 
 public class EnemyDied extends Entity{
 	

@@ -1,4 +1,4 @@
-package com.melqjpgames.world;
+package com.wellmax.world;
 
 public class Camera {
 

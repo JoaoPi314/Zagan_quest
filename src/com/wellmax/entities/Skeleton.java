@@ -1,8 +1,8 @@
-package com.melqjpgames.entities;
+package com.wellmax.entities;
 
 import java.awt.image.BufferedImage;
 
-import com.melqjpgames.main.Game;
+import com.wellmax.main.Game;
 
 public class Skeleton extends Enemy{
 	

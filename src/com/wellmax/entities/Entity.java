@@ -1,10 +1,10 @@
-package com.melqjpgames.entities;
+package com.wellmax.entities;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import com.melqjpgames.entities.types.Directions;
-import com.melqjpgames.main.Game;
+import com.wellmax.entities.types.Directions;
+import com.wellmax.main.Game;
 
 /**
  *  The Entity class covers all entities that

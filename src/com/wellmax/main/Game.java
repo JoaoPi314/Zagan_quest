@@ -1,4 +1,4 @@
-package com.melqjpgames.main;
+package com.wellmax.main;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -16,17 +16,17 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import com.melqjpgames.entities.Enemy;
-import com.melqjpgames.entities.EnemyDied;
-import com.melqjpgames.entities.Ent;
-import com.melqjpgames.entities.Entity;
-import com.melqjpgames.entities.FireballShoot;
-import com.melqjpgames.entities.LuteFire;
-import com.melqjpgames.entities.Player;
-import com.melqjpgames.entities.Skeleton;
-import com.melqjpgames.graphics.Spritesheet;
-import com.melqjpgames.graphics.UI;
-import com.melqjpgames.world.World;
+import com.wellmax.entities.Enemy;
+import com.wellmax.entities.EnemyDied;
+import com.wellmax.entities.Ent;
+import com.wellmax.entities.Entity;
+import com.wellmax.entities.FireballShoot;
+import com.wellmax.entities.LuteFire;
+import com.wellmax.entities.Player;
+import com.wellmax.entities.Skeleton;
+import com.wellmax.graphics.Spritesheet;
+import com.wellmax.graphics.UI;
+import com.wellmax.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener{
 

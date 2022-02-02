@@ -1,9 +1,9 @@
-package com.melqjpgames.world;
+package com.wellmax.world;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import com.melqjpgames.main.Game;
+import com.wellmax.main.Game;
 
 public class Tile {
 

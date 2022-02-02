@@ -1,10 +1,10 @@
-package com.melqjpgames.entities;
+package com.wellmax.entities;
 
 import java.awt.Graphics;
 
-import com.melqjpgames.world.Camera;
+import com.wellmax.world.Camera;
 
-public class Fireball extends Entity{
+public class HealthPotion extends Entity{
 
 	
 	private int frames;
@@ -12,11 +12,11 @@ public class Fireball extends Entity{
 	private int index;
 	private final int maxIndex = 3;
 	
-	
-	public Fireball(int x, int y, int width, int height) {
+	public HealthPotion(int x, int y, int width, int height) {
 		super(x, y, width, height);
 	}
-
+	
+	
 	public void update() {
 		frames++;
 		if(frames == maxFrames) {
@@ -28,9 +28,9 @@ public class Fireball extends Entity{
 		}
 	}
 	
-	
 	public void render(Graphics g) {
-		g.drawImage(FIREBALL_EN[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+		g.drawImage(HEALTH_POTION_EN[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
 	}
+	
 	
 }
