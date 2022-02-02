@@ -10,8 +10,11 @@ public class Skeleton extends Enemy{
 	public Skeleton(int x, int y, int width, int height, Directions dir) {
 		super(x, y, width, height);
 		this.setSpeed(1);
-		this.setFaceDir(dir);
+		this.setFaceDir(Directions.DOWN); 
+		this.setLife(10);
 		this.setFov(8);
+		this.setDefense(1.5);
+		this.setDamage(2);
 		
 		// Initiates sprites
 		enRight = new BufferedImage[this.getnOfSprites()];

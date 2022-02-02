@@ -149,7 +149,7 @@ public class World {
 							Game.entities.add(fireball);
 							break;
 						case 0xFFFF0000: // Enemy
-							Enemy en = new Enemy(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+							Orc en = new Orc(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 							Game.enemies.add(en);
 							break;
 						case 0xFF0000FF: // Player
