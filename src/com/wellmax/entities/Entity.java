@@ -294,7 +294,6 @@ public class Entity extends GenericEntity{
 	 */
 	protected void damageMovement() {
 		if(this.isDamaged()) {
-			
 			switch(this.getKbDir()) {
 				case RIGHT:
 					if(World.isFree((int)(this.getX() + this.getSpeed()*this.getKbSpeed()), (int) this.getY())) {

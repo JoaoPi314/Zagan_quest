@@ -17,7 +17,7 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 import com.wellmax.entities.Enemy;
-import com.wellmax.entities.EnemyDied;
+import com.wellmax.entities.DeadEnemy;
 import com.wellmax.entities.Ent;
 import com.wellmax.entities.Entity;
 import com.wellmax.entities.FireballShoot;
@@ -49,7 +49,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public static List<Enemy> enemies;
 	public static List<FireballShoot> fireballs;
 	public static List<LuteFire> luteFires;
-	public static List<EnemyDied> deadEnemies;
+	public static List<DeadEnemy> deadEnemies;
 	public static List<Ent> ents;
 	public static Spritesheet spritesheet;
 	public static Spritesheet spritesheet1;
@@ -88,7 +88,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		enemies = new ArrayList<Enemy>();
 		fireballs = new ArrayList<FireballShoot>();
 		luteFires = new ArrayList<LuteFire>();
-		deadEnemies = new ArrayList<EnemyDied>();
+		deadEnemies = new ArrayList<DeadEnemy>();
 		ents = new ArrayList<Ent>();
 		player = new Player(32, 32, 16, 16);
 		world = new World(level);
@@ -137,7 +137,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			reset = false;
 		}
 		for(int i = 0; i < deadEnemies.size(); i++) {
-			EnemyDied e = deadEnemies.get(i);
+			DeadEnemy e = deadEnemies.get(i);
 			e.update();
 		}
 		
@@ -148,10 +148,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			Entity e = entities.get(i);
 			e.update();
 		}
-		
-
-		
-		
+	
 		for(int i = 0; i < enemies.size(); i++) {
 			Enemy e = enemies.get(i);
 			e.update();
@@ -214,7 +211,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		world.render(g);
 		for(int i = 0; i < deadEnemies.size(); i++) {
-			EnemyDied e = deadEnemies.get(i);
+			DeadEnemy e = deadEnemies.get(i);
 			e.render(g);
 		}
 		
@@ -285,8 +282,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 				switch(currentWave) {
 					case 1: // Jumps to wave 2
 						for(int i = 0; i < deadEnemies.size(); i++) {
-							EnemyDied en = deadEnemies.get(i);
-							Skeleton skeleton = new Skeleton((int)en.getX(), (int)en.getY(), en.getWidth(), en.getHeight(), en.getDir());
+							DeadEnemy en = deadEnemies.get(i);
+							Skeleton skeleton = new Skeleton((int)en.getX(), (int)en.getY(), en.getWidth(), en.getHeight(), en.getFaceDir());
 							enemies.add(skeleton);
 						}
 						deadEnemies.removeAll(deadEnemies);

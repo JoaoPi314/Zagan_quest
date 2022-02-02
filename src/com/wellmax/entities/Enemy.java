@@ -42,6 +42,7 @@ public class Enemy extends Entity{
 		this.setLife(10);
 		this.setFov(5);
 		this.setDefense(1);
+		this.setDamage(1);
 		
 		// Initiates sprites
 		this.enRight = new BufferedImage[this.getnOfSprites()];
@@ -219,9 +220,10 @@ public class Enemy extends Entity{
 			}
 		}else if(Game.player.getLife() > 0) { // If enemy is colliding with player, and player is alive
 			// Attacking player
-			Game.player.setKbDir(this.getFaceDir());
 			if(Game.rand.nextInt(100) < 5) { // When in contact, enemy has a chance of 5% to deal damage
 				Game.player.setLife(Game.player.getLife() - this.getDamage()/Game.player.getDefense());
+				Game.player.setKbDir(this.getFaceDir());
+				Game.player.setKbspeed(3);
 				Game.player.setDamaged(true);
 			}
 		}
@@ -240,7 +242,7 @@ public class Enemy extends Entity{
 				this.setKbDir(e.getFaceDir());
 				this.setKbspeed(3);
 				this.setDamaged(true);
-				this.setLife(this.getLife() - 5/this.getDamage());
+				this.setLife(this.getLife() - 5/this.getDefense());
 				Game.fireballs.remove(i);
 				return;
 			}
@@ -254,7 +256,7 @@ public class Enemy extends Entity{
 				this.setKbDir(e.getFaceDir());
 				this.setKbspeed(1);
 				this.setDamaged(true);
-				this.setLife(this.getLife() - 2/this.getDamage());
+				this.setLife(this.getLife() - 2/this.getDefense());
 				Game.luteFires.remove(i);
 				return;
 			}
