@@ -37,6 +37,10 @@ public class Entity extends GenericEntity{
 	 */
 	protected double life;
 	/**
+	 * Entity max life
+	 */
+	protected int maxLife;
+	/**
 	 * Entity defense
 	 */
 	protected double defense;
@@ -153,6 +157,20 @@ public class Entity extends GenericEntity{
 		return life;
 	}
 	
+	/**
+	 * @return the maxLife
+	 */
+	public int getMaxLife() {
+		return maxLife;
+	}
+
+	/**
+	 * @param maxLife the maxLife to set
+	 */
+	public void setMaxLife(int maxLife) {
+		this.maxLife = maxLife;
+	}
+
 	/**
 	 * @param life the life to set
 	 */
