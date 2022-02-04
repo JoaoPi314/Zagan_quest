@@ -366,8 +366,8 @@ public class Player extends Entity{
 		this.shooting();
 		
 		// Makes camera follow player
-		Camera.x = Camera.clamp((int)getX() - (Game.WIDTH / 2), 0, World.WIDTH*16 - Game.WIDTH);
-		Camera.y = Camera.clamp((int)getY() - (Game.HEIGHT / 2), 0, World.HEIGHT*16 - Game.HEIGHT);
+		Camera.x = Camera.clamp((int)this.getX() - (Game.WIDTH / 2), 0, World.WIDTH*16 - Game.WIDTH);
+		Camera.y = Camera.clamp((int)this.getY() - (Game.HEIGHT / 2), 0, World.HEIGHT*16 - Game.HEIGHT);
 		
 	}
 
