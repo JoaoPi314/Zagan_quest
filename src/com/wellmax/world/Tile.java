@@ -17,23 +17,23 @@ public class Tile {
 	/**
 	 * X position of tile
 	 */
-	private int x;
+	protected int x;
 	/**
 	 * Y position of tile
 	 */
-	private int y;
+	protected int y;
 	/**
 	 * Tile width
 	 */
-	private int width;
+	protected int width;
 	/**
 	 * Tile height
 	 */
-	private int height;
+	protected int height;
 	/**
 	 * Tile sprite
 	 */
-	private BufferedImage sprite;
+	protected BufferedImage sprite;
 	
 	// Static attributes
 
