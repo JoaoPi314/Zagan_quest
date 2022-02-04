@@ -171,12 +171,12 @@ public class World {
 						case 0xFFF4FF00: // Health Potion
 							HealthPotion healthPotion = new HealthPotion(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 							healthPotion.setMask(4, 0, 8, 16);
-							Game.entities.add(healthPotion);
+							Game.collectibles.add(healthPotion);
 							break;
 						case 0xFFFF8200: // FireBall
 							Fireball fireball = new Fireball(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 							fireball.setMask(4, 0, 8, 16);
-							Game.entities.add(fireball);
+							Game.collectibles.add(fireball);
 							break;
 						case 0xFFFF0000: // Enemy
 							Orc en = new Orc(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);						

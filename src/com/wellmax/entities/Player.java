@@ -272,19 +272,19 @@ public class Player extends Entity{
 	 * Method to check collision of player with collectibles
 	 */
 	public void checkItens() {
-		for(int i = 0; i < Game.entities.size(); i++) {
-			GenericEntity en = Game.entities.get(i);
+		for(int i = 0; i < Game.collectibles.size(); i++) {
+			GenericEntity en = Game.collectibles.get(i);
 			if(en instanceof HealthPotion) {
 				if(GenericEntity.isColliding(this, en)) {
 					((HealthPotion) en).effect();
-					Game.entities.remove(en);
+					Game.collectibles.remove(en);
 					
 				}
 			}else if(en instanceof Fireball) {
 				if(GenericEntity.isColliding(this, en)) {
 					setHasFireball(true);
 					((Fireball) en).effect();
-					Game.entities.remove(en);
+					Game.collectibles.remove(en);
 				}
 				
 			}

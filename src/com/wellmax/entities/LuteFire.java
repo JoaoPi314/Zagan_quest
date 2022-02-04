@@ -94,20 +94,6 @@ public class LuteFire extends Projectile{
 		this.nOfNotes = nOfNotes;
 	}
 
-	public void update() {
-		
-		if(World.isFree((int)(x + dx*speed),(int)(y + dy*speed))) {
-			x += dx*speed;
-			y += dy*speed;
-		}else {
-			Game.projectiles.remove(this);
-		}
-
-		this.countFrames(true);
-		
-		this.projectileLifeTime();
-		
-	}
 	
 	public void render(Graphics g) {
 		g.drawImage(notes[indexNote][index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);

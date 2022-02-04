@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
+import com.wellmax.world.World;
 
 /**
  * The projectiles are all mechanisms of deal damage at distance
@@ -192,7 +193,18 @@ public class Projectile extends GenericEntity{
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
+		if(World.isFree((int)(this.getX() + this.getDx()*this.getSpeed()),(int)(this.getY() + this.getDy()*this.getSpeed())) &&
+				!this.isCollidingWithScenario((int)(this.getX() + this.getDx()*this.getSpeed()),(int)(this.getY() + this.getDy()*this.getSpeed()))){
+			
+			this.setX(this.getX() + this.getDx()*this.getSpeed());
+			this.setY(this.getY() + this.getDy()*this.getSpeed());
+		}else {
+			Game.projectiles.remove(this);
+		}
+
+		this.countFrames(true);
+		
+		this.projectileLifeTime();
 		
 	}
 

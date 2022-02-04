@@ -74,18 +74,6 @@ public class FireballShoot extends Projectile{
 	}
 	
 	
-	public void update() {
-		if(World.isFree((int)(x + dx*speed),(int)(y + dy*speed))) {
-			x += dx*speed;
-			y += dy*speed;
-		}else {
-			Game.projectiles.remove(this);
-		}
-		
-		this.countFrames(true);
-		this.projectileLifeTime();
-	}
-	
 	public void render(Graphics g) {
 		switch(this.getFaceDir()) {
 			case UP:

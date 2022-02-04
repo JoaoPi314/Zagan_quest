@@ -16,10 +16,9 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import com.wellmax.entities.Collectible;
 import com.wellmax.entities.DeadEnemy;
 import com.wellmax.entities.Enemy;
-import com.wellmax.entities.Ent;
-import com.wellmax.entities.Entity;
 import com.wellmax.entities.GenericEntity;
 import com.wellmax.entities.Player;
 import com.wellmax.entities.Projectile;
@@ -29,74 +28,335 @@ import com.wellmax.graphics.UI;
 import com.wellmax.world.Scenario;
 import com.wellmax.world.World;
 
+/**
+ * The main class of project. It will run the game
+ * @author joao.gomes
+ *
+ */
 public class Game extends Canvas implements Runnable, KeyListener{
 
-	
+	//---------------------------- Attributes ----------------------------------//	
+
 	/**
-	 * 
+	 * Serial Version UID
 	 */
 	private static final long serialVersionUID = 1L;
-	public static JFrame frame;
+	/**
+	 * JFrame (Screen)
+	 */
+	private static JFrame frame;
+	/**
+	 * Thread (Responsible for run the game)
+	 */
 	private Thread thread;
-	private boolean isRunning = true;
-	
+	/**
+	 * Flag that indicates if game is running
+	 */
+	private boolean running;
+	/**
+	 * Screen Width
+	 */
 	public static final int WIDTH = 256;
+	/**
+	 * Screen height
+	 */
 	public static final int HEIGHT = 240;
+	/**
+	 * Screen scale
+	 */
 	public static final int SCALE = 4;
 	
+	/**
+	 * Image to be rendered
+	 */
 	private BufferedImage image;
 
-	public static List<GenericEntity> entities;
+	/**
+	 * List with all collectibles 
+	 */
+	public static List<Collectible> collectibles;
+	/**
+	 * List with all enemies
+	 */
 	public static List<Enemy> enemies;
+	/**
+	 * List with all projectiles
+	 */
 	public static List<Projectile> projectiles;
+	/**
+	 * List with all dead enemies
+	 */
 	public static List<DeadEnemy> deadEnemies;
+	/**
+	 * List with all scenario items
+	 */
 	public static List<Scenario> scenario;
+	/**
+	 * First spritesheet
+	 */
 	public static Spritesheet spritesheet;
+	/**
+	 * Second spritesheet
+	 */
 	public static Spritesheet spritesheet1;
-	
+	/**
+	 * World is responsible for map generation
+	 */
 	public static World world;
+	/**
+	 * Game player
+	 */
 	public static Player player;
+	/**
+	 * User interface
+	 */
 	public UI ui;
+	/**
+	 * Random object to uses in various occasions
+	 */
 	public static Random rand;
 	
-	private String gameState = "NORMAL";
+	/**
+	 * Enum with gameState
+	 */
+	
+	private enum GameStates{
+		NORMAL,
+		GAMEOVER
+	}
+	
+	/**
+	 * Game state
+	 */
+	GameStates gState; 
+	
+	/**
+	 * Flag that indicates if the game over message should be rendered
+	 */
 	private boolean showGOMessage;
-	private int framesGO = 0;
-	private int maxFramesGO = 30;
+	/**
+	 * Frames counting to gameover message blink
+	 */
+	private int framesGO;
+	/**
+	 * Max frames of game over text to nlink
+	 */
+	private int maxFramesGO;
+	/**
+	 * Flag that indicates if game should be reseted
+	 */
 	private boolean reset;
 	
-	private int currentLevel = 1;
-	private int maxLevels = 2;
-	private int currentWave = 1;
-	private int maxWaves = 3;
+	/**
+	 * Current level
+	 */
+	private int currentLevel;
+	/**
+	 * Number of levels existing in game
+	 */
+	private int maxLevels;
+	/**
+	 * Current wave
+	 */
+	private int currentWave;
+	/**
+	 * Number of waves of current level
+	 */
+	private int maxWaves;
 	
+	
+	//---------------------------- Methods ----------------------------------//	
+	
+	/**
+	 * Game constructor
+	 */
 	public Game() {
+		// Attributes
+		this.setRunning(true);
+		this.setgState(GameStates.NORMAL);
+		// game over message
+		this.setFramesGO(0);
+		this.setMaxFramesGO(30);
+		
+		// Levels
+		this.setCurrentLevel(1);
+		this.setMaxLevels(1);
+		this.setCurrentWave(1);
+		this.setMaxWaves(3);
+		
+		
 		rand = new Random();
-		addKeyListener(this);
-		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
-		initFrame();
+		this.addKeyListener(this);
+		this.setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
+		this.initFrame("Zagan quest");
 		// Everything is scalable, to undo this, multiply here by scale
 		// Initiates Objects
-		initGame("/map_01.png");
+		this.initGame("/map_01.png");
 	}
 	
+	/**
+	 * @return the isRunning
+	 */
+	public boolean isRunning() {
+		return running;
+	}
+
+	/**
+	 * @param isRunning the isRunning to set
+	 */
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+	/**
+	 * @return the gState
+	 */
+	public GameStates getgState() {
+		return gState;
+	}
+
+	/**
+	 * @param gState the gState to set
+	 */
+	public void setgState(GameStates gState) {
+		this.gState = gState;
+	}
+
+	/**
+	 * @return the showGOMessage
+	 */
+	public boolean isShowGOMessage() {
+		return showGOMessage;
+	}
+
+	/**
+	 * @param showGOMessage the showGOMessage to set
+	 */
+	public void setShowGOMessage(boolean showGOMessage) {
+		this.showGOMessage = showGOMessage;
+	}
+
+	/**
+	 * @return the framesGO
+	 */
+	public int getFramesGO() {
+		return framesGO;
+	}
+
+	/**
+	 * @param framesGO the framesGO to set
+	 */
+	public void setFramesGO(int framesGO) {
+		this.framesGO = framesGO;
+	}
+
+	/**
+	 * @return the maxFramesGO
+	 */
+	public int getMaxFramesGO() {
+		return maxFramesGO;
+	}
+
+	/**
+	 * @param maxFramesGO the maxFramesGO to set
+	 */
+	public void setMaxFramesGO(int maxFramesGO) {
+		this.maxFramesGO = maxFramesGO;
+	}
+
+	/**
+	 * @return the reset
+	 */
+	public boolean isReset() {
+		return reset;
+	}
+
+	/**
+	 * @param reset the reset to set
+	 */
+	public void setReset(boolean reset) {
+		this.reset = reset;
+	}
+
+	/**
+	 * @return the currentLevel
+	 */
+	public int getCurrentLevel() {
+		return currentLevel;
+	}
+
+	/**
+	 * @param currentLevel the currentLevel to set
+	 */
+	public void setCurrentLevel(int currentLevel) {
+		this.currentLevel = currentLevel;
+	}
+
+	/**
+	 * @return the maxLevels
+	 */
+	public int getMaxLevels() {
+		return maxLevels;
+	}
+
+	/**
+	 * @param maxLevels the maxLevels to set
+	 */
+	public void setMaxLevels(int maxLevels) {
+		this.maxLevels = maxLevels;
+	}
+
+	/**
+	 * @return the currentWave
+	 */
+	public int getCurrentWave() {
+		return currentWave;
+	}
+
+	/**
+	 * @param currentWave the currentWave to set
+	 */
+	public void setCurrentWave(int currentWave) {
+		this.currentWave = currentWave;
+	}
+
+	/**
+	 * @return the maxWaves
+	 */
+	public int getMaxWaves() {
+		return maxWaves;
+	}
+
+	/**
+	 * @param maxWaves the maxWaves to set
+	 */
+	public void setMaxWaves(int maxWaves) {
+		this.maxWaves = maxWaves;
+	}
+
+	/**
+	 * Method to initiates all objects of the game
+	 * @param level Path to current map image
+	 */
 	public void initGame(String level) {
-		spritesheet = new Spritesheet("/spritesheet.png");
-		spritesheet1 = new Spritesheet("/spritesheet1.png");
-		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-		entities = new ArrayList<GenericEntity>();
-		enemies = new ArrayList<Enemy>();
-		projectiles = new ArrayList<Projectile>();
-		deadEnemies = new ArrayList<DeadEnemy>();
-		scenario = new ArrayList<Scenario>();
-		player = new Player(32, 32, 16, 16);
-		world = new World(level);
-		ui = new UI();
+		Game.spritesheet = new Spritesheet("/spritesheet.png");
+		Game.spritesheet1 = new Spritesheet("/spritesheet1.png");
+		this.image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+		Game.collectibles = new ArrayList<Collectible>();
+		Game.enemies = new ArrayList<Enemy>();
+		Game.projectiles = new ArrayList<Projectile>();
+		Game.deadEnemies = new ArrayList<DeadEnemy>();
+		Game.scenario = new ArrayList<Scenario>();
+		Game.player = new Player(32, 32, 16, 16);
+		Game.world = new World(level);
+		this.ui = new UI();
 	}
 	
-	
-	public void initFrame() {
-		frame = new JFrame("Zagan Quest");
+	/**
+	 * Method to initiates screen
+	 */
+	public void initFrame(String title) {
+		frame = new JFrame(title);
 		frame.add(this);
 		frame.setResizable(false);
 		frame.pack();
@@ -105,14 +365,20 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Method to start the game thread
+	 */
 	public synchronized void start() {
 		thread = new Thread(this);
-		isRunning = true;
+		this.setRunning(true);
 		thread.start();
 	}
 	
+	/**
+	 * Method to stop game thread
+	 */
 	public synchronized void stop() {
-		isRunning = false;
+		this.setRunning(false);
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
@@ -120,160 +386,36 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		}
 	}
 	
-	
+	/**
+	 * Main method
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Game game = new Game();
 		game.start();
 	}
 	
-
 	
-	public void update() {
+	/**
+	 * Method to check if game jumps to next level ow wave
+	 */
+	private void nextWaveorLevel() {
 		
-		if(gameState.equals("NORMAL")) {
-			reset = false;
-		}
-		for(int i = 0; i < deadEnemies.size(); i++) {
-			DeadEnemy e = deadEnemies.get(i);
-			e.update();
-		}
-		
-		if(gameState.equals("NORMAL"))
-			player.update();
-		
-		for(int i = 0; i < entities.size(); i++) {
-			GenericEntity e = entities.get(i);
-			e.update();
-		}
-	
-		for(int i = 0; i < enemies.size(); i++) {
-			Enemy e = enemies.get(i);
-			e.update();
-		}
-		
-		ui.update();
-		
-		for(int i = 0; i < projectiles.size(); i++) {
-			Projectile p = projectiles.get(i);
-			p.update();
-		}
-		
-		if(player.getLife() <= 0) {
-			gameState = "GAMEOVER";
-		}
-		
-		if(enemies.size() == 0) {
-			nextWaveorLevel();
-		}
-		
-		if(gameState.equals("GAMEOVER")) {
-			framesGO++;
-			if(framesGO > maxFramesGO) {
-				framesGO = 0;
-				if(this.showGOMessage) {
-					this.showGOMessage = false;
-				}else {
-					this.showGOMessage = true;
-				}
-			}
-			if(reset) {
-				initGame("/map_01.png");
-				reset = false;
-				gameState = "NORMAL";
-			}
-		}
-	}
-
-	public void render() {
-		BufferStrategy bs = this.getBufferStrategy();
-		if(bs == null) {
-			this.createBufferStrategy(3);
-			return;
-		}
-		Graphics g = image.getGraphics();
-		
-		g.setColor(Color.black);
-		g.fillRect(0, 0, WIDTH, HEIGHT);
-		
-		world.render(g);
-		for(int i = 0; i < deadEnemies.size(); i++) {
-			DeadEnemy e = deadEnemies.get(i);
-			e.render(g);
-		}
-				
-		if(gameState.equals("NORMAL"))
-			player.render(g);
-		else
-			player.renderDead(g);
-		
-	
-		for(int i = 0; i < projectiles.size(); i++) {
-			Projectile p = projectiles.get(i);
-			p.render(g);
-		}
-		
-		
-		for(int i = 0; i < enemies.size(); i++) {
-			Enemy e = enemies.get(i);
-			e.render(g);
-		}
-		
-		for(int i = 0; i < entities.size(); i++) {
-			GenericEntity e = entities.get(i);
-			e.render(g);
-		}
-
-		for(int i = 0; i < Game.scenario.size(); i++) {
-			Scenario s = Game.scenario.get(i);
-			s.render(g);	
-		}
-		
-		ui.render(g);
-		
-		
-		//
-		g.dispose();
-		g = bs.getDrawGraphics();
-		g.drawImage(image,  0,  0,  WIDTH*SCALE,  HEIGHT*SCALE, null);
-		
-		if(gameState == "GAMEOVER") {
-			Graphics2D g2 = (Graphics2D) g;
-			g2.setColor(new Color(0x00, 0x00, 0x00, 150));
-			g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
-			g.setColor(Color.white);
-			g.setFont(new Font("arial", Font.BOLD, 48));
-			g.drawString("Game Over", WIDTH*SCALE / 2 - 125, HEIGHT*SCALE / 2);
-			g.setFont(new Font("arial", Font.BOLD, 28));
-			
-			if(showGOMessage) {
-				g.drawString("Try again? (Press ENTER)", WIDTH*SCALE / 2 - 175, HEIGHT*SCALE / 2 + 48);
-			}
-			
-			
-		}
-		
-		bs.show();
-		
-	}
-	
-	
-	public void nextWaveorLevel() {
-		
-		switch(currentLevel) {
+		switch(this.getCurrentLevel()) {
 			case 1:
-				switch(currentWave) {
+				switch(this.getCurrentWave()) {
 					case 1: // Jumps to wave 2
-						for(int i = 0; i < deadEnemies.size(); i++) {
-							DeadEnemy en = deadEnemies.get(i);
+						for(int i = 0; i < Game.deadEnemies.size(); i++) {
+							DeadEnemy en = Game.deadEnemies.get(i);
 							Skeleton skeleton = new Skeleton((int)en.getX(), (int)en.getY(), en.getWidth(), en.getHeight(), en.getFaceDir());
-							enemies.add(skeleton);
+							Game.enemies.add(skeleton);
 						}
-						deadEnemies.removeAll(deadEnemies);
-						currentWave++;
+						Game.deadEnemies.removeAll(Game.deadEnemies);
+						this.setCurrentWave(this.getCurrentWave() + 1);
 						break;
 					case 2: // Jumps to wave 3
-						deadEnemies.removeAll(deadEnemies);
-						currentWave++;
+						Game.deadEnemies.removeAll(Game.deadEnemies);
+						this.setCurrentWave(this.getCurrentWave() + 1);
 						break;
 					case 3: // Jumps to level 2
 						break;
@@ -281,14 +423,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 				break;
 			
 		}
-		
-		
-		
-		
-//		currentLevel++;
-//		if(currentLevel > maxLevels) {
-//			currentLevel = 1;
-//		}
 //		String newWorld = "/map_0"+currentLevel+".png";
 //		System.out.println(newWorld);
 //		initGame(newWorld);
@@ -297,6 +431,170 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	
 	
+	
+	/**
+	 * Method to update frame at frame
+	 */
+	public void update() {
+		
+		// Updates deadEnemies
+		for(int i = 0; i < deadEnemies.size(); i++) {
+			DeadEnemy e = deadEnemies.get(i);
+			e.update();
+		}
+		
+		// Checks game state
+		switch(gState) {
+			case NORMAL:
+				// Game should not be reseted
+				this.setReset(false);
+				Game.player.update();
+				//
+				break;
+			case GAMEOVER:
+			default:
+				this.setFramesGO(this.getFramesGO() + 1);
+				if(this.getFramesGO() > this.getMaxFramesGO()) {
+					this.setFramesGO(0);
+					if(this.isShowGOMessage()) {
+						this.setShowGOMessage(false);
+					}else {
+						this.setShowGOMessage(true);
+					}
+				}
+				if(this.isReset()) {
+					this.initGame("/map_01.png");
+					this.setReset(false);
+					this.setgState(GameStates.NORMAL);
+				}
+				break;
+		}
+		
+		// Updates collectibles
+		for(int i = 0; i < collectibles.size(); i++) {
+			GenericEntity e = collectibles.get(i);
+			e.update();
+		}
+	
+		// Updates enemies
+		for(int i = 0; i < enemies.size(); i++) {
+			Enemy e = enemies.get(i);
+			e.update();
+		}
+		
+		// Updates projectile
+		for(int i = 0; i < projectiles.size(); i++) {
+			Projectile p = projectiles.get(i);
+			p.update();
+		}
+		
+		// Checks for game over
+		if(player.getLife() <= 0) {
+			this.setgState(GameStates.GAMEOVER);
+		}
+		
+		// Updates User Interface
+		ui.update();
+		
+		// Checks for next wave or level
+		if(enemies.size() == 0) {
+			nextWaveorLevel();
+		}
+
+	}
+
+	/**
+	 * Render method
+	 */
+	public void render() {
+		
+		// Creates BufferedStrategy
+		BufferStrategy bs = this.getBufferStrategy();
+		if(bs == null) {
+			this.createBufferStrategy(3);
+			return;
+		}
+		// Creates Graphics
+		Graphics g = image.getGraphics();
+		
+		// Default is black screen
+		g.setColor(Color.black);
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		
+		// Renders world
+		world.render(g);
+		for(int i = 0; i < deadEnemies.size(); i++) {
+			DeadEnemy e = deadEnemies.get(i);
+			e.render(g);
+		}
+				
+		
+		// Checks game state
+		switch(this.getgState()) {
+			case NORMAL:
+				Game.player.render(g);
+				break;
+			case GAMEOVER:
+			default:
+				Game.player.renderDead(g);
+				
+				// Shows Game over message
+				Graphics2D g2 = (Graphics2D) g;
+				g2.setColor(new Color(0x00, 0x00, 0x00, 150));
+				g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
+				g.setColor(Color.white);
+				g.setFont(new Font("arial", Font.BOLD, 48));
+				g.drawString("Game Over", WIDTH*SCALE / 2 - 125, HEIGHT*SCALE / 2);
+				g.setFont(new Font("arial", Font.BOLD, 28));
+				
+				if(showGOMessage) {
+					g.drawString("Try again? (Press ENTER)", WIDTH*SCALE / 2 - 175, HEIGHT*SCALE / 2 + 48);
+				}
+				
+				break;
+		}
+
+		// Renders projectiles
+		for(int i = 0; i < projectiles.size(); i++) {
+			Projectile p = projectiles.get(i);
+			p.render(g);
+		}
+		
+		// Renders enemies
+		for(int i = 0; i < enemies.size(); i++) {
+			Enemy e = enemies.get(i);
+			e.render(g);
+		}
+		
+		// Renders collectibles
+		for(int i = 0; i < collectibles.size(); i++) {
+			GenericEntity e = collectibles.get(i);
+			e.render(g);
+		}
+		
+		// Renders Scenario items
+		for(int i = 0; i < Game.scenario.size(); i++) {
+			Scenario s = Game.scenario.get(i);
+			s.render(g);	
+		}
+		
+		// Renders User interface
+		ui.render(g);
+				
+		
+		// Draws everything
+		g.dispose();
+		g = bs.getDrawGraphics();
+		g.drawImage(image,  0,  0,  WIDTH*SCALE,  HEIGHT*SCALE, null);
+		
+		bs.show();
+		
+	}
+	
+
+	/**
+	 * Method to run game
+	 */
 	@Override
 	public void run() {
 		// Catch current time from PC
@@ -312,13 +610,13 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		requestFocus();
 		
-		while(isRunning) {
+		while(this.isRunning()) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
 			if(delta >= 1) {
-				update();
-				render();
+				this.update();
+				this.render();
 				delta--;
 				frames++;
 			}
@@ -331,49 +629,65 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			}
 		}
 		
-		stop();
+		// Stops game when screen is closed (Security redundance)
+		this.stop();
 		
 	}
 
 	// Keyboard events methods
 	
+	/**
+	 * Method to check event KeyTyped
+	 */
 	@Override
 	public void keyTyped(KeyEvent e) {
 
 		
 	}
 
+	/**
+	 * Method to check event KeyPressed
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 	
-	
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT ||
-				e.getKeyCode() == KeyEvent.VK_D) {
-			// Moves Right
-			player.setRight(true);
-		}else if(e.getKeyCode() == KeyEvent.VK_LEFT ||
-				e.getKeyCode() == KeyEvent.VK_A) {
-			// Moves Left
-			player.setLeft(true);
+		
+		// Horizontal keys
+		switch(e.getKeyCode()) {
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_D:
+				Game.player.setRight(true);
+				break;
+			case KeyEvent.VK_LEFT:
+			case KeyEvent.VK_A:
+				Game.player.setLeft(true);
+				break;
+			default: 
+				break;
 		}
 
-		if(e.getKeyCode() == KeyEvent.VK_UP ||
-				e.getKeyCode() == KeyEvent.VK_W) {
-			// Moves up
-			player.setUp(true);
-		}else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
-				e.getKeyCode() == KeyEvent.VK_S) {
-			// Moves down
-			player.setDown(true);
+		// Vertical keys
+		switch(e.getKeyCode()) {
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_W:
+				Game.player.setUp(true);
+				break;
+			case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_S:
+				Game.player.setDown(true);
+				break;
+			default: 
+				break;
 		}
 		
+		// Shoot key
 		if(!player.isCoolDown()) {
 			if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 				player.setShoot(true);
 			}
 		}
 		
-		if(gameState.equals("GAMEOVER")) {
+		if(this.getgState() == GameStates.GAMEOVER) {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 				reset = true;
 			}
@@ -382,27 +696,40 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 	}
 
+	/**
+	 * Method to check event KeyReleased
+	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT ||
-				e.getKeyCode() == KeyEvent.VK_D) {
-			// Stops Right
-			player.setRight(false);
-		}else if(e.getKeyCode() == KeyEvent.VK_LEFT ||
-				e.getKeyCode() == KeyEvent.VK_A) {
-			// Stops Left
-			player.setLeft(false);
+
+		
+		// Horizontal keys
+		switch(e.getKeyCode()) {
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_D:
+				Game.player.setRight(false);
+				break;
+			case KeyEvent.VK_LEFT:
+			case KeyEvent.VK_A:
+				Game.player.setLeft(false);
+				break;
+			default: 
+				break;
 		}
 
-		if(e.getKeyCode() == KeyEvent.VK_UP ||
-				e.getKeyCode() == KeyEvent.VK_W) {
-			// Stops up
-			player.setUp(false);
-		}else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
-				e.getKeyCode() == KeyEvent.VK_S) {
-			// Stops down
-			player.setDown(false);
-		}	
+		// Vertical keys
+		switch(e.getKeyCode()) {
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_W:
+				Game.player.setUp(false);
+				break;
+			case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_S:
+				Game.player.setDown(false);
+				break;
+			default: 
+				break;
+		}
 		
 	}
 

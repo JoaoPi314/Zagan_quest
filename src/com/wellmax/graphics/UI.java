@@ -96,14 +96,14 @@ public class UI {
 		this.setCurrentEnemies(this.getMaxEnemies());
 		
 		// Sprites
-		heart = Game.spritesheet.getSprite(0, 144, heartSize, heartSize);
-		fireball = Game.spritesheet.getSprite(0, 152, fireballSize, fireballSize);
-		note = Game.spritesheet.getSprite(8,152, noteSize, noteSize);
+		this.heart = Game.spritesheet.getSprite(0, 144, this.heartSize, this.heartSize);
+		this.fireball = Game.spritesheet.getSprite(0, 152, this.fireballSize, this.fireballSize);
+		this.note = Game.spritesheet.getSprite(8,152, this.noteSize, this.noteSize);
 		
-		waveBarCornerRight = Game.spritesheet.getSprite(80, 48, waveSize, waveSize);
-		waveBarCornerLeft = Game.spritesheet.getSprite(80, 16, waveSize, waveSize);
-		waveBarMiddle = Game.spritesheet.getSprite(80, 32, waveSize, waveSize);
-		waveBarBoss= Game.spritesheet.getSprite(80, 64, waveSize, waveSize);
+		this.waveBarCornerRight = Game.spritesheet.getSprite(80, 48, this.waveSize, this.waveSize);
+		this.waveBarCornerLeft = Game.spritesheet.getSprite(80, 16, this.waveSize, this.waveSize);
+		this.waveBarMiddle = Game.spritesheet.getSprite(80, 32, this.waveSize, this.waveSize);
+		this.waveBarBoss= Game.spritesheet.getSprite(80, 64, this.waveSize, this.waveSize);
 
 	}
 	
@@ -209,7 +209,8 @@ public class UI {
 	 * Update method to UI
 	 */
 	public void update() {
-		currentEnemies = Game.enemies.size();
+		this.setCurrentEnemies(Game.enemies.size());
+
 	}
 	
 	/**
@@ -220,19 +221,19 @@ public class UI {
 		
 		// Draw life		
 		for(int i = 0; i < Game.player.getLife(); i++) {
-			g.drawImage(heart, 8 + 9*i, 4, null);
+			g.drawImage(this.heart, 8 + 9*i, 4, null);
 		}
 		
 		if(Game.player.isHasFireball()) {
 			// Draw Fireballs
-			g.drawImage(fireball, 8, 14, null);
+			g.drawImage(this.fireball, 8, 14, null);
 			g.setFont(new Font("arial", Font.BOLD, 8));
 			g.setColor(Color.white);
 			g.drawString("x"+Game.player.getFireballs(), 17, 21);
 			
 		}else {
 			// Draw note
-			g.drawImage(note, 8, 14, null);
+			g.drawImage(this.note, 8, 14, null);
 			g.setFont(new Font("arial", Font.BOLD, 8));
 			g.setColor(Color.white);
 			g.drawString("- -", 17, 21);
@@ -243,14 +244,14 @@ public class UI {
 		
 		// Draw waveBar
 		g.setColor(Color.red);
-		g.fillRect(23, 233, (int)((currentEnemies/maxEnemies)*maxWaveSize), 3);
+		g.fillRect(23, 233, (int)((this.getCurrentEnemies()/this.getMaxEnemies())*this.getMaxWaveSize()), 3);
 		
 		
-		g.drawImage(waveBarCornerLeft, 16, 224, null);
-		g.drawImage(waveBarCornerRight,224, 224, null);
+		g.drawImage(this.waveBarCornerLeft, 16, 224, null);
+		g.drawImage(this.waveBarCornerRight,224, 224, null);
 	
 		for(int i = 0; i < (Game.WIDTH/World.TILE_SIZE) - 4; i++) {
-			g.drawImage(waveBarMiddle, 32 +i*16, 224, null);
+			g.drawImage(this.waveBarMiddle, 32 +i*16, 224, null);
 		}
 
 		

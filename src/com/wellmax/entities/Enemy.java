@@ -223,7 +223,7 @@ public class Enemy extends Entity{
 				case RIGHT:
 					if(World.isFree((int)(this.getX() + this.getSpeed()*this.getKbSpeed()), (int) this.getY()) &&
 							!this.isCollidingWithEnemies((int)(this.getX() + this.getKbSpeed()), (int)this.getY()) &&
-							!this.isCollidingWithScenario((int)(this.getX() + this.getSpeed()), (int)this.getY())) {
+							!this.isCollidingWithScenario((int)(this.getX() + this.getKbSpeed()), (int)this.getY())) {
 						this.setX(this.getX() + this.getSpeed()*this.getKbSpeed());
 						this.setMoving(true);
 					}
@@ -231,7 +231,7 @@ public class Enemy extends Entity{
 				case LEFT:
 					if(World.isFree((int)(this.getX() - this.getSpeed()*this.getKbSpeed()), (int) this.getY()) &&
 							!this.isCollidingWithEnemies((int)(this.getX() - this.getKbSpeed()), (int)this.getY()) &&
-							!this.isCollidingWithScenario((int)(this.getX() - this.getSpeed()), (int)this.getY())) {
+							!this.isCollidingWithScenario((int)(this.getX() - this.getKbSpeed()), (int)this.getY())) {
 						this.setX(this.getX() - this.getSpeed()*this.getKbSpeed());
 						this.setMoving(true);
 					}
@@ -239,7 +239,7 @@ public class Enemy extends Entity{
 				case UP:
 					if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()*this.getKbSpeed()))&&
 							!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() - this.getKbSpeed())) &&
-							!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() - this.getSpeed()))) {
+							!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() - this.getKbSpeed()))) {
 						this.setY(this.getY() - this.getSpeed()*this.getKbSpeed());
 						this.setMoving(true);						
 					}
@@ -247,7 +247,7 @@ public class Enemy extends Entity{
 				case DOWN:
 					if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()*this.getKbSpeed())) &&
 							!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() + this.getKbSpeed())) &&
-							!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() + this.getSpeed()))) {
+							!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() + this.getKbSpeed()))) {
 						this.setY(this.getY() + this.getSpeed()*this.getKbSpeed());
 						this.setMoving(true);						
 					}
