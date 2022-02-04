@@ -208,11 +208,19 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			DeadEnemy e = deadEnemies.get(i);
 			e.render(g);
 		}
-		
+				
 		if(gameState.equals("NORMAL"))
 			player.render(g);
 		else
 			player.renderDead(g);
+		
+		
+		for(int i = 0; i < projectiles.size(); i++) {
+			Projectile p = projectiles.get(i);
+			p.render(g);
+		}
+		
+		
 		
 		for(int i = 0; i < enemies.size(); i++) {
 			Enemy e = enemies.get(i);
@@ -224,12 +232,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			e.render(g);
 		}
 		
-		
-		for(int i = 0; i < projectiles.size(); i++) {
-			Projectile p = projectiles.get(i);
-			p.render(g);
-		}
-		
+
 		for(int i = 0; i < ents.size(); i++) {
 			Entity e = ents.get(i);
 			e.render(g);
