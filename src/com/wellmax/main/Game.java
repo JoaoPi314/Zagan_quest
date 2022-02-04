@@ -20,14 +20,13 @@ import com.wellmax.entities.DeadEnemy;
 import com.wellmax.entities.Enemy;
 import com.wellmax.entities.Ent;
 import com.wellmax.entities.Entity;
-import com.wellmax.entities.FireballShoot;
 import com.wellmax.entities.GenericEntity;
-import com.wellmax.entities.LuteFire;
 import com.wellmax.entities.Player;
 import com.wellmax.entities.Projectile;
 import com.wellmax.entities.Skeleton;
 import com.wellmax.graphics.Spritesheet;
 import com.wellmax.graphics.UI;
+import com.wellmax.world.Scenario;
 import com.wellmax.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener{
@@ -51,7 +50,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public static List<Enemy> enemies;
 	public static List<Projectile> projectiles;
 	public static List<DeadEnemy> deadEnemies;
-	public static List<Ent> ents;
+	public static List<Scenario> scenario;
 	public static Spritesheet spritesheet;
 	public static Spritesheet spritesheet1;
 	
@@ -89,7 +88,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		enemies = new ArrayList<Enemy>();
 		projectiles = new ArrayList<Projectile>();
 		deadEnemies = new ArrayList<DeadEnemy>();
-		ents = new ArrayList<Ent>();
+		scenario = new ArrayList<Scenario>();
 		player = new Player(32, 32, 16, 16);
 		world = new World(level);
 		ui = new UI();
@@ -159,13 +158,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			p.update();
 		}
 		
-		
-		for(int i = 0; i < ents.size(); i++) {
-			Entity e = ents.get(i);
-			e.update();
-		}
-		
-		
 		if(player.getLife() <= 0) {
 			gameState = "GAMEOVER";
 		}
@@ -214,12 +206,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		else
 			player.renderDead(g);
 		
-		
+	
 		for(int i = 0; i < projectiles.size(); i++) {
 			Projectile p = projectiles.get(i);
 			p.render(g);
 		}
-		
 		
 		
 		for(int i = 0; i < enemies.size(); i++) {
@@ -231,12 +222,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			GenericEntity e = entities.get(i);
 			e.render(g);
 		}
-		
 
-		for(int i = 0; i < ents.size(); i++) {
-			Entity e = ents.get(i);
-			e.render(g);
+		for(int i = 0; i < Game.scenario.size(); i++) {
+			Scenario s = Game.scenario.get(i);
+			s.render(g);	
 		}
+		
 		ui.render(g);
 		
 		
