@@ -12,12 +12,15 @@ import javax.imageio.ImageIO;
  */
 public class Spritesheet {
 	
+	//---------------------------- Attributes ----------------------------------//	
+
 	/**
 	 * Spritesheet to be loaded
 	 */
 	private BufferedImage spritesheet;
 	
-	
+	//---------------------------- Methods ----------------------------------//	
+
 
 	/**
 	 * Constructor

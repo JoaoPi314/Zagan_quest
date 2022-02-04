@@ -8,57 +8,219 @@ import java.awt.image.BufferedImage;
 import com.wellmax.main.Game;
 import com.wellmax.world.World;
 
+/**
+ * Ui class contains all user interface elements
+ * @author joao.gomes
+ *
+ */
 public class UI {
 	
-	private BufferedImage fullHeart;
+	//---------------------------- Attributes ----------------------------------//	
+
+	/**
+	 * Sprite of heart
+	 */
+	private BufferedImage heart;
+	/**
+	 * Sprite of fireball
+	 */
 	private BufferedImage fireball;
+	/**
+	 * Sprite of right corner of wave bar
+	 */
 	private BufferedImage waveBarCornerRight;
+	/**
+	 * Sprite of left corner of wave bar
+	 */
 	private BufferedImage waveBarCornerLeft;
+	/**
+	 * Sprite of wave bar
+	 */
 	private BufferedImage waveBarMiddle;
+	/**
+	 * Sprite of boss wave bar
+	 */
 	private BufferedImage waveBarBoss;
+	/**
+	 * Sprite of musical note
+	 */
 	private BufferedImage note;
 	
+	/**
+	 * Size of heart displayed
+	 */
 	private int heartSize;
+	/**
+	 * Size of note displayed
+	 */
 	private int fireballSize;
-	private int noteSize = 8;
-	private final int waveWidth = 16;
-	private final int waveHeight = 16;
-	
+	/**
+	 * Size of notes
+	 */
+	private int noteSize;
+	/**
+	 * Width of wave bar
+	 */
+	private int waveSize;
+	/**
+	 * Height of
+	 */
+
+	/**
+	 * Number of enemies at world creation
+	 */
 	private double maxEnemies;
+	/**
+	 * Number of enemies reamining
+	 */
 	private double currentEnemies;
-	private double maxWaveSize = 13*16;
+	/**
+	 * Total size of wave bar
+	 */
+	private double maxWaveSize;
 	
 	
-	
+	//---------------------------- Methods ----------------------------------//	
+	/**
+	 * UI constructor
+	 */
 	public UI() {
-		heartSize = 8;
-		fireballSize = 8;
-		noteSize = 8;
-		fullHeart = Game.spritesheet.getSprite(0, 144, heartSize, heartSize);
+		
+		// Variables
+		this.setHeartSize(8);
+		this.setFireballSize(8);
+		this.setNoteSize(8);
+		this.setWaveSize(16);
+		this.setMaxWaveSize(13*16);
+		this.setMaxEnemies(Game.enemies.size());
+		this.setCurrentEnemies(this.getMaxEnemies());
+		
+		// Sprites
+		heart = Game.spritesheet.getSprite(0, 144, heartSize, heartSize);
 		fireball = Game.spritesheet.getSprite(0, 152, fireballSize, fireballSize);
 		note = Game.spritesheet.getSprite(8,152, noteSize, noteSize);
 		
-		waveBarCornerRight = Game.spritesheet.getSprite(80, 48, waveWidth, waveHeight);
-		waveBarCornerLeft = Game.spritesheet.getSprite(80, 16, waveWidth, waveHeight);
-		waveBarMiddle = Game.spritesheet.getSprite(80, 32, waveWidth, waveHeight);
-		waveBarBoss= Game.spritesheet.getSprite(80, 64, waveWidth, waveHeight);
-		
-		maxEnemies = Game.enemies.size();
-		currentEnemies = maxEnemies;
-		
+		waveBarCornerRight = Game.spritesheet.getSprite(80, 48, waveSize, waveSize);
+		waveBarCornerLeft = Game.spritesheet.getSprite(80, 16, waveSize, waveSize);
+		waveBarMiddle = Game.spritesheet.getSprite(80, 32, waveSize, waveSize);
+		waveBarBoss= Game.spritesheet.getSprite(80, 64, waveSize, waveSize);
+
 	}
 	
+	/**
+	 * @return the heartSize
+	 */
+	public int getHeartSize() {
+		return heartSize;
+	}
+
+	/**
+	 * @param heartSize the heartSize to set
+	 */
+	public void setHeartSize(int heartSize) {
+		this.heartSize = heartSize;
+	}
+
+	/**
+	 * @return the fireballSize
+	 */
+	public int getFireballSize() {
+		return fireballSize;
+	}
+
+	/**
+	 * @param fireballSize the fireballSize to set
+	 */
+	public void setFireballSize(int fireballSize) {
+		this.fireballSize = fireballSize;
+	}
+
+	/**
+	 * @return the noteSize
+	 */
+	public int getNoteSize() {
+		return noteSize;
+	}
+
+	/**
+	 * @param noteSize the noteSize to set
+	 */
+	public void setNoteSize(int noteSize) {
+		this.noteSize = noteSize;
+	}
+
+	/**
+	 * @return the maxEnemies
+	 */
+	public double getMaxEnemies() {
+		return maxEnemies;
+	}
+
+	/**
+	 * @param maxEnemies the maxEnemies to set
+	 */
+	public void setMaxEnemies(double maxEnemies) {
+		this.maxEnemies = maxEnemies;
+	}
+
+	/**
+	 * @return the currentEnemies
+	 */
+	public double getCurrentEnemies() {
+		return currentEnemies;
+	}
+
+	/**
+	 * @param currentEnemies the currentEnemies to set
+	 */
+	public void setCurrentEnemies(double currentEnemies) {
+		this.currentEnemies = currentEnemies;
+	}
+
+	/**
+	 * @return the maxWaveSize
+	 */
+	public double getMaxWaveSize() {
+		return maxWaveSize;
+	}
+
+	/**
+	 * @param maxWaveSize the maxWaveSize to set
+	 */
+	public void setMaxWaveSize(double maxWaveSize) {
+		this.maxWaveSize = maxWaveSize;
+	}
+
+	/**
+	 * @return the waveSize
+	 */
+	public int getWaveSize() {
+		return waveSize;
+	}
+
+	/**
+	 * @param maxWaveSize the maxWaveSize to set
+	 */
+	public void setWaveSize(int waveSize) {
+		this.waveSize = waveSize;
+	}
 	
+	/**
+	 * Update method to UI
+	 */
 	public void update() {
 		currentEnemies = Game.enemies.size();
 	}
 	
-	
+	/**
+	 * Renders the UI
+	 * @param g Graphics to be rendered
+	 */
 	public void render(Graphics g) {
 		
 		// Draw life		
 		for(int i = 0; i < Game.player.getLife(); i++) {
-			g.drawImage(fullHeart, 8 + 9*i, 4, null);
+			g.drawImage(heart, 8 + 9*i, 4, null);
 		}
 		
 		if(Game.player.isHasFireball()) {
