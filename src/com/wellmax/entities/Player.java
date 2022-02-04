@@ -233,30 +233,6 @@ public class Player extends Entity{
 	public void setMaxFramesCoolDown(double maxFramesCoolDown) {
 		this.maxFramesCoolDown = maxFramesCoolDown;
 	}
-
-	/**
-	 * Checks collision with scenario items
-	 * @param xx next player x position
-	 * @param yy next player y position
-	 * @return true if player collides with any scenario item
-	 */
-	public boolean isCollidingWithScenario(int xx, int yy) {
-		Rectangle player = new Rectangle((int)(xx + this.getMaskX()), 
-				(int)(yy + this.getMaskY()), this.getmWidth(), this.getmHeight());
-		
-		for(int i = 0; i < Game.scenario.size(); i++) {
-			Scenario s = Game.scenario.get(i);
-			
-			Rectangle scenarioItem = new Rectangle(s.getX() + s.getMaskX(), 
-					s.getY() +  s.getMaskY(), s.getmWidth(), s.getmHeight());
-			if(scenarioItem.intersects(player)){
-				return true;
-			}
-		}
-
-		return false;
-	}
-	
 	
 	/**
 	 * Method to calculate player movement based on

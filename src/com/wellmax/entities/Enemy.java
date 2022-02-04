@@ -132,25 +132,29 @@ public class Enemy extends Entity{
 			if(this.nearPlayer()) { // Enemy is near player
 				// Enemy to the player's left - Moves right
 				if((int)this.getX() < (int)Game.player.getX() && World.isFree((int)(this.getX() + this.getSpeed()), (int) this.getY()) &&
-						!this.isCollidingWithEnemies((int)(this.getX() + this.getSpeed()), (int)this.getY())) {
+						!this.isCollidingWithEnemies((int)(this.getX() + this.getSpeed()), (int)this.getY()) &&
+						!this.isCollidingWithScenario((int)(this.getX() + this.getSpeed()), (int)this.getY())) {
 					this.setX(this.getX() + this.getSpeed());
 					this.setFaceDir(Directions.RIGHT);
 					this.setMoving(true);
 				// Enemy to the player's right - Moves left
 				}else if((int)this.getX() > (int)Game.player.getX() && World.isFree((int)(this.getX() - this.getSpeed()), (int) this.getY()) &&
-						!this.isCollidingWithEnemies((int)(this.getX() - this.getSpeed()), (int)this.getY())) {
+						!this.isCollidingWithEnemies((int)(this.getX() - this.getSpeed()), (int)this.getY()) &&
+						!this.isCollidingWithScenario((int)(this.getX() - this.getSpeed()), (int)this.getY())) {
 					this.setX(this.getX() - this.getSpeed());
 					this.setFaceDir(Directions.LEFT);
 					this.setMoving(true);
 				// Enemy above player - Moves down
 				}else if((int)this.getY() < (int)Game.player.getY() && World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed())) &&
-						!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() + this.getSpeed()))) {
+						!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() + this.getSpeed())) &&
+						!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() + this.getSpeed()))) {
 					this.setY(this.getY() + this.getSpeed());
 					this.setFaceDir(Directions.DOWN);
 					this.setMoving(true);
 				// Enemy below player - Moves up
 				}else if((int)this.getY() > (int)Game.player.getY() && World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed())) &&
-						!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() - this.getSpeed()))) {
+						!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() - this.getSpeed())) &&
+						!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() - this.getSpeed()))) {
 					this.setY(this.getY() - this.getSpeed());
 					this.setFaceDir(Directions.UP);
 					this.setMoving(true);
@@ -165,21 +169,24 @@ public class Enemy extends Entity{
 						case RIGHT:
 							this.setFaceDir(Directions.RIGHT);
 							if(World.isFree((int)(this.getX() + this.getSpeed()), (int) this.getY()) &&
-									!this.isCollidingWithEnemies((int)(this.getX() + this.getSpeed()), (int)this.getY())) {
+									!this.isCollidingWithEnemies((int)(this.getX() + this.getSpeed()), (int)this.getY()) &&
+									!this.isCollidingWithScenario((int)(this.getX() + this.getSpeed()), (int)this.getY())) {
 								this.setX(this.getX() + this.getSpeed());
 							}
 							break;
 						case LEFT:
 							this.setFaceDir(Directions.LEFT);
 							if(World.isFree((int)(this.getX() - this.getSpeed()), (int) this.getY()) &&
-									!this.isCollidingWithEnemies((int)(this.getX() - this.getSpeed()), (int)this.getY())) {
+									!this.isCollidingWithEnemies((int)(this.getX() - this.getSpeed()), (int)this.getY()) &&
+									!this.isCollidingWithScenario((int)(this.getX() - this.getSpeed()), (int)this.getY())) {
 								this.setX(this.getX() - this.getSpeed());	
 							}
 							break;
 						case UP:
 							this.setFaceDir(Directions.UP);
 							if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed())) &&
-									!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() - this.getSpeed()))) {
+									!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() - this.getSpeed())) &&
+									!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() - this.getSpeed()))) {
 								this.setY(this.getY() - this.getSpeed());	
 							}
 							break;
@@ -187,7 +194,8 @@ public class Enemy extends Entity{
 						default:
 							this.setFaceDir(Directions.DOWN);
 							if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed())) &&
-									!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() + this.getSpeed()))) {
+									!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() + this.getSpeed())) &&
+									!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() + this.getSpeed()))) {
 								this.setY(this.getY() + this.getSpeed());	
 							}
 							break;
@@ -214,28 +222,32 @@ public class Enemy extends Entity{
 			switch(this.getKbDir()) {
 				case RIGHT:
 					if(World.isFree((int)(this.getX() + this.getSpeed()*this.getKbSpeed()), (int) this.getY()) &&
-							!this.isCollidingWithEnemies((int)(this.getX() + this.getKbSpeed()), (int)this.getY())) {
+							!this.isCollidingWithEnemies((int)(this.getX() + this.getKbSpeed()), (int)this.getY()) &&
+							!this.isCollidingWithScenario((int)(this.getX() + this.getSpeed()), (int)this.getY())) {
 						this.setX(this.getX() + this.getSpeed()*this.getKbSpeed());
 						this.setMoving(true);
 					}
 					break;
 				case LEFT:
 					if(World.isFree((int)(this.getX() - this.getSpeed()*this.getKbSpeed()), (int) this.getY()) &&
-							!this.isCollidingWithEnemies((int)(this.getX() - this.getKbSpeed()), (int)this.getY())) {
+							!this.isCollidingWithEnemies((int)(this.getX() - this.getKbSpeed()), (int)this.getY()) &&
+							!this.isCollidingWithScenario((int)(this.getX() - this.getSpeed()), (int)this.getY())) {
 						this.setX(this.getX() - this.getSpeed()*this.getKbSpeed());
 						this.setMoving(true);
 					}
 					break;
 				case UP:
 					if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()*this.getKbSpeed()))&&
-							!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() - this.getKbSpeed()))) {
+							!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() - this.getKbSpeed())) &&
+							!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() - this.getSpeed()))) {
 						this.setY(this.getY() - this.getSpeed()*this.getKbSpeed());
 						this.setMoving(true);						
 					}
 					break;
 				case DOWN:
 					if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()*this.getKbSpeed())) &&
-							!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() + this.getKbSpeed()))) {
+							!this.isCollidingWithEnemies((int)this.getX(), (int)(this.getY() + this.getKbSpeed())) &&
+							!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() + this.getSpeed()))) {
 						this.setY(this.getY() + this.getSpeed()*this.getKbSpeed());
 						this.setMoving(true);						
 					}

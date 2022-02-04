@@ -1,11 +1,13 @@
 package com.wellmax.entities;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
 import com.wellmax.world.Camera;
+import com.wellmax.world.Scenario;
 import com.wellmax.world.World;
 
 /**
@@ -273,6 +275,29 @@ public class Entity extends GenericEntity{
 	}
 
 	/**
+	 * Checks collision with scenario items
+	 * @param xx next player x position
+	 * @param yy next player y position
+	 * @return true if player collides with any scenario item
+	 */
+	protected boolean isCollidingWithScenario(int xx, int yy) {
+		Rectangle entity = new Rectangle((int)(xx + this.getMaskX()), 
+				(int)(yy + this.getMaskY()), this.getmWidth(), this.getmHeight());
+		
+		for(int i = 0; i < Game.scenario.size(); i++) {
+			Scenario s = Game.scenario.get(i);
+			
+			Rectangle scenarioItem = new Rectangle(s.getX() + s.getMaskX(), 
+					s.getY() +  s.getMaskY(), s.getmWidth(), s.getmHeight());
+			if(scenarioItem.intersects(entity)){
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
+	/**
 	 * Method to calculate player movement when it is
 	 * taking damage
 	 */
@@ -280,25 +305,29 @@ public class Entity extends GenericEntity{
 		if(this.isDamaged()) {
 			switch(this.getKbDir()) {
 				case RIGHT:
-					if(World.isFree((int)(this.getX() + this.getSpeed()*this.getKbSpeed()), (int) this.getY())) {
+					if(World.isFree((int)(this.getX() + this.getSpeed()*this.getKbSpeed()), (int) this.getY()) &&
+							!this.isCollidingWithScenario((int)(this.getX() + this.getSpeed()), (int)this.getY())) {
 						this.setX(this.getX() + this.getSpeed()*this.getKbSpeed());
 						this.setMoving(true);
 					}
 					break;
 				case LEFT:
-					if(World.isFree((int)(this.getX() - this.getSpeed()*this.getKbSpeed()), (int) this.getY())) {
+					if(World.isFree((int)(this.getX() - this.getSpeed()*this.getKbSpeed()), (int) this.getY()) &&
+							!this.isCollidingWithScenario((int)(this.getX() - this.getSpeed()), (int)this.getY())) {
 						this.setX(this.getX() - this.getSpeed()*this.getKbSpeed());
 						this.setMoving(true);
 					}
 					break;
 				case UP:
-					if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()*this.getKbSpeed()))) {
+					if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()*this.getKbSpeed())) &&
+							!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() - this.getSpeed()))) {
 						this.setY(this.getY() - this.getSpeed()*this.getKbSpeed());
 						this.setMoving(true);						
 					}
 					break;
 				case DOWN:
-					if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()*this.getKbSpeed()))) {
+					if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()*this.getKbSpeed())) &&
+							!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() + this.getSpeed()))) {
 						this.setY(this.getY() + this.getSpeed()*this.getKbSpeed());
 						this.setMoving(true);						
 					}
