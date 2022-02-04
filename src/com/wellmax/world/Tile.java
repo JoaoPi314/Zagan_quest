@@ -78,7 +78,7 @@ public class Tile {
 		// Scenario items
 		TILE_ROCK = Game.spritesheet1.getSprite(48, 48, 16, 16);
 		TILE_TREE = Game.spritesheet1.getSprite(64, 48, 32, 48);
-		TILE_STATUE = Game.spritesheet1.getSprite(224, 64, 64, 64);
+		TILE_STATUE = Game.spritesheet.getSprite(224, 64, 64, 64);
 		
 		// Initiates sprites 
 		for(int i = 0; i < 3; i++) {

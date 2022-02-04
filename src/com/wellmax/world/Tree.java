@@ -16,10 +16,7 @@ public class Tree extends Scenario{
 	 */
 	public Tree(int x, int y, BufferedImage sprite) {
 		super(x, y, sprite);
-		
-		// Sprite
-		this.sprite = Tile.TILE_TREE;
-		
+
 		// Width and height
 		this.setWidth(32);
 		this.setHeight(48);

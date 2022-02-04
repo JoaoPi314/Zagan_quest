@@ -17,9 +17,6 @@ public class Statue extends Scenario{
 	public Statue(int x, int y, BufferedImage sprite) {
 		super(x, y, sprite);
 		
-		// Sprite
-		this.sprite = Tile.TILE_STATUE;
-		
 		// Width and height
 		this.setWidth(64);
 		this.setHeight(64);

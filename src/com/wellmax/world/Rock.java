@@ -17,9 +17,7 @@ public class Rock extends Scenario{
 	public Rock(int x, int y, BufferedImage sprite) {
 		super(x, y, sprite);
 		
-		// Sprite
-		this.sprite = Tile.TILE_ROCK;
-		
+
 		// Width and height
 		this.setWidth(16);
 		this.setHeight(16);

@@ -101,30 +101,5 @@ public class Scenario extends Tile{
 	public void setmHeight(int mHeight) {
 		this.mHeight = mHeight;
 	}
-	
-	
-	/**
-	 * Checks collision with scenario items
-	 * @param xx next player x position
-	 * @param yy next player y position
-	 * @return true if player collides with any scenario item
-	 */
-	public boolean isCollisionWithEntity(int xx, int yy) {
-		Rectangle currentItem = new Rectangle(this.getX() + this.getMaskX(), this.getY() + this.getMaskY(), this.getmWidth(), this.getmHeight());
 		
-		for(int i = 0; i < Game.scenario.size(); i++) {
-			Scenario s = Game.scenario.get(i);
-			if(s == this) {
-				continue;
-			}
-			Rectangle player = new Rectangle(xx + Game.player.getMaskX(), yy +  Game.player.getMaskY(), Game.player.getmWidth(), Game.player.getmHeight());
-			if(currentItem.intersects(player)){
-				return true;
-			}
-		}
-
-		return false;
-	}
-	
-	
 }
