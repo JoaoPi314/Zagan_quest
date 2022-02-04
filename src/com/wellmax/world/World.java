@@ -3,29 +3,62 @@ package com.wellmax.world;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import com.wellmax.entities.*;
 import com.wellmax.main.Game;
 
+/**
+ * The World class initiates the map and all the scenario items
+ * @author joao.gomes
+ *
+ */
 public class World {
 	
-	
+	/**
+	 * Array with all tiles that will be rendered on screen
+	 */
 	public static Tile[] tiles;
-	public static Tile statue;
+
+	/**
+	 * List with all rocks
+	 */
+	public static List<Rock> rocks;
+	/**
+	 * List with all rocks
+	 */
+	public static List<Tree> trees;
 	
+	/**
+	 * Width and height of map
+	 */
 	public static int WIDTH, HEIGHT;
+	
+	/**
+	 * Constant Tile size
+	 */
 	public static final int TILE_SIZE = 16;
 	
 	
+	/**
+	 * World constructor
+	 * @param path Path to map image
+	 */
 	public World(String path) {
 		try {
 			BufferedImage map = ImageIO.read(getClass().getResource(path));
 			
-			
 			WIDTH = map.getWidth();
 			HEIGHT = map.getHeight();
+			
+			rocks = new ArrayList<Rock>();
+			trees = new ArrayList<Tree>();
+
+			
+			
 			int[] pixels = new int[WIDTH * HEIGHT];
 			tiles = new Tile[WIDTH * HEIGHT];
 			map.getRGB(0, 0, WIDTH, HEIGHT, pixels, 0, WIDTH);
@@ -95,10 +128,8 @@ public class World {
 							break;
 						case 0xFFEE03FF: // Tile that statue is placed
 							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[1][1]);
-							statue = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_RITUAL_STATUE);
-							break;
-						case 0xFF6C0073: // Stone floor but is statue
-							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STONE_FLOOR[1][1]);
+							Statue statue = new Statue(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_STATUE);
+							Game.scenario.add(statue);
 							break;
 						case 0xFFCDA664: // Path middle
 							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_PATH[1][1]);
@@ -128,15 +159,14 @@ public class World {
 							tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_PATH[2][0]);
 							break;
 						case 0xFF0E0404: // Rock
-							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_ROCK);
+							Rock rock = new Rock(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_ROCK);
+							Game.scenario.add(rock);
+							World.rocks.add(rock);
 							break;
 						case 0xFF0D260E: // Trees
-							Ent ent = new Ent(xx*TILE_SIZE, yy*TILE_SIZE, 32, 48);
-							ent.setMask(3, 38, 26, 10);
-							Game.ents.add(ent);
-							break;
-						case 0xFF0A4A0C: // Floor with collision (Tree)
-							tiles[xx + (yy*WIDTH)] = new WallTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_GRASS[1][1]);
+							Tree tree = new Tree(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_TREE);
+							Game.scenario.add(tree);
+							World.trees.add(tree);
 							break;
 						case 0xFFF4FF00: // Health Potion
 							HealthPotion healthPotion = new HealthPotion(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -149,7 +179,7 @@ public class World {
 							Game.entities.add(fireball);
 							break;
 						case 0xFFFF0000: // Enemy
-							Orc en = new Orc(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+							Orc en = new Orc(xx*TILE_SIZE, yy*TILE_SIZE, TILE_SIZE, TILE_SIZE);						
 							Game.enemies.add(en);
 							break;
 						case 0xFF0000FF: // Player
@@ -169,6 +199,12 @@ public class World {
 		}
 	}
 	
+	/**
+	 * Method to check if the next player position isn't a wall
+	 * @param x Next player x position
+	 * @param y Next player y position
+	 * @return true if player won't collide with any wall
+	 */
 	public static boolean isFree(int x, int y) {
 		// Converts position to tiles
 		int x1 = x / TILE_SIZE;
@@ -182,7 +218,7 @@ public class World {
 		
 		int x4 = (x + TILE_SIZE - 1) / TILE_SIZE;
 		int y4 = (y + TILE_SIZE - 1) / TILE_SIZE;
-		
+
 		return !((tiles[x1 + (y1*World.WIDTH)] instanceof WallTile) ||
 				 (tiles[x2 + (y2*World.WIDTH)] instanceof WallTile) ||
 				 (tiles[x3 + (y3*World.WIDTH)] instanceof WallTile) ||
@@ -190,13 +226,14 @@ public class World {
 		
 	}
 	
+	
 	public void render(Graphics g) {
 		int xstart = Camera.x >> 4;
 		int ystart = Camera.y >> 4;
 		
 		int xfinal = xstart + (Game.WIDTH >> 4);
 		int yfinal = ystart + (Game.HEIGHT >> 4);
-		
+				
 		for(int xx = xstart; xx <= xfinal; xx++) {
 			for(int yy = ystart; yy <= yfinal; yy++) {
 				if(xx < 0 || yy < 0 || xx >= WIDTH || yy >= HEIGHT)
@@ -206,8 +243,7 @@ public class World {
 				underFloor.render(g);
 				tile.render(g);
 			}
-		}		
-		statue.render(g);
+		}				
 	}
 	
 	

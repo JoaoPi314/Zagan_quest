@@ -1,11 +1,13 @@
 package com.wellmax.entities;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
 import com.wellmax.world.Camera;
+import com.wellmax.world.Scenario;
 import com.wellmax.world.World;
 
 public class Player extends Entity{
@@ -231,7 +233,7 @@ public class Player extends Entity{
 	public void setMaxFramesCoolDown(double maxFramesCoolDown) {
 		this.maxFramesCoolDown = maxFramesCoolDown;
 	}
-
+	
 	/**
 	 * Method to calculate player movement based on
 	 * user inputs
@@ -240,20 +242,24 @@ public class Player extends Entity{
 		
 		this.setMoving(false);
 		
-		if(this.isRight() && World.isFree((int)(this.getX() + this.getSpeed()), (int) this.getY())){
+		if(this.isRight() && World.isFree((int)(this.getX() + this.getSpeed()), (int) this.getY()) &&
+				!this.isCollidingWithScenario((int)(this.getX() + this.getSpeed()), (int) this.getY())){
 			this.setX(this.getX() + this.getSpeed());
 			this.setFaceDir(Directions.RIGHT);
 			this.setMoving(true);
-		}else if(this.isLeft() && World.isFree((int)(this.getX() - this.getSpeed()), (int) this.getY())) {
+		}else if(this.isLeft() && World.isFree((int)(this.getX() - this.getSpeed()), (int) this.getY())&&
+				!this.isCollidingWithScenario((int)(this.getX() - this.getSpeed()), (int) this.getY())){
 			this.setX(this.getX() - this.getSpeed());
 			this.setFaceDir(Directions.LEFT);
 			this.setMoving(true);
 		}
-		if(this.isUp() && World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()))) {
+		if(this.isUp() && World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed())) &&
+				!this.isCollidingWithScenario((int)this.getX(), (int) (this.getY() - this.getSpeed()))) {
 			this.setY(this.getY() - this.getSpeed());
 			this.setFaceDir(Directions.UP);
 			this.setMoving(true);
-		}else if(this.isDown() && World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()))) {
+		}else if(this.isDown() && World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()))&&
+				!this.isCollidingWithScenario((int)this.getX(), (int) (this.getY() + this.getSpeed()))) {
 			this.setY(this.getY() + this.getSpeed());
 			this.setFaceDir(Directions.DOWN);
 			this.setMoving(true);
@@ -347,7 +353,6 @@ public class Player extends Entity{
 		}
 	}
 
-
 	public void update() {
 		
 		// Keyboard movement
@@ -366,8 +371,8 @@ public class Player extends Entity{
 		this.shooting();
 		
 		// Makes camera follow player
-		Camera.x = Camera.clamp((int)getX() - (Game.WIDTH / 2), 0, World.WIDTH*16 - Game.WIDTH);
-		Camera.y = Camera.clamp((int)getY() - (Game.HEIGHT / 2), 0, World.HEIGHT*16 - Game.HEIGHT);
+		Camera.x = Camera.clamp((int)this.getX() - (Game.WIDTH / 2), 0, World.WIDTH*16 - Game.WIDTH);
+		Camera.y = Camera.clamp((int)this.getY() - (Game.HEIGHT / 2), 0, World.HEIGHT*16 - Game.HEIGHT);
 		
 	}
 

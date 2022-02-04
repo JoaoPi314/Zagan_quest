@@ -31,6 +31,7 @@ public abstract class GenericEntity {
 	 * Height of entity
 	 */
 	protected int height;
+	
 	/**
 	 * x position of collision mask (offset based on x attribute)
 	 */
