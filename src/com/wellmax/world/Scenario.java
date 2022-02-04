@@ -42,10 +42,8 @@ public class Scenario extends Tile{
 	 * @param width Sprite width 
 	 * @param height Sprite height
 	 */
-	public Scenario(int x, int y, BufferedImage sprite, int width, int height) {
+	public Scenario(int x, int y, BufferedImage sprite) {
 		super(x, y, sprite);
-		this.setWidth(width);
-		this.setHeight(height);
 	}
 	
 	/**

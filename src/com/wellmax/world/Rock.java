@@ -13,15 +13,18 @@ public class Rock extends Scenario{
 	 * @param x x position
 	 * @param y y position
 	 * @param sprite Rock sprite
-	 * @param width Rock width
-	 * @param height Rock height
 	 */
-	public Rock(int x, int y, BufferedImage sprite, int width, int height) {
-		super(x, y, sprite, width, height);
+	public Rock(int x, int y, BufferedImage sprite) {
+		super(x, y, sprite);
+		
+		// Width and height
+		this.setWidth(16);
+		this.setHeight(16);
+		
 		
 		// Collision mask
-		this.setMaskX(9);
-		this.setMaskY(0);
+		this.setMaskX(0);
+		this.setMaskY(9);
 		this.setmWidth(16);
 		this.setmHeight(7);
 	}
