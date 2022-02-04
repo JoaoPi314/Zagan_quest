@@ -8,6 +8,7 @@ package com.wellmax.world;
  */
 public final class Camera {
 
+	
 	/**
 	 * Camera x position
 	 */
