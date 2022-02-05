@@ -205,7 +205,7 @@ public class Enemy extends Entity{
 			}
 		}else if(Game.player.getLife() > 0) { // If enemy is colliding with player, and player is alive
 			// Attacking player
-			if(Game.rand.nextInt(100) < 5) { // When in contact, enemy has a chance of 5% to deal damage
+			if(Game.rand.nextInt(100) < 10) { // When in contact, enemy has a chance of 10% to deal damage
 				Game.player.setLife(Game.player.getLife() - this.getDamage()/Game.player.getDefense());
 				Game.player.setKbDir(this.getFaceDir());
 				Game.player.setKbspeed(3);

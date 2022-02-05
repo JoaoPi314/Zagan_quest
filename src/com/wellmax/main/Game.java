@@ -10,10 +10,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import com.wellmax.entities.Collectible;
@@ -71,6 +73,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 */
 	private BufferedImage image;
 
+	
 	/**
 	 * List with all collectibles 
 	 */
@@ -99,6 +102,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * Second spritesheet
 	 */
 	public static Spritesheet spritesheet1;
+
+	/**
+	 * Game Over screen image
+	 */
+	private BufferedImage gameOverImage;
+	
 	/**
 	 * World is responsible for map generation
 	 */
@@ -341,6 +350,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public void initGame(String level) {
 		Game.spritesheet = new Spritesheet("/spritesheet.png");
 		Game.spritesheet1 = new Spritesheet("/spritesheet1.png");
+		
+		try {
+			this.gameOverImage = ImageIO.read(getClass().getResource("/gameoverscreen.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 		this.image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		Game.collectibles = new ArrayList<Collectible>();
 		Game.enemies = new ArrayList<Enemy>();
@@ -529,30 +546,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		}
 				
 		
-		// Checks game state
-		switch(this.getgState()) {
-			case NORMAL:
-				Game.player.render(g);
-				break;
-			case GAMEOVER:
-			default:
-				Game.player.renderDead(g);
-				
-				// Shows Game over message
-				Graphics2D g2 = (Graphics2D) g;
-				g2.setColor(new Color(0x00, 0x00, 0x00, 150));
-				g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
-				g.setColor(Color.white);
-				g.setFont(new Font("arial", Font.BOLD, 48));
-				g.drawString("Game Over", WIDTH*SCALE / 2 - 125, HEIGHT*SCALE / 2);
-				g.setFont(new Font("arial", Font.BOLD, 28));
-				
-				if(showGOMessage) {
-					g.drawString("Try again? (Press ENTER)", WIDTH*SCALE / 2 - 175, HEIGHT*SCALE / 2 + 48);
-				}
-				
-				break;
+		if(this.getgState() == GameStates.NORMAL) {
+			Game.player.render(g);
+		}else if(this.getgState() == GameStates.GAMEOVER) {
+			Game.player.renderDead(g);
 		}
+		
 
 		// Renders projectiles
 		for(int i = 0; i < projectiles.size(); i++) {
@@ -581,11 +580,28 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		// Renders User interface
 		ui.render(g);
 				
-		
 		// Draws everything
 		g.dispose();
 		g = bs.getDrawGraphics();
 		g.drawImage(image,  0,  0,  WIDTH*SCALE,  HEIGHT*SCALE, null);
+		
+		if(this.getgState() == GameStates.GAMEOVER) {
+			// Shows Game over message
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setColor(new Color(0x00, 0x00, 0x00, 150));
+			g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
+			g.drawImage(this.gameOverImage, 0, 0,WIDTH*SCALE, HEIGHT*SCALE, null);
+			g.setColor(Color.white);
+			//g.setFont(new Font("arial", Font.BOLD, 48));
+			//g.drawString("Game Over", WIDTH*SCALE / 2 - 125, HEIGHT*SCALE / 2);
+			g.setFont(new Font("arial", Font.BOLD, 28));
+			
+			if(showGOMessage) {
+				g.drawString("Try again? (Press ENTER)", WIDTH*SCALE / 2 - 175, HEIGHT*SCALE / 2 + 175);
+			}
+			
+		}
+		
 		
 		bs.show();
 		
