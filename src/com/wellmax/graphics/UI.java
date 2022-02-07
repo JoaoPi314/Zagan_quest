@@ -20,31 +20,31 @@ public class UI {
 	/**
 	 * Sprite of heart
 	 */
-	private BufferedImage heart;
+	private final BufferedImage heart;
 	/**
 	 * Sprite of fireball
 	 */
-	private BufferedImage fireball;
+	private final BufferedImage fireball;
 	/**
 	 * Sprite of right corner of wave bar
 	 */
-	private BufferedImage waveBarCornerRight;
+	private final BufferedImage waveBarCornerRight;
 	/**
 	 * Sprite of left corner of wave bar
 	 */
-	private BufferedImage waveBarCornerLeft;
+	private final BufferedImage waveBarCornerLeft;
 	/**
 	 * Sprite of wave bar
 	 */
-	private BufferedImage waveBarMiddle;
+	private final BufferedImage waveBarMiddle;
 	/**
 	 * Sprite of boss wave bar
 	 */
-	private BufferedImage waveBarBoss;
+	private final BufferedImage waveBarBoss;
 	/**
 	 * Sprite of musical note
 	 */
-	private BufferedImage note;
+	private final BufferedImage note;
 	
 	/**
 	 * Size of heart displayed
@@ -62,16 +62,13 @@ public class UI {
 	 * Width of wave bar
 	 */
 	private int waveSize;
-	/**
-	 * Height of
-	 */
 
 	/**
 	 * Number of enemies at world creation
 	 */
 	private double maxEnemies;
 	/**
-	 * Number of enemies reamining
+	 * Number of enemies remaining
 	 */
 	private double currentEnemies;
 	/**
@@ -96,121 +93,76 @@ public class UI {
 		this.setCurrentEnemies(this.getMaxEnemies());
 		
 		// Sprites
-		this.heart = Game.spritesheet.getSprite(0, 144, this.heartSize, this.heartSize);
-		this.fireball = Game.spritesheet.getSprite(0, 152, this.fireballSize, this.fireballSize);
-		this.note = Game.spritesheet.getSprite(8,152, this.noteSize, this.noteSize);
+		this.heart = Game.spritesheet.getSprite(0, 144, this.getHeartSize(), this.getHeartSize());
+		this.fireball = Game.spritesheet.getSprite(0, 152, this.getFireballSize(), this.getFireballSize());
+		this.note = Game.spritesheet.getSprite(8,152, this.getNoteSize(), this.getNoteSize());
 		
-		this.waveBarCornerRight = Game.spritesheet.getSprite(80, 48, this.waveSize, this.waveSize);
-		this.waveBarCornerLeft = Game.spritesheet.getSprite(80, 16, this.waveSize, this.waveSize);
-		this.waveBarMiddle = Game.spritesheet.getSprite(80, 32, this.waveSize, this.waveSize);
-		this.waveBarBoss= Game.spritesheet.getSprite(80, 64, this.waveSize, this.waveSize);
+		this.waveBarCornerRight = Game.spritesheet.getSprite(80, 48, this.getWaveSize(), this.getWaveSize());
+		this.waveBarCornerLeft = Game.spritesheet.getSprite(80, 16, this.getWaveSize(), this.getWaveSize());
+		this.waveBarMiddle = Game.spritesheet.getSprite(80, 32, this.getWaveSize(), this.getWaveSize());
+		this.waveBarBoss= Game.spritesheet.getSprite(80, 64, this.getWaveSize(), this.getWaveSize());
 
 	}
 	
-	/**
-	 * @return the heartSize
-	 */
+
 	public int getHeartSize() {
 		return heartSize;
 	}
 
-	/**
-	 * @param heartSize the heartSize to set
-	 */
 	public void setHeartSize(int heartSize) {
 		this.heartSize = heartSize;
 	}
 
-	/**
-	 * @return the fireballSize
-	 */
 	public int getFireballSize() {
 		return fireballSize;
 	}
 
-	/**
-	 * @param fireballSize the fireballSize to set
-	 */
 	public void setFireballSize(int fireballSize) {
 		this.fireballSize = fireballSize;
 	}
 
-	/**
-	 * @return the noteSize
-	 */
 	public int getNoteSize() {
 		return noteSize;
 	}
 
-	/**
-	 * @param noteSize the noteSize to set
-	 */
 	public void setNoteSize(int noteSize) {
 		this.noteSize = noteSize;
 	}
 
-	/**
-	 * @return the maxEnemies
-	 */
 	public double getMaxEnemies() {
 		return maxEnemies;
 	}
 
-	/**
-	 * @param maxEnemies the maxEnemies to set
-	 */
 	public void setMaxEnemies(double maxEnemies) {
 		this.maxEnemies = maxEnemies;
 	}
 
-	/**
-	 * @return the currentEnemies
-	 */
 	public double getCurrentEnemies() {
 		return currentEnemies;
 	}
 
-	/**
-	 * @param currentEnemies the currentEnemies to set
-	 */
 	public void setCurrentEnemies(double currentEnemies) {
 		this.currentEnemies = currentEnemies;
 	}
 
-	/**
-	 * @return the maxWaveSize
-	 */
 	public double getMaxWaveSize() {
 		return maxWaveSize;
 	}
 
-	/**
-	 * @param maxWaveSize the maxWaveSize to set
-	 */
 	public void setMaxWaveSize(double maxWaveSize) {
 		this.maxWaveSize = maxWaveSize;
 	}
 
-	/**
-	 * @return the waveSize
-	 */
 	public int getWaveSize() {
 		return waveSize;
 	}
 
-	/**
-	 * @param maxWaveSize the maxWaveSize to set
-	 */
 	public void setWaveSize(int waveSize) {
 		this.waveSize = waveSize;
 	}
-	
-	/**
-	 * Update method to UI
-	 */
+
 	public void update() {
 		this.setCurrentEnemies(Game.enemies.size());
-
 	}
 	
 	/**
