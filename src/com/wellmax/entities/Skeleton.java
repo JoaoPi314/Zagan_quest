@@ -28,7 +28,7 @@ public class Skeleton extends Enemy{
 		this.setLife(10);
 		this.setFov(8);
 		this.setDefense(1.5);
-		this.setDamage(2);
+		this.setDamage(1);
 		
 		// Initiates sprites
 		enRight = new BufferedImage[this.getNumberOfSprites()];
