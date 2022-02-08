@@ -1,5 +1,6 @@
 -- refactoring (MUST DO FIRST)
-	-- Implement collidsion check with entity to stop using wallTile to everythiing with collision
+	-- Adjust collision mask of trees
+	-- Implement collision check with entity to stop using wallTile to everythiing with collision
 	-- Transfer the statue to an entity since it will become a enemy
 	-- Transfer the stones to entity
 	-- Review all code
