@@ -2,373 +2,264 @@ package com.wellmax.entities;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 
-import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
-import com.wellmax.world.Camera;
 import com.wellmax.world.Scenario;
-import com.wellmax.world.World;
 
 /**
- *  The Entity class covers all entities that
- *  has an intelligence (include player)
+ * Generic Creature class. The Creature, projectile and Collectible classes
+ * will inheritance this class
  * @author joao.gomes
  *
  */
-public class Entity extends GenericEntity{
-
-	//---------------------------- Attributes ----------------------------------//	
-
-	/**
-	 * Direction the entity wants to move
-	 */
-	protected Directions moveDir;
-	/**
-	 * Direction the entity faces
-	 */
-	protected Directions faceDir;
-	/**
-	 * Entity speed
-	 */
-	protected double speed;
-	/**
-	 * Flag that indicates if entity is moving
-	 */
-	protected boolean moving;
-	/**
-	 * Entity life
-	 */
-	protected double life;
-	/**
-	 * Entity max life
-	 */
-	protected int maxLife;
-	/**
-	 * Entity defense
-	 */
-	protected double defense;
-	/**
-	 * Flag that indicates if entity took damage recently
-	 */
-	protected boolean damaged;
-	/**
-	 * Number of frames the damage sprite should be rendered 
-	 */
-	protected int damageFrames;
-	/**
-	 * Knockback speed when taking damage
-	 */
-	protected int kbSpeed;
-	/**
-	 * Knockback direction when taking damage
-	 */
-	protected Directions kbDir;
-	
-	
-	// Sprites
-	/**
-	 * Sprites of entity facing right
-	 */
-	protected BufferedImage[] enRight;
-	/**
-	 * sprites of entity facing left
-	 */
-	protected BufferedImage[] enLeft;
-	/**
-	 * Sprites of entity facing up
-	 */
-	protected BufferedImage[] enUp;
-	/**
-	 * Sprites of entity facing down
-	 */
-	protected BufferedImage[] enDown;
+public abstract class Entity {
+	//---------------------------- Attributes ----------------------------------//
 	
 	/**
-	 * Sprite of entity taking damage facing right
+	 * x position of Creature
 	 */
-	protected BufferedImage enDamageRight;
+	private double x;
 	/**
-	 * Sprite of entity taking damage facing left
+	 * y position of Creature
 	 */
-	protected BufferedImage enDamageLeft;
+	private double y;
 	/**
-	 * Sprite of entity taking damage facing up
+	 * Width of Creature
 	 */
-	protected BufferedImage enDamageUp;
+	private int width;
 	/**
-	 * Sprite of entity taking damage facing down
+	 * Height of entity
 	 */
-	protected BufferedImage enDamageDown;
-
+	private int height;
+	/**
+	 * x position of collision mask (offset based on x attribute)
+	 */
+	private int maskX;
+	/**
+	 * y position of collision mask(offset based on y attribute)
+	 */
+	private int maskY;
+	/**
+	 * Width of collision mask. Based on (maskX, maskY) point
+	 */
+	private int maskWidth;
+	/**
+	 * Height of collision mask. Based on (maskX, maskY) point
+	 */
+	private int maskHeight;
+	/**
+	 * Number of sprites of Creature (Used when entity has animation)
+	 */
+	private int numberOfSprites;
+	/**
+	 * Current frames of animation
+	 */
+	private int frames;
+	/**
+	 * Max value of frames before sprite changes
+	 */
+	private int maxFrames;
+	/**
+	 * Index of sprite array (Animation calculus)
+	 */
+	private int index;
 	
-	
-	//---------------------------- Methods ----------------------------------//	
-	
+	//---------------------------- Methods ----------------------------------//
 	/**
-	 * The constructor takes the fundamental parameters of an Entity
+	 * The constructor takes the fundamental parameters of a Creature
 	 * @param x: x position
 	 * @param y: y position
-	 * @param width: Entity width
-	 * @param height: Entity heighy
+	 * @param width: Creature width
+	 * @param height: Creature height
 	 */
 	public Entity(int x, int y, int width, int height) {
-		super(x, y, width, height);
+		this.setX(x);
+		this.setY(y);
+		this.setWidth(width);
+		this.setHeight(height);
 		
+		this.setMaskWidth(width);
+		this.setMaskHeight(height);
+		
+		// Other initializations
+		this.setMaxFrames(10);
+		this.setFrames(0);
+		this.setIndex(0);
+		this.setNumberOfSprites(4);
+	}
+	
+	public double getX() {
+		return x;
 	}
 
-	
-	
-
-	/**
-	 * @return the moveDir
-	 */
-	public Directions getMoveDir() {
-		return moveDir;
-	}
-	
-	/**
-	 * @param moveDir the moveDir to set
-	 */
-	public void setMoveDir(Directions moveDir) {
-		this.moveDir = moveDir;
-	}
-	
-	/**
-	 * @return the faceDir
-	 */
-	public Directions getFaceDir() {
-		return faceDir;
-	}
-	
-	/**
-	 * @param faceDir the faceDir to set
-	 */
-	public void setFaceDir(Directions faceDir) {
-		this.faceDir = faceDir;
-	}
-	
-	/**
-	 * @return the speed
-	 */
-	public double getSpeed() {
-		return speed;
-	}
-	
-	/**
-	 * @param speed the speed to set
-	 */
-	public void setSpeed(double speed) {
-		this.speed = speed;
-	}
-	
-	/**
-	 * @return the moving
-	 */
-	public boolean isMoving() {
-		return moving;
-	}
-	
-	/**
-	 * @param moving the moving to set
-	 */
-	public void setMoving(boolean moving) {
-		this.moving = moving;
-	}
-	
-	/**
-	 * @return the life
-	 */
-	public double getLife() {
-		return life;
-	}
-	
-	/**
-	 * @return the maxLife
-	 */
-	public int getMaxLife() {
-		return maxLife;
+	public void setX(double x) {
+		this.x = x;
 	}
 
-	/**
-	 * @param maxLife the maxLife to set
-	 */
-	public void setMaxLife(int maxLife) {
-		this.maxLife = maxLife;
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getMaskX() {
+		return maskX;
+	}
+
+	public void setMaskX(int maskX) {
+		this.maskX = maskX;
+	}
+
+	public int getMaskY() {
+		return maskY;
+	}
+
+	public void setMaskY(int maskY) {
+		this.maskY = maskY;
+	}
+
+	public int getMaskWidth() {
+		return maskWidth;
+	}
+
+	public void setMaskWidth(int maskWidth) {
+		this.maskWidth = maskWidth;
+	}
+	
+	public int getMaskHeight() {
+		return maskHeight;
+	}
+
+	public void setMaskHeight(int maskHeight) {
+		this.maskHeight = maskHeight;
+	}
+
+	public int getNumberOfSprites() {
+		return numberOfSprites;
+	}
+
+	public void setNumberOfSprites(int numberOfSprites) {
+		this.numberOfSprites = numberOfSprites;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public int getFrames() {
+		return frames;
+	}
+
+	public void setFrames(int frames) {
+		this.frames = frames;
+	}
+
+	public int getMaxFrames() {
+		return maxFrames;
+	}
+
+	public void setMaxFrames(int maxFrames) {
+		this.maxFrames = maxFrames;
 	}
 
 	/**
-	 * @param life the life to set
+	 * Static method to check collision between two entities
+	 * @param e1 Generic entity 1
+	 * @param e2 Generic entity 2
+	 * @return true if e1 and e2 are colliding
 	 */
-	public void setLife(double life) {
-		this.life = life;
-	}
+	public static boolean isColliding(Entity e1, Entity e2) {
+		Rectangle e1Mask = new Rectangle((int)(e1.getX() + e1.getMaskX()), (int)(e1.getY() + e1.getMaskY()), e1.getMaskWidth(), e1.getMaskHeight());
+		Rectangle e2Mask = new Rectangle((int)(e2.getX() + e2.getMaskX()), (int)(e2.getY() + e2.getMaskY()), e2.getMaskWidth(), e2.getMaskHeight());
+		
+		return e1Mask.intersects(e2Mask);
+	}	
 	
 	/**
-	 * @return the defense
+	 * Checks collision with scenario items
+	 * @param xx next player x position
+	 * @param yy next player y position
+	 * @return true if player isn't colliding with any scenario item
 	 */
-	public double getDefense() {
-		return defense;
-	}
-	
-	/**
-	 * @param defense the defense to set
-	 */
-	public void setDefense(double defense) {
-		this.defense = defense;
-	}
-	
-	/**
-	 * @return the damaged
-	 */
-	public boolean isDamaged() {
-		return damaged;
-	}
-	
-	/**
-	 * @param damaged the damaged to set
-	 */
-	public void setDamaged(boolean damaged) {
-		this.damaged = damaged;
-	}
-	
-	/**
-	 * @return the damageFrames
-	 */
-	public int getDamageFrames() {
-		return damageFrames;
-	}
-	
-	/**
-	 * @param damageFrames the damageFrames to set
-	 */
-	public void setDamageFrames(int damageFrames) {
-		this.damageFrames = damageFrames;
-	}
-	
-	/**
-	 * @return the kbspeed
-	 */
-	public int getKbSpeed() {
-		return kbSpeed;
-	}
-	
-	/**
-	 * @param kbspeed the kbspeed to set
-	 */
-	public void setKbspeed(int kbSpeed) {
-		this.kbSpeed = kbSpeed;
-	}
-	
-	/**
-	 * @return the kbdir
-	 */
-	public Directions getKbDir() {
-		return kbDir;
-	}
-	
-	/**
-	 * @param kbdir the kbdir to set
-	 */
-	public void setKbDir(Directions kbDir) {
-		this.kbDir = kbDir;
-	}
-
-
-	/**
-	 * Method to calculate player movement when it is
-	 * taking damage
-	 */
-	protected void damageMovement() {
-		if(this.isDamaged()) {
-			switch(this.getKbDir()) {
-				case RIGHT:
-					if(World.isFree((int)(this.getX() + this.getSpeed()*this.getKbSpeed()), (int) this.getY()) &&
-							!this.isCollidingWithScenario((int)(this.getX() + this.getKbSpeed()), (int)this.getY())) {
-						this.setX(this.getX() + this.getSpeed()*this.getKbSpeed());
-						this.setMoving(true);
-					}
-					break;
-				case LEFT:
-					if(World.isFree((int)(this.getX() - this.getSpeed()*this.getKbSpeed()), (int) this.getY()) &&
-							!this.isCollidingWithScenario((int)(this.getX() - this.getKbSpeed()), (int)this.getY())) {
-						this.setX(this.getX() - this.getSpeed()*this.getKbSpeed());
-						this.setMoving(true);
-					}
-					break;
-				case UP:
-					if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()*this.getKbSpeed())) &&
-							!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() - this.getKbSpeed()))) {
-						this.setY(this.getY() - this.getSpeed()*this.getKbSpeed());
-						this.setMoving(true);						
-					}
-					break;
-				case DOWN:
-					if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()*this.getKbSpeed())) &&
-							!this.isCollidingWithScenario((int)this.getX(), (int)(this.getY() + this.getKbSpeed()))) {
-						this.setY(this.getY() + this.getSpeed()*this.getKbSpeed());
-						this.setMoving(true);						
-					}
-					break;
-				default:
-					break;
+	protected boolean isNotCollidingWithScenario(int xx, int yy) {
+		Rectangle entity = new Rectangle((int)(xx + this.getMaskX()), 
+				(int)(yy + this.getMaskY()), this.getMaskWidth(), this.getMaskHeight());
+		
+		for(int i = 0; i < Game.scenario.size(); i++) {
+			Scenario s = Game.scenario.get(i);
 			
+			Rectangle scenarioItem = new Rectangle(s.getX() + s.getMaskX(), 
+					s.getY() +  s.getMaskY(), s.getmWidth(), s.getmHeight());
+			if(scenarioItem.intersects(entity)){
+				return false;
 			}
-			
-			// Sprite damage calculus
-			damageFrames++;
-			if(damageFrames ==8) {
-				damageFrames = 0;
-				setDamaged(false);
-			}	
+		}
+		return true;
+	}
+
+	/**
+	 * Method to set all collision mask attributes at once
+	 * @param maskX x mask position
+	 * @param maskY y mask position
+	 * @param mWidth mask width
+	 * @param mHeight mask height
+	 */
+	public void setMask(int maskX, int maskY, int mWidth, int mHeight) {
+		this.setMaskX(maskX);
+		this.setMaskY(maskY);
+		this.setMaskWidth(mWidth);
+		this.setMaskHeight(mHeight);
+	}
+	
+	/**
+	 * Method to count the frames necessary to update Creature sprite
+	 * @param count Flag that indicates if entity sprite must be updated
+	 */
+	protected void countFrames(boolean count) {
+		if(count) {
+			this.setFrames(this.getFrames() + 1);
+			if(this.getFrames() == this.getMaxFrames()) {
+				this.setFrames(0);
+				this.index++;
+				if(this.index >= this.getNumberOfSprites()) {
+					this.index = 0;
+				}
+			}
 		}
 	}
 	
-	@Override
-	public void update() {
-		
-	}
+	/**
+	 * Abstract method to evaluate entity logic at each frame
+	 */
+	public abstract void update();
 
-
-	@Override
-	public void render(Graphics g) {
-		
-		BufferedImage currentSprite;
-		
-		switch(this.getFaceDir()) {
-			case RIGHT:
-				if(!this.isDamaged()) {
-					currentSprite = this.enRight[index];
-				}else {
-					currentSprite = this.enDamageRight;
-				}
-				break;
-			case LEFT:
-				if(!this.isDamaged()) {
-					currentSprite = this.enLeft[index];
-				}else {
-					currentSprite = this.enDamageLeft;
-				}
-				break;
-			case UP:
-				if(!this.isDamaged()) {
-					currentSprite = this.enUp[index];
-				}else {
-					currentSprite = this.enDamageUp;
-				}
-				break;
-			case DOWN: // If DOWN or NONE, sprite down is rendered	
-			default:
-				if(!this.isDamaged()) {
-					currentSprite = this.enDown[index];
-				}else {
-					currentSprite = this.enDamageDown;
-				}
-				break;
-		}
-		
-		g.drawImage(currentSprite, (int)(this.getX() - Camera.x), (int)(this.getY() - Camera.y), null);
-
-	}
+	/**
+	 * Abstract method to render entity at each frame
+	 * @param g Graphic object to render entity
+	 */
+	public abstract void render(Graphics g);
 
 }
+

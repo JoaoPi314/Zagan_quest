@@ -6,36 +6,33 @@ import java.awt.image.BufferedImage;
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
 import com.wellmax.world.Camera;
-import com.wellmax.world.World;
 
 /**
  * The FireBallShoot is a power that deals
- * 2x the damage of LuteFire, dealing a major
- * knockback when an enemy is hitted
+ * 2x the damage compared to LuteFire, dealing a major
+ * knock-back when an enemy is hit
  * @author joao.gomes
  *
  */
 public class FireballShoot extends Projectile{
 
-	//---------------------------- Attributes ----------------------------------//	
-
-
+	//---------------------------- Attributes ----------------------------------//
 	/**
 	 * Fireball facing right sprite
 	 */
-	private BufferedImage[] fireRight;
+	private final BufferedImage[] fireRight;
 	/**
 	 * Fireball facing left
 	 */
-	private BufferedImage[] fireLeft;
+	private final BufferedImage[] fireLeft;
 	/**
 	 * Fireball facing up sprite
 	 */
-	private BufferedImage[] fireUp;
+	private final BufferedImage[] fireUp;
 	/**
 	 * Fireball facing down sprite
 	 */
-	private BufferedImage[] fireDown;
+	private final BufferedImage[] fireDown;
 
 	//---------------------------- Methods ----------------------------------//	
 	
@@ -43,8 +40,8 @@ public class FireballShoot extends Projectile{
 	 * Constructor
 	 * @param x x position
 	 * @param y y position
-	 * @param width Fireballshoot width
-	 * @param height Fireballshoot height
+	 * @param width Fireball shoot width
+	 * @param height Fireball shoot height
 	 * @param dir Direction of shoot
 	 * @param dx x axis multiplier
 	 * @param dy y axis multiplier
@@ -57,40 +54,34 @@ public class FireballShoot extends Projectile{
 		this.setTotalTime(60);
 		this.setTimeRemain(0);
 		this.setDamage(5);
+		this.setKnockBackDealt(3);
 		
-		this.fireRight = new BufferedImage[this.getnOfSprites()];
-		this.fireLeft = new BufferedImage[this.getnOfSprites()];
-		this.fireUp = new BufferedImage[this.getnOfSprites()];
-		this.fireDown = new BufferedImage[this.getnOfSprites()];
+		this.fireRight = new BufferedImage[this.getNumberOfSprites()];
+		this.fireLeft = new BufferedImage[this.getNumberOfSprites()];
+		this.fireUp = new BufferedImage[this.getNumberOfSprites()];
+		this.fireDown = new BufferedImage[this.getNumberOfSprites()];
 
 		
-		for(int i = 0; i < this.getnOfSprites(); i++) {
-			this.fireRight[i] = Game.spritesheet.getSprite(96 + i*16, 32, this.getmWidth(), this.getHeight());
-			this.fireLeft[i] = Game.spritesheet.getSprite(96 + i*16, 48, this.getmWidth(), this.getHeight());
-			this.fireUp[i] = Game.spritesheet.getSprite(96 + i*16, 0, this.getmWidth(), this.getHeight());
-			this.fireDown[i] = Game.spritesheet.getSprite(96 + i*16, 16, this.getmWidth(), this.getHeight());
+		for(int i = 0; i < this.getNumberOfSprites(); i++) {
+			this.fireRight[i] = Game.spritesheet.getSprite(96 + i*16, 32, this.getMaskWidth(), this.getHeight());
+			this.fireLeft[i] = Game.spritesheet.getSprite(96 + i*16, 48, this.getMaskWidth(), this.getHeight());
+			this.fireUp[i] = Game.spritesheet.getSprite(96 + i*16, 0, this.getMaskWidth(), this.getHeight());
+			this.fireDown[i] = Game.spritesheet.getSprite(96 + i*16, 16, this.getMaskWidth(), this.getHeight());
 		}
 		
 	}
 	
-	
+	@Override
 	public void render(Graphics g) {
-		switch(this.getFaceDir()) {
-			case UP:
-				g.drawImage(fireUp[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-				break;
-			case DOWN:
-				g.drawImage(fireDown[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-				break;
-			case RIGHT:
-				g.drawImage(fireRight[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-				break;
-			case LEFT:
-				g.drawImage(fireLeft[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-				break;
-			default:
-				g.drawImage(fireRight[index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
-				break;
+		switch (this.getFaceDir()) {
+			case UP -> g.drawImage(fireUp[this.getIndex()], (int) (getX() - Camera.x), (int) (getY() - Camera.y),
+					null);
+			case DOWN -> g.drawImage(fireDown[this.getIndex()], (int) (getX() - Camera.x), (int) (getY() - Camera.y),
+					null);
+			case RIGHT -> g.drawImage(fireRight[this.getIndex()], (int) (getX() - Camera.x), (int) (getY() - Camera.y),
+					null);
+			case LEFT -> g.drawImage(fireLeft[this.getIndex()], (int) (getX() - Camera.x), (int) (getY() - Camera.y),
+					null);
 		}
 	}
 

@@ -7,14 +7,15 @@ import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
 import com.wellmax.world.Camera;
 
-public class DeadEnemy extends Entity{
-	
-	
+public class DeadEnemy extends Creature {
+	//---------------------------- Attributes ----------------------------------//
+
 	/**
 	 * Flag that indicates if death animation ends
 	 */
 	private boolean endAnimation;
-	
+
+	//---------------------------- Methods ----------------------------------//
 	/**
 	 * Constructor of dead enemy
 	 * @param x x position
@@ -27,14 +28,13 @@ public class DeadEnemy extends Entity{
 		super(x, y, width, height);
 		
 		this.setFaceDir(dir);
-		
-		enRight = new BufferedImage[this.getnOfSprites()];
-		enLeft = new BufferedImage[this.getnOfSprites()];
-		enUp = new BufferedImage[this.getnOfSprites()];
-		enDown = new BufferedImage[this.getnOfSprites()];
 
-		
-		for(int i = 0; i < nOfSprites; i++) {
+		enRight = new BufferedImage[this.getNumberOfSprites()];
+		enLeft = new BufferedImage[this.getNumberOfSprites()];
+		enUp = new BufferedImage[this.getNumberOfSprites()];
+		enDown = new BufferedImage[this.getNumberOfSprites()];
+
+		for(int i = 0; i < this.getNumberOfSprites(); i++) {
 			enRight[i] = Game.spritesheet.getSprite(224 + i*16, 32, this.getWidth(), this.getHeight());
 			enLeft[i] = Game.spritesheet.getSprite(224 + i*16, 48, this.getWidth(), this.getHeight());
 			enUp[i] = Game.spritesheet.getSprite(224 + i*16, 0, this.getWidth(), this.getHeight());
@@ -42,64 +42,53 @@ public class DeadEnemy extends Entity{
 		}
 	}
 	
-	/**
-	 * @return the endAnimation
-	 */
+
 	public boolean isEndAnimation() {
 		return endAnimation;
 	}
 
-	/**
-	 * @param endAnimation the endAnimation to set
-	 */
 	public void setEndAnimation(boolean endAnimation) {
 		this.endAnimation = endAnimation;
 	}
 	
 	
 	/**
-	 * The countframes of deadEnemy is different, once the animation
+	 * The counting frames of deadEnemy is different, once the animation
 	 * has to stop when finishes the sprites
 	 */
 	public void countFrames(boolean count) {
 		if(count) {
-			this.frames++;
-			if(this.frames == this.maxFrames) {
-				this.frames = 0;
-				this.index++;
-				if(this.index >= this.getnOfSprites()) {
-					this.index = this.getnOfSprites() - 1;
-					setEndAnimation(true);
+			this.setFrames(this.getFrames() + 1);
+			if(this.getFrames() == this.getMaxFrames()) {
+				this.setFrames(0);
+				this.setIndex(this.getIndex() + 1);
+				if(this.getIndex() >= this.getNumberOfSprites()) {
+					this.setIndex(this.getNumberOfSprites() - 1);
+					this.setEndAnimation(true);
 				}
 			}
 		}
 	}
 	
-	
+	@Override
 	public void update() {
 		this.countFrames(true);
 	}
-	
+
+	@Override
+	public void attack() {
+
+	}
+
 	public void render(Graphics g) {
 		
-		BufferedImage currentSprite;
-		
-		switch(this.getFaceDir()) {
-			case RIGHT:
-				currentSprite = this.enRight[index];
-				break;
-			case LEFT:
-				currentSprite = this.enLeft[index];
-				break;
-			case UP:
-				currentSprite = this.enUp[index];
-				break;
-			case DOWN: // If DOWN, sprite down is rendered	
-			default:
-				currentSprite = this.enDown[index];
-				break;
-		}
-		
+		BufferedImage currentSprite = switch (this.getFaceDir()) {
+			case RIGHT -> this.enRight[this.getIndex()];
+			case LEFT -> this.enLeft[this.getIndex()];
+			case UP -> this.enUp[this.getIndex()];
+			case DOWN -> this.enDown[this.getIndex()];
+		};
+
 		g.drawImage(currentSprite, (int)(this.getX() - Camera.x), (int)(this.getY() - Camera.y), null);
 
 	}

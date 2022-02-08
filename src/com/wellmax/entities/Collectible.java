@@ -10,11 +10,8 @@ import com.wellmax.main.Game;
  * @author joao.gomes
  *
  */
-public class Collectible extends GenericEntity{
-	
-	
-	//---------------------------- Attributes ----------------------------------//	
-	
+public abstract class Collectible extends Entity {
+	//---------------------------- Attributes ----------------------------------//
 	/**
 	 * Static sprites of Health potion
 	 */
@@ -23,10 +20,7 @@ public class Collectible extends GenericEntity{
 	 * Static sprites of fireballs
 	 */
 	public static BufferedImage []FIREBALL;
-	
-	/**
-	 * Initialization of static sprites
-	 */
+
 	static {
 		HEALTH_POTION = new BufferedImage[4];
 		FIREBALL = new BufferedImage[4];
@@ -37,9 +31,8 @@ public class Collectible extends GenericEntity{
 		}
 		
 	}
-	
-	//---------------------------- Methods ----------------------------------//	
-	
+
+	//---------------------------- Methods ----------------------------------//
 	/**
 	 * Constructor
 	 * @param x x position
@@ -52,22 +45,7 @@ public class Collectible extends GenericEntity{
 	}
 
 	/**
-	 * Method with collectible effect
+	 * Abstract Method with collectible effect
 	 */
-	protected void effect() {
-		
-	}
-
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void render(Graphics g) {
-		// TODO Auto-generated method stub
-		
-	}
-	
+	protected abstract void effect();
 }

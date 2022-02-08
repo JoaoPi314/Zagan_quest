@@ -31,10 +31,10 @@ public class Skeleton extends Enemy{
 		this.setDamage(2);
 		
 		// Initiates sprites
-		enRight = new BufferedImage[this.getnOfSprites()];
-		enLeft = new BufferedImage[this.getnOfSprites()];
-		enUp = new BufferedImage[this.getnOfSprites()];
-		enDown = new BufferedImage[this.getnOfSprites()];
+		enRight = new BufferedImage[this.getNumberOfSprites()];
+		enLeft = new BufferedImage[this.getNumberOfSprites()];
+		enUp = new BufferedImage[this.getNumberOfSprites()];
+		enDown = new BufferedImage[this.getNumberOfSprites()];
 
 		enDamageRight = Game.spritesheet.getSprite(80, 112, this.getWidth(), this.getHeight());
 		enDamageLeft = Game.spritesheet.getSprite(80, 128, this.getWidth(), this.getHeight());
@@ -42,12 +42,17 @@ public class Skeleton extends Enemy{
 		enDamageDown = Game.spritesheet.getSprite(80, 96, this.getWidth(), this.getHeight());
 
 		
-		for(int i = 0; i < nOfSprites; i++) {
+		for(int i = 0; i < this.getNumberOfSprites(); i++) {
 			enRight[i] = Game.spritesheet.getSprite(160 + i*16, 32, this.getWidth(), this.getHeight());
 			enLeft[i] = Game.spritesheet.getSprite(160 + i*16, 48, this.getWidth(), this.getHeight());
 			enUp[i] = Game.spritesheet.getSprite(160 + i*16, 0, this.getWidth(), this.getHeight());
 			enDown[i] = Game.spritesheet.getSprite(160 + i*16, 16, this.getWidth(), this.getHeight());	
 		}
 		
+	}
+
+	@Override
+	public void attack() {
+
 	}
 }
