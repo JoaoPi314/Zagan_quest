@@ -12,7 +12,20 @@ import com.wellmax.main.Game;
  *
  */
 public class Skeleton extends Enemy{
-	
+	//---------------------------- Attributes ----------------------------------//
+	/**
+	 * Max approach of enemy
+	 */
+	private int maxApproaching;
+	/**
+	 * Flag that indicates id skeleton is attacking with ranged attacks
+	 */
+	private boolean ranged;
+
+
+
+	//---------------------------- Methods ----------------------------------//
+
 	/**
 	 * Constructor
 	 * @param x x position
@@ -29,6 +42,7 @@ public class Skeleton extends Enemy{
 		this.setFov(8);
 		this.setDefense(1.5);
 		this.setDamage(1);
+		this.setMaxApproaching(4);
 		
 		// Initiates sprites
 		enRight = new BufferedImage[this.getNumberOfSprites()];
@@ -51,8 +65,80 @@ public class Skeleton extends Enemy{
 		
 	}
 
-	@Override
-	public void attack() {
+	public int getMaxApproaching() {
+		return maxApproaching;
+	}
+
+	public void setMaxApproaching(int maxApproaching) {
+		this.maxApproaching = maxApproaching;
+	}
+
+	public boolean isRanged() {
+		return ranged;
+	}
+
+	public void setRanged(boolean ranged) {
+		this.ranged = ranged;
+	}
+
+	/**
+	 * Method to check if enemy is at approaching limit of player
+	 * @return true if enemy is too near the player
+	 */
+	private boolean limitApproachPlayer(){
+		boolean limitX = (Math.abs(this.getX() - Game.player.getX()) <= this.getWidth()*this.getMaxApproaching());
+		boolean limitY = (Math.abs(this.getY() - Game.player.getY()) <= this.getWidth()*this.getMaxApproaching());;
+
+		return (limitX && limitY);
+	}
+
+
+	/**
+	 * Method to execute enemy IA
+	 */
+	protected void enemyIA() {
+
+		if(!Entity.isColliding(this, Game.player) || Game.player.getLife() <= 0) {
+			if(this.nearPlayer() && !this.limitApproachPlayer()) { // Enemy is near player nut not too near
+				this.enemyFollowingIA();
+			}else if(this.limitApproachPlayer()){ // Enemy is at limit range - Starts firing
+				this.attack();
+				this.setRanged(true);
+			}
+		}else if(Game.player.getLife() > 0) { // If enemy is colliding with player, and player is alive
+			// Attacking player
+			if(!this.isCoolDown()) {
+				this.attack();
+			}
+		}
 
 	}
+
+
+	@Override
+	public void attack() {
+		if(this.isRanged()) { // Ranged attack
+			// Vector starting at enemy and ending at player
+			double xDistance = Game.player.getX() - this.getX();
+			double yDistance = Game.player.getY() - this.getY();
+
+			// Angle of this vector
+			double angle = Math.toDegrees(Math.atan2(yDistance, xDistance));
+
+			// Checks angle to make Skeleton always look to the nearest player direction
+			if(angle > 135 || angle <= -135) { // Player is in left region
+				this.setFaceDir(Directions.LEFT);
+			}else if(angle <= -45){ // Player is in down region
+				this.setFaceDir(Directions.UP);
+			}else if(angle <= 45) { // Player is in right region
+				this.setFaceDir(Directions.RIGHT);
+			}else { // Player is in up region
+				this.setFaceDir(Directions.DOWN);
+			}
+
+		} else {
+			// Melee attack
+		}
+	}
+
 }
