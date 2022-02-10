@@ -49,7 +49,7 @@ public abstract class Enemy extends Creature {
 	 * Method to check if the player is near enemy
 	 * @return true if player is inside the fov of enemy and the player is alive
 	 */
-	private boolean nearPlayer() {
+	protected boolean nearPlayer() {
 		
 		boolean xAxisNear = (Math.abs(this.getX() - Game.player.getX()) <= this.getWidth()*this.getFov());
 		boolean yAxisNear = (Math.abs(this.getY() - Game.player.getY()) <= this.getHeight()*this.getFov());
@@ -60,94 +60,107 @@ public abstract class Enemy extends Creature {
 	}
 
 	/**
+	 * Method to Idle movement
+	 */
+	protected void enemyIdleIA(){
+		Directions randDir;
+		randDir = Utils.randomEnum(Directions.class);
+
+		// Enemy has a chance of 5% to move
+		if(Game.rand.nextInt(100) < 5) {
+			switch (randDir) {
+				case RIGHT -> {
+					this.setFaceDir(Directions.RIGHT);
+					if (World.isFree((int) (this.getX() + this.getSpeed()), (int) this.getY()) &&
+							this.isNotCollidingWithEnemies((int) (this.getX() + this.getSpeed()),
+									(int) this.getY()) &&
+							this.isNotCollidingWithScenario((int) (this.getX() + this.getSpeed()),
+									(int) this.getY())) {
+						this.setX(this.getX() + this.getSpeed());
+					}
+				}
+				case LEFT -> {
+					this.setFaceDir(Directions.LEFT);
+					if (World.isFree((int) (this.getX() - this.getSpeed()), (int) this.getY()) &&
+							this.isNotCollidingWithEnemies((int) (this.getX() - this.getSpeed()),
+									(int) this.getY()) &&
+							this.isNotCollidingWithScenario((int) (this.getX() - this.getSpeed()),
+									(int) this.getY())) {
+						this.setX(this.getX() - this.getSpeed());
+					}
+				}
+				case UP -> {
+					this.setFaceDir(Directions.UP);
+					if (World.isFree((int) this.getX(), (int) (this.getY() - this.getSpeed())) &&
+							this.isNotCollidingWithEnemies((int) this.getX(),
+									(int) (this.getY() - this.getSpeed())) &&
+							this.isNotCollidingWithScenario((int) this.getX(),
+									(int) (this.getY() - this.getSpeed()))) {
+						this.setY(this.getY() - this.getSpeed());
+					}
+				} // Default movement is down
+				case DOWN-> {
+					this.setFaceDir(Directions.DOWN);
+					if (World.isFree((int) this.getX(), (int) (this.getY() + this.getSpeed())) &&
+							this.isNotCollidingWithEnemies((int) this.getX(),
+									(int) (this.getY() + this.getSpeed())) &&
+							this.isNotCollidingWithScenario((int) this.getX(),
+									(int) (this.getY() + this.getSpeed()))) {
+						this.setY(this.getY() + this.getSpeed());
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Method to calculate enemy movement when following player
+	 */
+	protected void enemyFollowingIA(){
+		// Enemy to the player's left - Moves right
+		if((int)this.getX() < (int)Game.player.getX() && World.isFree((int)(this.getX() + this.getSpeed()),
+				(int) this.getY()) &&
+				this.isNotCollidingWithEnemies((int) (this.getX() + this.getSpeed()), (int) this.getY()) &&
+				this.isNotCollidingWithScenario((int) (this.getX() + this.getSpeed()), (int) this.getY())) {
+			this.setX(this.getX() + this.getSpeed());
+			this.setFaceDir(Directions.RIGHT);
+			this.setMoving(true);
+			// Enemy to the player's right - Moves left
+		}else if((int)this.getX() > (int)Game.player.getX() && World.isFree((int)(this.getX() - this.getSpeed()),
+				(int) this.getY()) &&
+				this.isNotCollidingWithEnemies((int) (this.getX() - this.getSpeed()), (int) this.getY()) &&
+				this.isNotCollidingWithScenario((int) (this.getX() - this.getSpeed()), (int) this.getY())) {
+			this.setX(this.getX() - this.getSpeed());
+			this.setFaceDir(Directions.LEFT);
+			this.setMoving(true);
+			// Enemy above player - Moves down
+		}else if((int)this.getY() < (int)Game.player.getY() && World.isFree((int)this.getX(),
+				(int) (this.getY() + this.getSpeed())) &&
+				this.isNotCollidingWithEnemies((int) this.getX(), (int) (this.getY() + this.getSpeed())) &&
+				this.isNotCollidingWithScenario((int) this.getX(), (int) (this.getY() + this.getSpeed()))) {
+			this.setY(this.getY() + this.getSpeed());
+			this.setFaceDir(Directions.DOWN);
+			this.setMoving(true);
+			// Enemy below player - Moves up
+		}else if((int)this.getY() > (int)Game.player.getY() && World.isFree((int)this.getX(),
+				(int) (this.getY() - this.getSpeed())) &&
+				this.isNotCollidingWithEnemies((int) this.getX(), (int) (this.getY() - this.getSpeed())) &&
+				this.isNotCollidingWithScenario((int) this.getX(), (int) (this.getY() - this.getSpeed()))) {
+			this.setY(this.getY() - this.getSpeed());
+			this.setFaceDir(Directions.UP);
+			this.setMoving(true);
+		}
+	}
+	/**
 	 * Method to execute enemy IA
 	 */
 	protected void enemyIA() {
 
 		if(!Entity.isColliding(this, Game.player) || Game.player.getLife() <= 0) {
 			if(this.nearPlayer()) { // Enemy is near player
-				// Enemy to the player's left - Moves right
-				if((int)this.getX() < (int)Game.player.getX() && World.isFree((int)(this.getX() + this.getSpeed()),
-						(int) this.getY()) &&
-						this.isNotCollidingWithEnemies((int) (this.getX() + this.getSpeed()), (int) this.getY()) &&
-						this.isNotCollidingWithScenario((int) (this.getX() + this.getSpeed()), (int) this.getY())) {
-					this.setX(this.getX() + this.getSpeed());
-					this.setFaceDir(Directions.RIGHT);
-					this.setMoving(true);
-				// Enemy to the player's right - Moves left
-				}else if((int)this.getX() > (int)Game.player.getX() && World.isFree((int)(this.getX() - this.getSpeed()),
-						(int) this.getY()) &&
-						this.isNotCollidingWithEnemies((int) (this.getX() - this.getSpeed()), (int) this.getY()) &&
-						this.isNotCollidingWithScenario((int) (this.getX() - this.getSpeed()), (int) this.getY())) {
-					this.setX(this.getX() - this.getSpeed());
-					this.setFaceDir(Directions.LEFT);
-					this.setMoving(true);
-				// Enemy above player - Moves down
-				}else if((int)this.getY() < (int)Game.player.getY() && World.isFree((int)this.getX(),
-						(int) (this.getY() + this.getSpeed())) &&
-						this.isNotCollidingWithEnemies((int) this.getX(), (int) (this.getY() + this.getSpeed())) &&
-						this.isNotCollidingWithScenario((int) this.getX(), (int) (this.getY() + this.getSpeed()))) {
-					this.setY(this.getY() + this.getSpeed());
-					this.setFaceDir(Directions.DOWN);
-					this.setMoving(true);
-				// Enemy below player - Moves up
-				}else if((int)this.getY() > (int)Game.player.getY() && World.isFree((int)this.getX(),
-						(int) (this.getY() - this.getSpeed())) &&
-						this.isNotCollidingWithEnemies((int) this.getX(), (int) (this.getY() - this.getSpeed())) &&
-						this.isNotCollidingWithScenario((int) this.getX(), (int) (this.getY() - this.getSpeed()))) {
-					this.setY(this.getY() - this.getSpeed());
-					this.setFaceDir(Directions.UP);
-					this.setMoving(true);
-				}
-			}else { // Enemy is idle - Moves randomly and slowly
-				Directions randDir;
-				randDir = Utils.randomEnum(Directions.class);
-				
-				// Enemy has a chance of 5% to move
-				if(Game.rand.nextInt(100) < 5) {
-					switch (randDir) {
-						case RIGHT -> {
-							this.setFaceDir(Directions.RIGHT);
-							if (World.isFree((int) (this.getX() + this.getSpeed()), (int) this.getY()) &&
-									this.isNotCollidingWithEnemies((int) (this.getX() + this.getSpeed()),
-											(int) this.getY()) &&
-									this.isNotCollidingWithScenario((int) (this.getX() + this.getSpeed()),
-											(int) this.getY())) {
-								this.setX(this.getX() + this.getSpeed());
-							}
-						}
-						case LEFT -> {
-							this.setFaceDir(Directions.LEFT);
-							if (World.isFree((int) (this.getX() - this.getSpeed()), (int) this.getY()) &&
-									this.isNotCollidingWithEnemies((int) (this.getX() - this.getSpeed()),
-											(int) this.getY()) &&
-									this.isNotCollidingWithScenario((int) (this.getX() - this.getSpeed()),
-											(int) this.getY())) {
-								this.setX(this.getX() - this.getSpeed());
-							}
-						}
-						case UP -> {
-							this.setFaceDir(Directions.UP);
-							if (World.isFree((int) this.getX(), (int) (this.getY() - this.getSpeed())) &&
-									this.isNotCollidingWithEnemies((int) this.getX(),
-											(int) (this.getY() - this.getSpeed())) &&
-									this.isNotCollidingWithScenario((int) this.getX(),
-											(int) (this.getY() - this.getSpeed()))) {
-								this.setY(this.getY() - this.getSpeed());
-							}
-						} // Default movement is down
-						case DOWN-> {
-							this.setFaceDir(Directions.DOWN);
-							if (World.isFree((int) this.getX(), (int) (this.getY() + this.getSpeed())) &&
-									this.isNotCollidingWithEnemies((int) this.getX(),
-											(int) (this.getY() + this.getSpeed())) &&
-									this.isNotCollidingWithScenario((int) this.getX(),
-											(int) (this.getY() + this.getSpeed()))) {
-								this.setY(this.getY() + this.getSpeed());
-							}
-						}
-					}
-				}
+				this.enemyFollowingIA();
+			}else{ // Enemy is idle - Moves randomly and slowly
+				this.enemyIdleIA();
 			}
 		}else if(Game.player.getLife() > 0) { // If enemy is colliding with player, and player is alive
 			// Attacking player
@@ -155,7 +168,7 @@ public abstract class Enemy extends Creature {
 				this.attack();
 			}
 		}
-		
+
 	}
 	/**
 	 * Method to calculate knock-back movement
