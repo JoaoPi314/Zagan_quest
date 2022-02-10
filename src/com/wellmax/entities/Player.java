@@ -145,27 +145,23 @@ public class Player extends Creature {
 		this.setMoving(false);
 		
 		if(this.isRight() && World.isFree((int)(this.getX() + this.getSpeed()), (int) this.getY()) &&
-				this.isNotCollidingWithScenario((int) (this.getX() + this.getSpeed()), (int) this.getY()) &&
-				this.isNotCollidingWithEnemies((int) (this.getX() + this.getSpeed()), (int) this.getY())){
+				this.isNotCollidingWithScenario((int) (this.getX() + this.getSpeed()), (int) this.getY())){
 			this.setX(this.getX() + this.getSpeed());
 			this.setFaceDir(Directions.RIGHT);
 			this.setMoving(true);
 		}else if(this.isLeft() && World.isFree((int)(this.getX() - this.getSpeed()), (int) this.getY())&&
-				this.isNotCollidingWithScenario((int) (this.getX() - this.getSpeed()), (int) this.getY())&&
-				this.isNotCollidingWithEnemies((int) (this.getX() - this.getSpeed()), (int) this.getY())){
+				this.isNotCollidingWithScenario((int) (this.getX() - this.getSpeed()), (int) this.getY())){
 			this.setX(this.getX() - this.getSpeed());
 			this.setFaceDir(Directions.LEFT);
 			this.setMoving(true);
 		}
 		if(this.isUp() && World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed())) &&
-				this.isNotCollidingWithScenario((int) this.getX(), (int) (this.getY() - this.getSpeed()))&&
-				this.isNotCollidingWithEnemies((int) this.getX(), (int) (this.getY() - this.getSpeed()))) {
+				this.isNotCollidingWithScenario((int) this.getX(), (int) (this.getY() - this.getSpeed()))) {
 			this.setY(this.getY() - this.getSpeed());
 			this.setFaceDir(Directions.UP);
 			this.setMoving(true);
 		}else if(this.isDown() && World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed())) &&
-				this.isNotCollidingWithScenario((int) this.getX(), (int) (this.getY() + this.getSpeed())) &&
-				this.isNotCollidingWithEnemies((int) this.getX(), (int) (this.getY() + this.getSpeed()))) {
+				this.isNotCollidingWithScenario((int) this.getX(), (int) (this.getY() + this.getSpeed()))) {
 			this.setY(this.getY() + this.getSpeed());
 			this.setFaceDir(Directions.DOWN);
 			this.setMoving(true);
@@ -188,7 +184,6 @@ public class Player extends Creature {
 
 	@Override
 	public void attack() {
-
 		// FIRE
 		this.setShoot(false);
 		int dx = 0;

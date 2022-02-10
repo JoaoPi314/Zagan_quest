@@ -258,8 +258,6 @@ public abstract class Creature extends Entity {
 				case RIGHT:
 					if(World.isFree((int)(this.getX() + this.getSpeed()*this.getKnockBackSpeed()), (int) this.getY()) &&
 							this.isNotCollidingWithScenario((int) (this.getX() + this.getKnockBackSpeed()),
-									(int) this.getY())&&
-							this.isNotCollidingWithEnemies((int) (this.getX() + this.getKnockBackSpeed()),
 									(int) this.getY())) {
 						this.setX(this.getX() + this.getSpeed()*this.getKnockBackSpeed());
 						this.setMoving(true);
@@ -268,8 +266,6 @@ public abstract class Creature extends Entity {
 				case LEFT:
 					if(World.isFree((int)(this.getX() - this.getSpeed()*this.getKnockBackSpeed()), (int) this.getY()) &&
 							this.isNotCollidingWithScenario((int) (this.getX() - this.getKnockBackSpeed()),
-									(int) this.getY())&&
-							this.isNotCollidingWithEnemies((int) (this.getX() - this.getKnockBackSpeed()),
 									(int) this.getY())) {
 						this.setX(this.getX() - this.getSpeed()*this.getKnockBackSpeed());
 						this.setMoving(true);
@@ -278,9 +274,7 @@ public abstract class Creature extends Entity {
 				case UP:
 					if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()*this.getKnockBackSpeed())) &&
 							this.isNotCollidingWithScenario((int) this.getX(),
-									(int) (this.getY() - this.getKnockBackSpeed())) &&
-							this.isNotCollidingWithEnemies((int) this.getX(),
-									(int) (this.getY() - this.getKnockBackSpeed()))) {
+									(int) (this.getY() - this.getKnockBackSpeed())) ) {
 						this.setY(this.getY() - this.getSpeed()*this.getKnockBackSpeed());
 						this.setMoving(true);						
 					}
@@ -288,9 +282,7 @@ public abstract class Creature extends Entity {
 				case DOWN:
 					if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()*this.getKnockBackSpeed())) &&
 							this.isNotCollidingWithScenario((int) this.getX(),
-									(int) (this.getY() + this.getKnockBackSpeed())) &&
-							this.isNotCollidingWithEnemies((int) this.getX(),
-									(int) (this.getY() + this.getKnockBackSpeed()))) {
+									(int) (this.getY() + this.getKnockBackSpeed())) ) {
 						this.setY(this.getY() + this.getSpeed()*this.getKnockBackSpeed());
 						this.setMoving(true);						
 					}
