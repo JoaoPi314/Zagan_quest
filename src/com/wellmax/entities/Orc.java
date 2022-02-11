@@ -11,7 +11,11 @@ import com.wellmax.main.Game;
  *
  */
 public class Orc extends Enemy{
-	
+
+	//---------------------------- Attributes ----------------------------------//
+	private BufferedImage[] axeSprite;
+	//---------------------------- Methods ----------------------------------//
+
 	/**
 	 * Constructor
 	 * @param x position
@@ -33,6 +37,7 @@ public class Orc extends Enemy{
 		this.enLeft = new BufferedImage[this.getNumberOfSprites()];
 		this.enUp = new BufferedImage[this.getNumberOfSprites()];
 		this.enDown = new BufferedImage[this.getNumberOfSprites()];
+		this.axeSprite = new BufferedImage[this.getNumberOfSprites()];
 
 		this.enDamageRight = Game.spritesheet.getSprite(64, 112, this.getWidth(), this.getHeight());
 		this.enDamageLeft = Game.spritesheet.getSprite(64, 128, this.getWidth(), this.getHeight());
@@ -44,6 +49,8 @@ public class Orc extends Enemy{
 			this.enLeft[i] = Game.spritesheet.getSprite(i*16, 128, this.getWidth(), this.getHeight());
 			this.enUp[i] = Game.spritesheet.getSprite(i*16, 80, this.getWidth(), this.getHeight());
 			this.enDown[i] = Game.spritesheet.getSprite(i*16, 96, this.getWidth(), this.getHeight());
+			this.enDown[i] = Game.spritesheet.getSprite(32 + i*16, 144, this.getWidth(), this.getHeight());
+
 		}
 	}
 
