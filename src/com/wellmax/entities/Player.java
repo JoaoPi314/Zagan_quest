@@ -240,11 +240,14 @@ public class Player extends Creature {
 		
 		// Check collectibles
 		this.checkItems();
-	
+
 		// Shooting update
 		if(this.isShoot() && !this.isCoolDown()) {
 			this.attack();
 		}
+
+		// Colliding project
+		this.collidingProjectile();
 
 		this.coolDownCalculus();
 
