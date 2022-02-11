@@ -11,8 +11,10 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -21,7 +23,6 @@ import javax.swing.JFrame;
 import com.wellmax.entities.Collectible;
 import com.wellmax.entities.DeadEnemy;
 import com.wellmax.entities.Enemy;
-import com.wellmax.entities.GenericEntity;
 import com.wellmax.entities.Player;
 import com.wellmax.entities.Projectile;
 import com.wellmax.entities.Skeleton;
@@ -37,16 +38,12 @@ import com.wellmax.world.World;
  */
 public class Game extends Canvas implements Runnable, KeyListener{
 
-	//---------------------------- Attributes ----------------------------------//	
-
+	//---------------------------- Attributes ----------------------------------//
 	/**
 	 * Serial Version UID
 	 */
+	@Serial
 	private static final long serialVersionUID = 1L;
-	/**
-	 * JFrame (Screen)
-	 */
-	private static JFrame frame;
 	/**
 	 * Thread (Responsible for run the game)
 	 */
@@ -67,13 +64,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * Screen scale
 	 */
 	public static final int SCALE = 4;
-	
 	/**
 	 * Image to be rendered
 	 */
 	private BufferedImage image;
-
-	
 	/**
 	 * List with all collectibles 
 	 */
@@ -102,12 +96,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * Second spritesheet
 	 */
 	public static Spritesheet spritesheet1;
-
 	/**
 	 * Game Over screen image
 	 */
 	private BufferedImage gameOverImage;
-	
 	/**
 	 * World is responsible for map generation
 	 */
@@ -121,41 +113,36 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 */
 	public UI ui;
 	/**
-	 * Random object to uses in various occasions
+	 * Random object to use in various occasions
 	 */
 	public static Random rand;
-	
 	/**
 	 * Enum with gameState
 	 */
-	
 	private enum GameStates{
 		NORMAL,
-		GAMEOVER
+		GAME_OVER
 	}
-	
 	/**
 	 * Game state
 	 */
-	GameStates gState; 
-	
+	GameStates gameState;
 	/**
 	 * Flag that indicates if the game over message should be rendered
 	 */
-	private boolean showGOMessage;
+	private boolean showGameOverMessage;
 	/**
-	 * Frames counting to gameover message blink
+	 * Frames counting to game over message blink
 	 */
-	private int framesGO;
+	private int framesGameOver;
 	/**
 	 * Max frames of game over text to nlink
 	 */
-	private int maxFramesGO;
+	private int maxFramesGameOver;
 	/**
-	 * Flag that indicates if game should be reseted
+	 * Flag that indicates if game should be reset
 	 */
 	private boolean reset;
-	
 	/**
 	 * Current level
 	 */
@@ -172,8 +159,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * Number of waves of current level
 	 */
 	private int maxWaves;
-	
-	
+
 	//---------------------------- Methods ----------------------------------//	
 	
 	/**
@@ -182,10 +168,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public Game() {
 		// Attributes
 		this.setRunning(true);
-		this.setgState(GameStates.NORMAL);
+		this.setGameState(GameStates.NORMAL);
 		// game over message
-		this.setFramesGO(0);
-		this.setMaxFramesGO(30);
+		this.setFramesGameOver(0);
+		this.setMaxFramesGameOver(30);
 		
 		// Levels
 		this.setCurrentLevel(1);
@@ -203,142 +189,83 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		this.initGame("/map_01.png");
 	}
 	
-	/**
-	 * @return the isRunning
-	 */
+
 	public boolean isRunning() {
 		return running;
 	}
 
-	/**
-	 * @param isRunning the isRunning to set
-	 */
 	public void setRunning(boolean running) {
 		this.running = running;
 	}
 
-	/**
-	 * @return the gState
-	 */
-	public GameStates getgState() {
-		return gState;
+	public GameStates getGameState() {
+		return gameState;
 	}
 
-	/**
-	 * @param gState the gState to set
-	 */
-	public void setgState(GameStates gState) {
-		this.gState = gState;
+	public void setGameState(GameStates gameState) {
+		this.gameState = gameState;
 	}
 
-	/**
-	 * @return the showGOMessage
-	 */
-	public boolean isShowGOMessage() {
-		return showGOMessage;
+	public boolean isShowGameOverMessage() {
+		return showGameOverMessage;
 	}
 
-	/**
-	 * @param showGOMessage the showGOMessage to set
-	 */
-	public void setShowGOMessage(boolean showGOMessage) {
-		this.showGOMessage = showGOMessage;
+	public void setShowGameOverMessage(boolean showGameOverMessage) {
+		this.showGameOverMessage = showGameOverMessage;
 	}
 
-	/**
-	 * @return the framesGO
-	 */
-	public int getFramesGO() {
-		return framesGO;
+	public int getFramesGameOver() {
+		return framesGameOver;
 	}
 
-	/**
-	 * @param framesGO the framesGO to set
-	 */
-	public void setFramesGO(int framesGO) {
-		this.framesGO = framesGO;
+	public void setFramesGameOver(int framesGameOver) {
+		this.framesGameOver = framesGameOver;
 	}
 
-	/**
-	 * @return the maxFramesGO
-	 */
-	public int getMaxFramesGO() {
-		return maxFramesGO;
+	public int getMaxFramesGameOver() {
+		return maxFramesGameOver;
 	}
 
-	/**
-	 * @param maxFramesGO the maxFramesGO to set
-	 */
-	public void setMaxFramesGO(int maxFramesGO) {
-		this.maxFramesGO = maxFramesGO;
+	public void setMaxFramesGameOver(int maxFramesGameOver) {
+		this.maxFramesGameOver = maxFramesGameOver;
 	}
 
-	/**
-	 * @return the reset
-	 */
 	public boolean isReset() {
 		return reset;
 	}
 
-	/**
-	 * @param reset the reset to set
-	 */
 	public void setReset(boolean reset) {
 		this.reset = reset;
 	}
 
-	/**
-	 * @return the currentLevel
-	 */
 	public int getCurrentLevel() {
 		return currentLevel;
 	}
 
-	/**
-	 * @param currentLevel the currentLevel to set
-	 */
 	public void setCurrentLevel(int currentLevel) {
 		this.currentLevel = currentLevel;
 	}
 
-	/**
-	 * @return the maxLevels
-	 */
 	public int getMaxLevels() {
 		return maxLevels;
 	}
 
-	/**
-	 * @param maxLevels the maxLevels to set
-	 */
 	public void setMaxLevels(int maxLevels) {
 		this.maxLevels = maxLevels;
 	}
 
-	/**
-	 * @return the currentWave
-	 */
 	public int getCurrentWave() {
 		return currentWave;
 	}
 
-	/**
-	 * @param currentWave the currentWave to set
-	 */
 	public void setCurrentWave(int currentWave) {
 		this.currentWave = currentWave;
 	}
 
-	/**
-	 * @return the maxWaves
-	 */
 	public int getMaxWaves() {
 		return maxWaves;
 	}
 
-	/**
-	 * @param maxWaves the maxWaves to set
-	 */
 	public void setMaxWaves(int maxWaves) {
 		this.maxWaves = maxWaves;
 	}
@@ -352,18 +279,18 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.spritesheet1 = new Spritesheet("/spritesheet1.png");
 		
 		try {
-			this.gameOverImage = ImageIO.read(getClass().getResource("/gameoverscreen.png"));
+			this.gameOverImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/gameoverscreen.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		
 		this.image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-		Game.collectibles = new ArrayList<Collectible>();
-		Game.enemies = new ArrayList<Enemy>();
-		Game.projectiles = new ArrayList<Projectile>();
-		Game.deadEnemies = new ArrayList<DeadEnemy>();
-		Game.scenario = new ArrayList<Scenario>();
+		Game.collectibles = new ArrayList<>();
+		Game.enemies = new ArrayList<>();
+		Game.projectiles = new ArrayList<>();
+		Game.deadEnemies = new ArrayList<>();
+		Game.scenario = new ArrayList<>();
 		Game.player = new Player(32, 32, 16, 16);
 		Game.world = new World(level);
 		this.ui = new UI();
@@ -373,7 +300,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * Method to initiates screen
 	 */
 	public void initFrame(String title) {
-		frame = new JFrame(title);
+		JFrame frame = new JFrame(title);
 		frame.add(this);
 		frame.setResizable(false);
 		frame.pack();
@@ -405,18 +332,16 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 	/**
 	 * Main method
-	 * @param args
 	 */
 	public static void main(String[] args) {
 		Game game = new Game();
 		game.start();
 	}
-	
-	
+
 	/**
 	 * Method to check if game jumps to next level ow wave
 	 */
-	private void nextWaveorLevel() {
+	private void nextWaveOrLevel() {
 		
 		switch(this.getCurrentLevel()) {
 			case 1:
@@ -427,11 +352,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 							Skeleton skeleton = new Skeleton((int)en.getX(), (int)en.getY(), en.getWidth(), en.getHeight(), en.getFaceDir());
 							Game.enemies.add(skeleton);
 						}
-						Game.deadEnemies.removeAll(Game.deadEnemies);
+						Game.deadEnemies.clear();
 						this.setCurrentWave(this.getCurrentWave() + 1);
 						break;
 					case 2: // Jumps to wave 3
-						Game.deadEnemies.removeAll(Game.deadEnemies);
+						Game.deadEnemies.clear();
 						this.setCurrentWave(this.getCurrentWave() + 1);
 						break;
 					case 3: // Jumps to level 2
@@ -440,15 +365,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 				break;
 			
 		}
-//		String newWorld = "/map_0"+currentLevel+".png";
-//		System.out.println(newWorld);
-//		initGame(newWorld);
 	}
-	
-	
-	
-	
-	
+
 	/**
 	 * Method to update frame at frame
 	 */
@@ -461,35 +379,35 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		}
 		
 		// Checks game state
-		switch(gState) {
+		switch(gameState) {
 			case NORMAL:
 				// Game should not be reseted
 				this.setReset(false);
 				Game.player.update();
 				//
 				break;
-			case GAMEOVER:
+			case GAME_OVER:
 			default:
-				this.setFramesGO(this.getFramesGO() + 1);
-				if(this.getFramesGO() > this.getMaxFramesGO()) {
-					this.setFramesGO(0);
-					if(this.isShowGOMessage()) {
-						this.setShowGOMessage(false);
+				this.setFramesGameOver(this.getFramesGameOver() + 1);
+				if(this.getFramesGameOver() > this.getMaxFramesGameOver()) {
+					this.setFramesGameOver(0);
+					if(this.isShowGameOverMessage()) {
+						this.setShowGameOverMessage(false);
 					}else {
-						this.setShowGOMessage(true);
+						this.setShowGameOverMessage(true);
 					}
 				}
 				if(this.isReset()) {
 					this.initGame("/map_01.png");
 					this.setReset(false);
-					this.setgState(GameStates.NORMAL);
+					this.setGameState(GameStates.NORMAL);
 				}
 				break;
 		}
 		
 		// Updates collectibles
 		for(int i = 0; i < collectibles.size(); i++) {
-			GenericEntity e = collectibles.get(i);
+			Collectible e = collectibles.get(i);
 			e.update();
 		}
 	
@@ -507,7 +425,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		// Checks for game over
 		if(player.getLife() <= 0) {
-			this.setgState(GameStates.GAMEOVER);
+			this.setGameState(GameStates.GAME_OVER);
 		}
 		
 		// Updates User Interface
@@ -515,7 +433,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		// Checks for next wave or level
 		if(enemies.size() == 0) {
-			nextWaveorLevel();
+			nextWaveOrLevel();
 		}
 
 	}
@@ -546,9 +464,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		}
 				
 		
-		if(this.getgState() == GameStates.NORMAL) {
+		if(this.getGameState() == GameStates.NORMAL) {
 			Game.player.render(g);
-		}else if(this.getgState() == GameStates.GAMEOVER) {
+		}else if(this.getGameState() == GameStates.GAME_OVER) {
 			Game.player.renderDead(g);
 		}
 		
@@ -567,7 +485,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		// Renders collectibles
 		for(int i = 0; i < collectibles.size(); i++) {
-			GenericEntity e = collectibles.get(i);
+			Collectible e = collectibles.get(i);
 			e.render(g);
 		}
 		
@@ -585,18 +503,16 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		g = bs.getDrawGraphics();
 		g.drawImage(image,  0,  0,  WIDTH*SCALE,  HEIGHT*SCALE, null);
 		
-		if(this.getgState() == GameStates.GAMEOVER) {
+		if(this.getGameState() == GameStates.GAME_OVER) {
 			// Shows Game over message
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setColor(new Color(0x00, 0x00, 0x00, 150));
 			g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
 			g.drawImage(this.gameOverImage, 0, 0,WIDTH*SCALE, HEIGHT*SCALE, null);
 			g.setColor(Color.white);
-			//g.setFont(new Font("arial", Font.BOLD, 48));
-			//g.drawString("Game Over", WIDTH*SCALE / 2 - 125, HEIGHT*SCALE / 2);
 			g.setFont(new Font("arial", Font.BOLD, 28));
 			
-			if(showGOMessage) {
+			if(showGameOverMessage) {
 				g.drawString("Try again? (Press ENTER)", WIDTH*SCALE / 2 - 175, HEIGHT*SCALE / 2 + 175);
 			}
 			
@@ -645,20 +561,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			}
 		}
 		
-		// Stops game when screen is closed (Security redundance)
+		// Stops game when screen is closed (Security redundancy)
 		this.stop();
-		
 	}
-
-	// Keyboard events methods
-	
 	/**
 	 * Method to check event KeyTyped
 	 */
 	@Override
 	public void keyTyped(KeyEvent e) {
-
-		
 	}
 
 	/**
@@ -669,31 +579,19 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	
 		
 		// Horizontal keys
-		switch(e.getKeyCode()) {
-			case KeyEvent.VK_RIGHT:
-			case KeyEvent.VK_D:
-				Game.player.setRight(true);
-				break;
-			case KeyEvent.VK_LEFT:
-			case KeyEvent.VK_A:
-				Game.player.setLeft(true);
-				break;
-			default: 
-				break;
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> Game.player.setRight(true);
+			case KeyEvent.VK_LEFT, KeyEvent.VK_A -> Game.player.setLeft(true);
+			default -> {
+			}
 		}
 
 		// Vertical keys
-		switch(e.getKeyCode()) {
-			case KeyEvent.VK_UP:
-			case KeyEvent.VK_W:
-				Game.player.setUp(true);
-				break;
-			case KeyEvent.VK_DOWN:
-			case KeyEvent.VK_S:
-				Game.player.setDown(true);
-				break;
-			default: 
-				break;
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_UP, KeyEvent.VK_W -> Game.player.setUp(true);
+			case KeyEvent.VK_DOWN, KeyEvent.VK_S -> Game.player.setDown(true);
+			default -> {
+			}
 		}
 		
 		// Shoot key
@@ -703,7 +601,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			}
 		}
 		
-		if(this.getgState() == GameStates.GAMEOVER) {
+		if(this.getGameState() == GameStates.GAME_OVER) {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 				reset = true;
 			}
@@ -720,31 +618,19 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 		
 		// Horizontal keys
-		switch(e.getKeyCode()) {
-			case KeyEvent.VK_RIGHT:
-			case KeyEvent.VK_D:
-				Game.player.setRight(false);
-				break;
-			case KeyEvent.VK_LEFT:
-			case KeyEvent.VK_A:
-				Game.player.setLeft(false);
-				break;
-			default: 
-				break;
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> Game.player.setRight(false);
+			case KeyEvent.VK_LEFT, KeyEvent.VK_A -> Game.player.setLeft(false);
+			default -> {
+			}
 		}
 
 		// Vertical keys
-		switch(e.getKeyCode()) {
-			case KeyEvent.VK_UP:
-			case KeyEvent.VK_W:
-				Game.player.setUp(false);
-				break;
-			case KeyEvent.VK_DOWN:
-			case KeyEvent.VK_S:
-				Game.player.setDown(false);
-				break;
-			default: 
-				break;
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_UP, KeyEvent.VK_W -> Game.player.setUp(false);
+			case KeyEvent.VK_DOWN, KeyEvent.VK_S -> Game.player.setDown(false);
+			default -> {
+			}
 		}
 		
 	}

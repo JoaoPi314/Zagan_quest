@@ -18,7 +18,7 @@ public class Fireball extends Collectible{
 	/**
 	 * Number of fireballs that the collectible gives
 	 */
-	private int nOfFireballs;
+	private int numberOfFireballs;
 	//---------------------------- Methods ----------------------------------//	
 	
 	/**
@@ -30,36 +30,32 @@ public class Fireball extends Collectible{
 	 */
 	public Fireball(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		this.setnOfFireballs(5);
+		this.setNumberOfFireballs(5);
 	}
 
-	/**
-	 * @return the nOfFireballs
-	 */
-	public int getnOfFireballs() {
-		return nOfFireballs;
+	public int getNumberOfFireballs() {
+		return numberOfFireballs;
 	}
 
-	/**
-	 * @param nOfFireballs the nOfFireballs to set
-	 */
-	public void setnOfFireballs(int nOfFireballs) {
-		this.nOfFireballs = nOfFireballs;
+	public void setNumberOfFireballs(int numberOfFireballs) {
+		this.numberOfFireballs = numberOfFireballs;
 	}
-	
 
+	@Override
 	public void effect() {
-		Game.player.setFireballs(Game.player.getFireballs() + this.getnOfFireballs());
+		Game.player.setFireballs(Game.player.getFireballs() + this.getNumberOfFireballs());
+		Game.player.setHasFireball(true);
 	}
-	
-	
+
+	@Override
 	public void update() {
 		this.countFrames(true);
 	}
-	
-	
+
+	@Override
 	public void render(Graphics g) {
-		g.drawImage(FIREBALL[index], (int)(this.getX() - Camera.x), (int)(this.getY() - Camera.y), null);
+		g.drawImage(FIREBALL[this.getIndex()], (int)(this.getX() - Camera.x), (int)(this.getY() - Camera.y),
+				null);
 	}
 	
 }

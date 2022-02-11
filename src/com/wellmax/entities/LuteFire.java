@@ -6,23 +6,20 @@ import java.awt.image.BufferedImage;
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
 import com.wellmax.world.Camera;
-import com.wellmax.world.World;
 
 /**
  * The luteFire is the base projectile launched
  * by player. It deals normal damage and causes
- * normal knockback
+ * normal knock-back
  * @author joao.gomes
  *
  */
 public class LuteFire extends Projectile{
-
-	//---------------------------- Attributes ----------------------------------//	
-	
+	//---------------------------- Attributes ----------------------------------//
 	/**
 	 * Array with all luteFire sprites
 	 */
-	private BufferedImage[][] notes;
+	private final BufferedImage[][] notes;
 	/**
 	 * Index of note sprite at notes array
 	 */
@@ -30,7 +27,7 @@ public class LuteFire extends Projectile{
 	/**
 	 * Number of notes existing in notes array
 	 */
-	private int nOfNotes;
+	private int numberOfNotes;
 	
 	//---------------------------- Methods ----------------------------------//	
 	/**
@@ -47,56 +44,46 @@ public class LuteFire extends Projectile{
 		super(x, y, width, height, dx, dy);
 		
 		this.setIndexNote(indexNote);
-		this.setnOfNotes(3);
+		this.setNumberOfNotes(3);
 		this.setTotalTime(45);
 		this.setTimeRemain(0);
 		this.setFaceDir(dir);
 		this.setDamage(2);
+		this.setKnockBackDealt(1);
 		
-		this.notes = new BufferedImage[this.getnOfNotes()][this.getnOfSprites()];
+		this.notes = new BufferedImage[this.getNumberOfNotes()][this.getNumberOfSprites()];
 			
 		this.setSpeed(2);	
 		
-		for(int i = 0; i < this.getnOfNotes(); i++) {
-			for(int j = 0; j < this.getnOfSprites(); j++) {
-				this.notes[i][j] = Game.spritesheet.getSprite(96 + j*16, 64 + i*16, this.getWidth(), this.getHeight());
+		for(int i = 0; i < this.getNumberOfNotes(); i++) {
+			for(int j = 0; j < this.getNumberOfSprites(); j++) {
+				this.notes[i][j] = Game.spritesheet.getSprite(96 + j*16, 64 + i*16, this.getWidth(),
+						this.getHeight());
 			}
 		}
 		
 	}
-	
-	
-	/**
-	 * @return the indexNote
-	 */
+
 	public int getIndexNote() {
 		return indexNote;
 	}
 
-	/**
-	 * @param indexNote the indexNote to set
-	 */
 	public void setIndexNote(int indexNote) {
 		this.indexNote = indexNote;
 	}
 
-	/**
-	 * @return the nOfNotes
-	 */
-	public int getnOfNotes() {
-		return nOfNotes;
+	public int getNumberOfNotes() {
+		return numberOfNotes;
 	}
 
-	/**
-	 * @param nOfNotes the nOfNotes to set
-	 */
-	public void setnOfNotes(int nOfNotes) {
-		this.nOfNotes = nOfNotes;
+	public void setNumberOfNotes(int numberOfNotes) {
+		this.numberOfNotes = numberOfNotes;
 	}
 
-	
+	@Override
 	public void render(Graphics g) {
-		g.drawImage(notes[indexNote][index], (int)(getX() - Camera.x), (int)(getY() - Camera.y), null);
+		g.drawImage(notes[this.getIndexNote()][this.getIndex()], (int)(getX() - Camera.x), (int)(getY() - Camera.y),
+				null);
 	}
 
 	
