@@ -233,24 +233,6 @@ public abstract class Enemy extends Creature {
 	}
 	
 	/**
-	 * Method to compute if a projectile hits enemy
-	 */
-	protected void collidingProjectile() {
-		// Search for projectiles
-		for(int i = 0; i < Game.projectiles.size(); i++) {
-			Projectile e = Game.projectiles.get(i);
-			if(Entity.isColliding(this, e)) {
-				this.setKnockBackDir(e.getFaceDir());
-				this.setKnockBackSpeed(e.getKnockBackDealt());
-				this.setDamaged(true);
-				this.setLife(this.getLife() - e.getDamage()/this.getDefense());
-				Game.projectiles.remove(i);
-				return;
-			}
-		}
-	}
-	
-	/**
 	 * Method called when enemy dies
 	 */
 	protected void enemyDeath() {
