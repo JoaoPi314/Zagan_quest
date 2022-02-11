@@ -38,7 +38,7 @@ public class Bone extends Projectile{
 		super(x, y, width, height, dx, dy);
 		
 		this.setFaceDir(dir);
-		this.setSpeed(4);
+		this.setSpeed(2.5);
 		this.setTotalTime(60);
 		this.setTimeRemain(0);
 		this.setDamage(2);
