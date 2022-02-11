@@ -102,42 +102,78 @@ public class Skeleton extends Enemy{
 			if(this.nearPlayer() && !this.limitApproachPlayer()) { // Enemy is near player nut not too near
 				this.enemyFollowingIA();
 			}else if(this.limitApproachPlayer()){ // Enemy is at limit range - Starts firing
-				this.attack();
 				this.setRanged(true);
+				this.attack();
 			}
 		}else if(Game.player.getLife() > 0) { // If enemy is colliding with player, and player is alive
-			// Attacking player
-			if(!this.isCoolDown()) {
-				this.attack();
-			}
+			this.setRanged(false);
+			this.attack();
 		}
 
+	}
+
+	/**
+	 * Method to adjust skeleton direction when it near player
+	 */
+	private void facingPlayer(){
+		// Vector starting at enemy and ending at player
+		double xDistance = Game.player.getX() - this.getX();
+		double yDistance = Game.player.getY() - this.getY();
+
+		// Angle of this vector
+		double angle = Math.toDegrees(Math.atan2(yDistance, xDistance));
+
+		// Checks angle to make Skeleton always look to the nearest player direction
+		if(angle > 135 || angle <= -135) { // Player is in left region
+			this.setFaceDir(Directions.LEFT);
+		}else if(angle <= -45){ // Player is in down region
+			this.setFaceDir(Directions.UP);
+		}else if(angle <= 45) { // Player is in right region
+			this.setFaceDir(Directions.RIGHT);
+		}else { // Player is in up region
+			this.setFaceDir(Directions.DOWN);
+		}
 	}
 
 
 	@Override
 	public void attack() {
 		if(this.isRanged()) { // Ranged attack
-			// Vector starting at enemy and ending at player
-			double xDistance = Game.player.getX() - this.getX();
-			double yDistance = Game.player.getY() - this.getY();
 
-			// Angle of this vector
-			double angle = Math.toDegrees(Math.atan2(yDistance, xDistance));
+			this.facingPlayer();
 
-			// Checks angle to make Skeleton always look to the nearest player direction
-			if(angle > 135 || angle <= -135) { // Player is in left region
-				this.setFaceDir(Directions.LEFT);
-			}else if(angle <= -45){ // Player is in down region
-				this.setFaceDir(Directions.UP);
-			}else if(angle <= 45) { // Player is in right region
-				this.setFaceDir(Directions.RIGHT);
-			}else { // Player is in up region
-				this.setFaceDir(Directions.DOWN);
+			// Bone logic
+			int xDistanceAbs = Math.abs((int) (Game.player.getX() - this.getX()));
+			int yDistanceAbs = Math.abs((int) (Game.player.getY() - this.getY()));
+
+			if((xDistanceAbs <= 8 || yDistanceAbs <= 8) && !this.isCoolDown()) {
+				int dx = 0;
+				int dy = 0;
+
+				switch (this.getFaceDir()) {
+					case RIGHT -> dx = 1;
+					case LEFT -> dx = -1;
+					case UP -> dy = -1;
+					case DOWN -> dy = 1;
+					default -> {
+					}
+				}
+
+				this.setCoolDown(true);
+				this.setMaxFramesCoolDown(40);
+				this.setFramesCoolDown(this.getMaxFramesCoolDown());
+				Bone fire = new Bone((int) (this.getX()), (int) (this.getY()), this.getWidth(),
+						this.getHeight(), this.getFaceDir(), dx, dy);
+				Game.projectiles.add(fire);
 			}
-
 		} else {
 			// Melee attack
+			if(Game.rand.nextInt(100) < 10) {
+				Game.player.setLife(Game.player.getLife() - this.getDamage() / Game.player.getDefense());
+				Game.player.setKnockBackDir(this.getFaceDir());
+				Game.player.setKnockBackSpeed(2);
+				Game.player.setDamaged(true);
+			}
 		}
 	}
 
