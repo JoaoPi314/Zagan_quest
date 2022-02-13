@@ -1,5 +1,7 @@
 package com.wellmax.world;
 
+import com.wellmax.main.Game;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -26,5 +28,10 @@ public class Tree extends Scenario{
 		this.setMaskY(40);
 		this.setmWidth(26);
 		this.setmHeight(8);
+
+		this.shadowSprite = Game.spritesheet1.getSprite(192, 128, 72, 32);
+
+		this.setShadowX(this.getX() - 4);
+		this.setShadowY(this.getY() + 71);
 	}
 }

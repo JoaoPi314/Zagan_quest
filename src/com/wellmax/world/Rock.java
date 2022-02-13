@@ -1,5 +1,7 @@
 package com.wellmax.world;
 
+import com.wellmax.main.Game;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -16,7 +18,6 @@ public class Rock extends Scenario{
 	 */
 	public Rock(int x, int y, BufferedImage sprite) {
 		super(x, y, sprite);
-		
 
 		// Width and height
 		this.setWidth(16);
@@ -27,5 +28,10 @@ public class Rock extends Scenario{
 		this.setMaskY(9);
 		this.setmWidth(16);
 		this.setmHeight(7);
+
+		this.shadowSprite = Game.spritesheet1.getSprite(192, 96, 42, 21);
+
+		this.setShadowX(this.getX() - 6);
+		this.setShadowY(this.getY() + 12);
 	}
 }

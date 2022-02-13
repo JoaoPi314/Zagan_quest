@@ -1,6 +1,6 @@
 package com.wellmax.world;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import com.wellmax.entities.Enemy;
@@ -32,15 +32,26 @@ public class Scenario extends Tile{
 	 */
 	protected int mHeight;
 
-	//---------------------------- Methods ----------------------------------//	
+	/**
+	 * Shadow sprite
+	 */
+	protected BufferedImage shadowSprite;
+	/**
+	 * Shadow x position
+	 */
+	private int shadowX;
+	/**
+	 * Shadow y position
+	 */
+	private int shadowY;
+
+	//---------------------------- Methods ----------------------------------//
 	
 	/**
 	 * Scenario constructor. It receives also the width and height
 	 * @param x x position
 	 * @param y y position
 	 * @param sprite Scenario item sprite
-	 * @param width Sprite width 
-	 * @param height Sprite height
 	 */
 	public Scenario(int x, int y, BufferedImage sprite) {
 		super(x, y, sprite);
@@ -101,5 +112,27 @@ public class Scenario extends Tile{
 	public void setmHeight(int mHeight) {
 		this.mHeight = mHeight;
 	}
-		
+
+	public int getShadowX() {
+		return shadowX;
+	}
+
+	public void setShadowX(int shadowX) {
+		this.shadowX = shadowX;
+	}
+
+	public int getShadowY() {
+		return shadowY;
+	}
+
+	public void setShadowY(int shadowY) {
+		this.shadowY = shadowY;
+	}
+
+	public void render(Graphics g){
+		g.drawImage(this.shadowSprite,this.getShadowX() - Camera.x, this.getShadowY() - Camera.y, null);
+		g.drawImage(this.sprite, this.getX() - Camera.x, this.getY() - Camera.y, null);
+
+	}
+
 }
