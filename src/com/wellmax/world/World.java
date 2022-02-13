@@ -41,7 +41,7 @@ public class World {
 	/**
 	 * Constant Tile size
 	 */
-	public static final int TILE_SIZE = 16;
+	public static final int TILE_SIZE = 32;
 	
 	
 	/**
@@ -198,11 +198,11 @@ public class World {
 	
 	
 	public void render(Graphics g) {
-		int xstart = Camera.x >> 4;
-		int ystart = Camera.y >> 4;
+		int xstart = Camera.x >> 5;
+		int ystart = Camera.y >> 5;
 		
-		int xfinal = xstart + (Game.WIDTH >> 4);
-		int yfinal = ystart + (Game.HEIGHT >> 4);
+		int xfinal = xstart + (Game.WIDTH >> 5);
+		int yfinal = ystart + (Game.HEIGHT >> 5);
 				
 		for(int xx = xstart; xx <= xfinal; xx++) {
 			for(int yy = ystart; yy <= yfinal; yy++) {
