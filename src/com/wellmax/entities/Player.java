@@ -33,18 +33,39 @@ public class Player extends Creature {
 	/**
 	 * Flag that indicates if player is shooting
 	 */
-	private boolean shoot;
+	private boolean attacking;
 
 	/**
 	 * Player scythe
 	 */
 	private final BufferedImage scytheDownAndRight;
 	private final BufferedImage scytheUpAndLeft;
+
+	/**
+	 * Scythe attacking
+	 */
+	private final BufferedImage[] scytheAttackDownAndRight;
+	private final BufferedImage[] scytheAttackUpAndLeft;
+
+
+	/**
+	 * Flag to start attacking animation
+	 */
+	private boolean startScytheAttack;
+
+
+
 	/**
 	 * Scythe position
 	 */
 	private double scytheX;
 	private double scytheY;
+
+
+	private int scytheFrames;
+	private int scytheMaxFrames;
+	private int scytheIndex;
+
 
 	//---------------------------- Methods ----------------------------------//
 	/**
@@ -56,29 +77,32 @@ public class Player extends Creature {
 	 */
 	public Player(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		this.setSpeed(0.9);
+		this.setSpeed(1.2);
 		this.setFaceDir(Directions.DOWN); 
 		this.setLife(12);
 		this.setMaxLife(12);
 		this.setDefense(1);
 		
 		this.setHasFireball(false);
-		this.setFireballs(0);
-		
+
+		this.setScytheMaxFrames(6);
+
+
 		// Initiates sprites
 		this.enDown = Game.spritesheet.getSprite(0, 0, this.getWidth(), this.getHeight());
 		this.enLeft = Game.spritesheet.getSprite(32, 0, this.getWidth(), this.getHeight());
 		this.enUp = Game.spritesheet.getSprite(64, 0, this.getWidth(), this.getHeight());
 		this.enRight = Game.spritesheet.getSprite(96, 0, this.getWidth(), this.getHeight());
 
-
 		this.enWalkingRight = new BufferedImage[this.getNumberOfSprites()];
 		this.enWalkingLeft = new BufferedImage[this.getNumberOfSprites()];
 		this.enWalkingUp = new BufferedImage[this.getNumberOfSprites()];
 		this.enWalkingDown = new BufferedImage[this.getNumberOfSprites()];
+		this.scytheAttackDownAndRight = new BufferedImage[this.getNumberOfSprites()];
+		this.scytheAttackUpAndLeft = new BufferedImage[this.getNumberOfSprites()];
 
-		this.scytheDownAndRight = Game.spritesheet.getSprite(0, 96, this.getWidth(), this.getHeight());
-		this.scytheUpAndLeft = Game.spritesheet.getSprite(32, 96, this.getWidth(), this.getHeight());
+		this.scytheDownAndRight = Game.spritesheet.getSprite(0, 288, this.getWidth(), this.getHeight());
+		this.scytheUpAndLeft = Game.spritesheet.getSprite(32, 288, this.getWidth(), this.getHeight());
 
 		this.enDamageRight = Game.spritesheet.getSprite(64, 48, this.getWidth(), this.getHeight());
 		this.enDamageLeft = Game.spritesheet.getSprite(64, 64, this.getWidth(), this.getHeight());
@@ -88,13 +112,18 @@ public class Player extends Creature {
 		this.playerDead = Game.spritesheet.getSprite(16, 144, this.getWidth(), this.getHeight());
 		
 		for(int i = 0; i < this.getNumberOfSprites(); i++) {
-			this.enWalkingRight[i] = Game.spritesheet.getSprite(i*this.getWidth(), 64, this.getWidth(),
+			this.enWalkingRight[i] = Game.spritesheet.getSprite(i*this.getWidth(), 192, this.getWidth(),
 					this.getHeight());
-			this.enWalkingLeft[i] = Game.spritesheet.getSprite(i*this.getWidth(), 64, this.getWidth(),
+			this.enWalkingLeft[i] = Game.spritesheet.getSprite(i*this.getWidth(), 128, this.getWidth(),
 					this.getHeight());
-			this.enWalkingUp[i] = Game.spritesheet.getSprite(i*this.getWidth(), 64, this.getWidth(),
+			this.enWalkingUp[i] = Game.spritesheet.getSprite(i*this.getWidth(), 256, this.getWidth(),
 					this.getHeight());
 			this.enWalkingDown[i] = Game.spritesheet.getSprite(i*this.getWidth(), 64, this.getWidth(),
+					this.getHeight());
+
+			this.scytheAttackDownAndRight[i] = Game.spritesheet.getSprite(64 + i*this.getWidth(), 288, this.getWidth(),
+					this.getHeight());
+			this.scytheAttackUpAndLeft[i] = Game.spritesheet.getSprite(i*this.getWidth(), 64, this.getWidth(),
 					this.getHeight());
 
 		}
@@ -149,12 +178,12 @@ public class Player extends Creature {
 		this.fireballs = fireballs;
 	}
 
-	public boolean isShoot() {
-		return shoot;
+	public boolean isAttacking() {
+		return attacking;
 	}
 
-	public void setShoot(boolean shoot) {
-		this.shoot = shoot;
+	public void setAttacking(boolean attacking) {
+		this.attacking = attacking;
 	}
 
 	public double getScytheX() {
@@ -172,7 +201,41 @@ public class Player extends Creature {
 	public void setScytheY(double scytheY) {
 		this.scytheY = scytheY;
 	}
-	
+
+	public boolean isStartScytheAttack() {
+		return startScytheAttack;
+	}
+
+	public void setStartScytheAttack(boolean startScytheAttack) {
+		this.startScytheAttack = startScytheAttack;
+	}
+
+	public int getScytheFrames() {
+		return scytheFrames;
+	}
+
+	public void setScytheFrames(int scytheFrames) {
+		this.scytheFrames = scytheFrames;
+	}
+
+	public int getScytheMaxFrames() {
+		return scytheMaxFrames;
+	}
+
+	public void setScytheMaxFrames(int scytheMaxFrames) {
+		this.scytheMaxFrames = scytheMaxFrames;
+	}
+
+	public int getScytheIndex() {
+		return scytheIndex;
+	}
+
+	public void setScytheIndex(int scytheIndex) {
+		this.scytheIndex = scytheIndex;
+	}
+
+
+
 	/**
 	 * Method to calculate player movement based on
 	 * user inputs
@@ -221,24 +284,23 @@ public class Player extends Creature {
 
 	@Override
 	public void attack() {
-		// FIRE
-		this.setShoot(false);
-		int dx = 0;
-		int dy = 0;
-
-		switch (this.getFaceDir()) {
-			case RIGHT -> dx = 1;
-			case LEFT -> dx = -1;
-			case UP -> dy = -1;
-			case DOWN -> dy = 1;
-			default -> {
-			}
-		}
-
-		// After shoot, player must wait a cool down
+		// After attacking, player must wait a cool down
+		this.setAttacking(false);
 		this.setCoolDown(true);
 		// If player has fireball power and fireballs remaining
 		if(this.isHasFireball() && this.getFireballs() > 0) {
+			// FIRE
+			int dx = 0;
+			int dy = 0;
+
+			switch (this.getFaceDir()) {
+				case RIGHT -> dx = 1;
+				case LEFT -> dx = -1;
+				case UP -> dy = -1;
+				case DOWN -> dy = 1;
+				default -> {
+				}
+			}
 			FireballShoot fire = new FireballShoot((int)(this.getX()), (int)(this.getY()), this.getWidth(),
 					this.getHeight(), this.getFaceDir(), dx, dy);
 			Game.projectiles.add(fire);
@@ -249,15 +311,10 @@ public class Player extends Creature {
 
 			// Cool down of fireball
 			this.setMaxFramesCoolDown(60);
-		}else { // Default shoot is lute fire
-			// Choose a random note sprite
-			int randFire = Game.rand.nextInt(3);
-			LuteFire fire = new LuteFire((int)(this.getX()), (int)(this.getY()), this.getWidth(), this.getHeight(),
-					this.getFaceDir(), dx, dy, randFire);
-			Game.projectiles.add(fire);
+		}else { // Default attack is scythe
+			this.setMaxFramesCoolDown(40);
+			this.setStartScytheAttack(true);
 
-			// Cool down of lute fire
-			this.setMaxFramesCoolDown(30);
 		}
 		// The initial frames is equal to max frames
 		this.setFramesCoolDown(getMaxFramesCoolDown());
@@ -279,6 +336,18 @@ public class Player extends Creature {
 				this.setScytheY(this.getY() - 3);
 			}
 		}
+
+		if(this.isStartScytheAttack()) {
+			this.setScytheFrames(this.getScytheFrames() + 1);
+			if(this.getScytheFrames() == this.getScytheMaxFrames()) {
+				this.setScytheFrames(0);
+				this.scytheIndex++;
+				if(this.scytheIndex >= this.getNumberOfSprites()) {
+					this.scytheIndex = 0;
+					this.setStartScytheAttack(false);
+				}
+			}
+		}
 	}
 
 	public void update() {
@@ -296,7 +365,7 @@ public class Player extends Creature {
 		this.checkItems();
 
 		// Shooting update
-		if(this.isShoot() && !this.isCoolDown()) {
+		if(this.isAttacking() && !this.isCoolDown()) {
 			this.attack();
 		}
 
@@ -317,12 +386,42 @@ public class Player extends Creature {
 	 */
 	public void renderScythe(Graphics g) {
 
-		BufferedImage currentSprite = switch (this.getFaceDir()) {
-			case RIGHT, DOWN -> this.scytheDownAndRight;
-			case LEFT, UP -> this.scytheUpAndLeft;
-		};
+		int xOffset = 0;
+		int yOffset = 0;
 
-		g.drawImage(currentSprite, (int)(this.getScytheX() - Camera.x), (int)(this.getScytheY()- Camera.y), null);
+		BufferedImage currentSprite;
+		if(this.isStartScytheAttack()) {
+			switch (this.getFaceDir()) {
+				case RIGHT -> {
+					currentSprite = this.scytheAttackDownAndRight[this.getScytheIndex()];
+					xOffset = 16;
+				}
+				case DOWN -> {
+					currentSprite = this.scytheAttackDownAndRight[this.getScytheIndex()];
+					yOffset = 16;
+				}
+				case LEFT -> {
+					currentSprite = this.scytheAttackUpAndLeft[this.getScytheIndex()];
+					xOffset = -16;
+				}
+				case UP -> {
+					currentSprite = this.scytheAttackUpAndLeft[this.getScytheIndex()];
+					yOffset = -16;
+				}
+				default -> currentSprite = this.scytheAttackDownAndRight[this.getScytheIndex()];
+			};
+
+
+		}else {
+			currentSprite = switch (this.getFaceDir()) {
+				case RIGHT, DOWN -> this.scytheDownAndRight;
+				case LEFT, UP -> this.scytheUpAndLeft;
+			};
+
+		}
+
+		g.drawImage(currentSprite, (int) (this.getScytheX() + xOffset - Camera.x),
+				(int) (this.getScytheY() + yOffset - Camera.y), null);
 	}
 
 
