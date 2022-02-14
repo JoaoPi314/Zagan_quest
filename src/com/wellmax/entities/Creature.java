@@ -60,21 +60,38 @@ public abstract class Creature extends Entity {
 
 	// Sprites
 	/**
-	 * Sprites of entity facing right
+	 * Sprite of entity facing right
 	 */
-	protected BufferedImage[] enRight;
+	protected BufferedImage enRight;
 	/**
-	 * sprites of entity facing left
+	 * Sprite of entity facing left
 	 */
-	protected BufferedImage[] enLeft;
+	protected BufferedImage enLeft;
 	/**
-	 * Sprites of entity facing up
+	 * Sprite of entity facing up
 	 */
-	protected BufferedImage[] enUp;
+	protected BufferedImage enUp;
 	/**
-	 * Sprites of entity facing down
+	 * Sprite of entity facing down
 	 */
-	protected BufferedImage[] enDown;
+	protected BufferedImage enDown;
+
+	/**
+	 * Sprites of entity walking right
+	 */
+	protected BufferedImage[] enWalkingRight;
+	/**
+	 * sprites of entity walking left
+	 */
+	protected BufferedImage[] enWalkingLeft;
+	/**
+	 * Sprites of entity walking up
+	 */
+	protected BufferedImage[] enWalkingUp;
+	/**
+	 * Sprites of entity walking down
+	 */
+	protected BufferedImage[] enWalkingDown;
 	
 	/**
 	 * Sprite of entity taking damage facing right
@@ -351,32 +368,32 @@ public abstract class Creature extends Entity {
 		
 		switch(this.getFaceDir()) {
 			case RIGHT:
-				if(!this.isDamaged()) {
-					currentSprite = this.enRight[this.getIndex()];
+				if(this.isMoving()) {
+					currentSprite = this.enWalkingRight[this.getIndex()];
 				}else {
-					currentSprite = this.enDamageRight;
+					currentSprite = this.enRight;
 				}
 				break;
 			case LEFT:
-				if(!this.isDamaged()) {
-					currentSprite = this.enLeft[this.getIndex()];
+				if(this.isMoving()) {
+					currentSprite = this.enWalkingLeft[this.getIndex()];
 				}else {
-					currentSprite = this.enDamageLeft;
+					currentSprite = this.enLeft;
 				}
 				break;
 			case UP:
-				if(!this.isDamaged()) {
-					currentSprite = this.enUp[this.getIndex()];
+				if(this.isMoving()) {
+					currentSprite = this.enWalkingUp[this.getIndex()];
 				}else {
-					currentSprite = this.enDamageUp;
+					currentSprite = this.enUp;
 				}
 				break;
 			case DOWN:
 			default:
-				if(!this.isDamaged()) {
-					currentSprite = this.enDown[this.getIndex()];
+				if(this.isMoving()) {
+					currentSprite = this.enWalkingDown[this.getIndex()];
 				}else {
-					currentSprite = this.enDamageDown;
+					currentSprite = this.enDown;
 				}
 				break;
 		}
