@@ -258,8 +258,6 @@ public abstract class Creature extends Entity {
 				case RIGHT:
 					if(World.isFree((int)(this.getX() + this.getSpeed()*this.getKnockBackSpeed()), (int) this.getY()) &&
 							this.isNotCollidingWithScenario((int) (this.getX() + this.getKnockBackSpeed()),
-									(int) this.getY())&&
-							this.isNotCollidingWithEnemies((int) (this.getX() + this.getKnockBackSpeed()),
 									(int) this.getY())) {
 						this.setX(this.getX() + this.getSpeed()*this.getKnockBackSpeed());
 						this.setMoving(true);
@@ -268,8 +266,6 @@ public abstract class Creature extends Entity {
 				case LEFT:
 					if(World.isFree((int)(this.getX() - this.getSpeed()*this.getKnockBackSpeed()), (int) this.getY()) &&
 							this.isNotCollidingWithScenario((int) (this.getX() - this.getKnockBackSpeed()),
-									(int) this.getY())&&
-							this.isNotCollidingWithEnemies((int) (this.getX() - this.getKnockBackSpeed()),
 									(int) this.getY())) {
 						this.setX(this.getX() - this.getSpeed()*this.getKnockBackSpeed());
 						this.setMoving(true);
@@ -278,9 +274,7 @@ public abstract class Creature extends Entity {
 				case UP:
 					if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()*this.getKnockBackSpeed())) &&
 							this.isNotCollidingWithScenario((int) this.getX(),
-									(int) (this.getY() - this.getKnockBackSpeed())) &&
-							this.isNotCollidingWithEnemies((int) this.getX(),
-									(int) (this.getY() - this.getKnockBackSpeed()))) {
+									(int) (this.getY() - this.getKnockBackSpeed())) ) {
 						this.setY(this.getY() - this.getSpeed()*this.getKnockBackSpeed());
 						this.setMoving(true);						
 					}
@@ -288,9 +282,7 @@ public abstract class Creature extends Entity {
 				case DOWN:
 					if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()*this.getKnockBackSpeed())) &&
 							this.isNotCollidingWithScenario((int) this.getX(),
-									(int) (this.getY() + this.getKnockBackSpeed())) &&
-							this.isNotCollidingWithEnemies((int) this.getX(),
-									(int) (this.getY() + this.getKnockBackSpeed()))) {
+									(int) (this.getY() + this.getKnockBackSpeed())) ) {
 						this.setY(this.getY() + this.getSpeed()*this.getKnockBackSpeed());
 						this.setMoving(true);						
 					}
@@ -308,12 +300,37 @@ public abstract class Creature extends Entity {
 			}	
 		}
 	}
+	/**
+	 * Method to compute if a projectile hits player
+	 */
+	protected void collidingProjectile() {
+		// Search for projectiles
+		for(int i = 0; i < Game.projectiles.size(); i++) {
+			Projectile e = Game.projectiles.get(i);
+			if(this instanceof Player) {
+				if (!(e instanceof Bone)) {
+					continue;
+				}
+			} else {
+				if (e instanceof Bone) {
+					continue;
+				}
+			}
+			if(Entity.isColliding(this, e)) {
+				this.setKnockBackDir(e.getFaceDir());
+				this.setKnockBackSpeed(e.getKnockBackDealt());
+				this.setDamaged(true);
+				this.setLife(this.getLife() - e.getDamage()/this.getDefense());
+				Game.projectiles.remove(i);
+				return;
+			}
+		}
+	}
+
 
 	/**
-	 * Each creature will have its own attack pattern
+	 * Cool down calculus
 	 */
-	public abstract void attack();
-
 	public void coolDownCalculus(){
 		// Cool down calculus
 		if(this.isCoolDown()) {
@@ -324,6 +341,8 @@ public abstract class Creature extends Entity {
 		}
 	}
 
+
+	public abstract void attack();
 
 	@Override
 	public void render(Graphics g) {

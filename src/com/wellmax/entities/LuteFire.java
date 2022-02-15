@@ -82,7 +82,7 @@ public class LuteFire extends Projectile{
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(notes[this.getIndexNote()][this.getIndex()], (int)(getX() - Camera.x), (int)(getY() - Camera.y),
+		g.drawImage(notes[this.getIndexNote()][this.getIndex()], (int)(this.getX() - Camera.x), (int)(this.getY() - Camera.y),
 				null);
 	}
 

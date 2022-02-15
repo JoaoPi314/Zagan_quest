@@ -80,7 +80,7 @@ public class FireballShoot extends Projectile{
 					null);
 			case RIGHT -> g.drawImage(fireRight[this.getIndex()], (int) (getX() - Camera.x), (int) (getY() - Camera.y),
 					null);
-			case LEFT -> g.drawImage(fireLeft[this.getIndex()], (int) (getX() - Camera.x), (int) (getY() - Camera.y),
+			case LEFT -> g.drawImage(fireLeft[this.getIndex()], (int) (this.getX() - Camera.x), (int) (this.getY() - Camera.y),
 					null);
 		}
 	}
