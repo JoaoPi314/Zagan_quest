@@ -7,7 +7,7 @@ import com.wellmax.entities.Enemy;
 import com.wellmax.main.Game;
 
 /**
- * Scenario items have a different behgavior when colliding with 
+ * Scenario items have a different behavior when colliding with
  * players. They have a configurable collision mask
  * @author joao.gomes
  *

@@ -33,10 +33,10 @@ public class Orc extends Enemy{
 		this.setDamage(1);
 		
 		// Initiates sprites
-		this.enRight = new BufferedImage[this.getNumberOfSprites()];
-		this.enLeft = new BufferedImage[this.getNumberOfSprites()];
-		this.enUp = new BufferedImage[this.getNumberOfSprites()];
-		this.enDown = new BufferedImage[this.getNumberOfSprites()];
+		this.enWalkingRight = new BufferedImage[this.getNumberOfSprites()];
+		this.enWalkingLeft = new BufferedImage[this.getNumberOfSprites()];
+		this.enWalkingUp = new BufferedImage[this.getNumberOfSprites()];
+		this.enWalkingDown = new BufferedImage[this.getNumberOfSprites()];
 		this.axeSprite = new BufferedImage[this.getNumberOfSprites()];
 
 		this.enDamageRight = Game.spritesheet.getSprite(64, 112, this.getWidth(), this.getHeight());
@@ -45,11 +45,11 @@ public class Orc extends Enemy{
 		this.enDamageDown = Game.spritesheet.getSprite(64, 96, this.getWidth(), this.getHeight());
 
 		for(int i = 0; i < this.getNumberOfSprites(); i++) {
-			this.enRight[i] = Game.spritesheet.getSprite(i*16, 112, this.getWidth(), this.getHeight());
-			this.enLeft[i] = Game.spritesheet.getSprite(i*16, 128, this.getWidth(), this.getHeight());
-			this.enUp[i] = Game.spritesheet.getSprite(i*16, 80, this.getWidth(), this.getHeight());
-			this.enDown[i] = Game.spritesheet.getSprite(i*16, 96, this.getWidth(), this.getHeight());
-			this.enDown[i] = Game.spritesheet.getSprite(32 + i*16, 144, this.getWidth(), this.getHeight());
+			this.enWalkingRight[i] = Game.spritesheet.getSprite(i*16, 112, this.getWidth(), this.getHeight());
+			this.enWalkingLeft[i] = Game.spritesheet.getSprite(i*16, 128, this.getWidth(), this.getHeight());
+			this.enWalkingUp[i] = Game.spritesheet.getSprite(i*16, 80, this.getWidth(), this.getHeight());
+			this.enWalkingDown[i] = Game.spritesheet.getSprite(i*16, 96, this.getWidth(), this.getHeight());
+			this.axeSprite[i] = Game.spritesheet.getSprite(32 + i*16, 144, this.getWidth(), this.getHeight());
 
 		}
 	}

@@ -29,16 +29,16 @@ public class DeadEnemy extends Creature {
 		
 		this.setFaceDir(dir);
 
-		enRight = new BufferedImage[this.getNumberOfSprites()];
-		enLeft = new BufferedImage[this.getNumberOfSprites()];
-		enUp = new BufferedImage[this.getNumberOfSprites()];
-		enDown = new BufferedImage[this.getNumberOfSprites()];
+		enWalkingRight = new BufferedImage[this.getNumberOfSprites()];
+		enWalkingLeft = new BufferedImage[this.getNumberOfSprites()];
+		enWalkingUp = new BufferedImage[this.getNumberOfSprites()];
+		enWalkingDown = new BufferedImage[this.getNumberOfSprites()];
 
 		for(int i = 0; i < this.getNumberOfSprites(); i++) {
-			enRight[i] = Game.spritesheet.getSprite(224 + i*16, 32, this.getWidth(), this.getHeight());
-			enLeft[i] = Game.spritesheet.getSprite(224 + i*16, 48, this.getWidth(), this.getHeight());
-			enUp[i] = Game.spritesheet.getSprite(224 + i*16, 0, this.getWidth(), this.getHeight());
-			enDown[i] = Game.spritesheet.getSprite(224 + i*16, 16, this.getWidth(), this.getHeight());
+			enWalkingRight[i] = Game.spritesheet.getSprite(224 + i*16, 32, this.getWidth(), this.getHeight());
+			enWalkingLeft[i] = Game.spritesheet.getSprite(224 + i*16, 48, this.getWidth(), this.getHeight());
+			enWalkingUp[i] = Game.spritesheet.getSprite(224 + i*16, 0, this.getWidth(), this.getHeight());
+			enWalkingDown[i] = Game.spritesheet.getSprite(224 + i*16, 16, this.getWidth(), this.getHeight());
 		}
 	}
 	
@@ -83,10 +83,10 @@ public class DeadEnemy extends Creature {
 	public void render(Graphics g) {
 		
 		BufferedImage currentSprite = switch (this.getFaceDir()) {
-			case RIGHT -> this.enRight[this.getIndex()];
-			case LEFT -> this.enLeft[this.getIndex()];
-			case UP -> this.enUp[this.getIndex()];
-			case DOWN -> this.enDown[this.getIndex()];
+			case RIGHT -> this.enWalkingRight[this.getIndex()];
+			case LEFT -> this.enWalkingLeft[this.getIndex()];
+			case UP -> this.enWalkingUp[this.getIndex()];
+			case DOWN -> this.enWalkingDown[this.getIndex()];
 		};
 
 		g.drawImage(currentSprite, (int)(this.getX() - Camera.x), (int)(this.getY() - Camera.y), null);

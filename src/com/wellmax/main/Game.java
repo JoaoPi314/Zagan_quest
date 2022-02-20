@@ -26,6 +26,7 @@ import com.wellmax.entities.Enemy;
 import com.wellmax.entities.Player;
 import com.wellmax.entities.Projectile;
 import com.wellmax.entities.Skeleton;
+import com.wellmax.entities.types.Directions;
 import com.wellmax.graphics.Spritesheet;
 import com.wellmax.graphics.UI;
 import com.wellmax.world.Scenario;
@@ -55,15 +56,15 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	/**
 	 * Screen Width
 	 */
-	public static final int WIDTH = 256;
+	public static final int WIDTH = 512;
 	/**
 	 * Screen height
 	 */
-	public static final int HEIGHT = 240;
+	public static final int HEIGHT = 448;
 	/**
 	 * Screen scale
 	 */
-	public static final int SCALE = 4;
+	public static final int SCALE = 2;
 	/**
 	 * Image to be rendered
 	 */
@@ -291,7 +292,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.projectiles = new ArrayList<>();
 		Game.deadEnemies = new ArrayList<>();
 		Game.scenario = new ArrayList<>();
-		Game.player = new Player(32, 32, 16, 16);
+		Game.player = new Player(32, 32, 32, 32);
 		Game.world = new World(level);
 		this.ui = new UI();
 	}
@@ -379,30 +380,26 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		}
 		
 		// Checks game state
-		switch(gameState) {
-			case NORMAL:
+		switch (gameState) {
+			case NORMAL -> {
 				// Game should not be reseted
 				this.setReset(false);
 				Game.player.update();
-				//
-				break;
-			case GAME_OVER:
-			default:
+				Game.player.countAttackFrames();
+			}
+			//
+			case GAME_OVER -> {
 				this.setFramesGameOver(this.getFramesGameOver() + 1);
-				if(this.getFramesGameOver() > this.getMaxFramesGameOver()) {
+				if (this.getFramesGameOver() > this.getMaxFramesGameOver()) {
 					this.setFramesGameOver(0);
-					if(this.isShowGameOverMessage()) {
-						this.setShowGameOverMessage(false);
-					}else {
-						this.setShowGameOverMessage(true);
-					}
+					this.setShowGameOverMessage(!this.isShowGameOverMessage());
 				}
-				if(this.isReset()) {
+				if (this.isReset()) {
 					this.initGame("/map_01.png");
 					this.setReset(false);
 					this.setGameState(GameStates.NORMAL);
 				}
-				break;
+			}
 		}
 		
 		// Updates collectibles
@@ -465,7 +462,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 				
 		
 		if(this.getGameState() == GameStates.NORMAL) {
-			Game.player.render(g);
+			Game.player.renderShadow(g);
+			if(Game.player.isStartScytheAttack()) {
+				Game.player.renderAttackWithScythe(g);
+			}else {
+				Game.player.render(g);
+			}
 		}else if(this.getGameState() == GameStates.GAME_OVER) {
 			Game.player.renderDead(g);
 		}
@@ -597,7 +599,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		// Shoot key
 		if(!player.isCoolDown()) {
 			if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-				player.setShoot(true);
+				player.setAttacking(true);
 			}
 		}
 		

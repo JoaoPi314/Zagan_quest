@@ -45,10 +45,10 @@ public class Skeleton extends Enemy{
 		this.setMaxApproaching(4);
 		
 		// Initiates sprites
-		enRight = new BufferedImage[this.getNumberOfSprites()];
-		enLeft = new BufferedImage[this.getNumberOfSprites()];
-		enUp = new BufferedImage[this.getNumberOfSprites()];
-		enDown = new BufferedImage[this.getNumberOfSprites()];
+		enWalkingRight = new BufferedImage[this.getNumberOfSprites()];
+		enWalkingLeft = new BufferedImage[this.getNumberOfSprites()];
+		enWalkingUp = new BufferedImage[this.getNumberOfSprites()];
+		enWalkingDown = new BufferedImage[this.getNumberOfSprites()];
 
 		enDamageRight = Game.spritesheet.getSprite(80, 112, this.getWidth(), this.getHeight());
 		enDamageLeft = Game.spritesheet.getSprite(80, 128, this.getWidth(), this.getHeight());
@@ -57,10 +57,10 @@ public class Skeleton extends Enemy{
 
 		
 		for(int i = 0; i < this.getNumberOfSprites(); i++) {
-			enRight[i] = Game.spritesheet.getSprite(160 + i*16, 32, this.getWidth(), this.getHeight());
-			enLeft[i] = Game.spritesheet.getSprite(160 + i*16, 48, this.getWidth(), this.getHeight());
-			enUp[i] = Game.spritesheet.getSprite(160 + i*16, 0, this.getWidth(), this.getHeight());
-			enDown[i] = Game.spritesheet.getSprite(160 + i*16, 16, this.getWidth(), this.getHeight());	
+			enWalkingRight[i] = Game.spritesheet.getSprite(160 + i*16, 32, this.getWidth(), this.getHeight());
+			enWalkingLeft[i] = Game.spritesheet.getSprite(160 + i*16, 48, this.getWidth(), this.getHeight());
+			enWalkingUp[i] = Game.spritesheet.getSprite(160 + i*16, 0, this.getWidth(), this.getHeight());
+			enWalkingDown[i] = Game.spritesheet.getSprite(160 + i*16, 16, this.getWidth(), this.getHeight());
 		}
 		
 	}
