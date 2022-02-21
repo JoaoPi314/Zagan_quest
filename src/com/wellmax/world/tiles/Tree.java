@@ -1,6 +1,7 @@
-package com.wellmax.world;
+package com.wellmax.world.tiles;
 
 import com.wellmax.main.Game;
+import com.wellmax.world.tiles.Scenario;
 
 import java.awt.image.BufferedImage;
 
@@ -9,7 +10,7 @@ import java.awt.image.BufferedImage;
  * @author joao.gomes
  *
  */
-public class Tree extends Scenario{
+public class Tree extends Scenario {
 	/**
 	 * The tree constructor initializes the collision mask values
 	 * @param x x position
