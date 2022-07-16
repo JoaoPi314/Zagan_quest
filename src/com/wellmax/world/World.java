@@ -11,6 +11,8 @@ import javax.imageio.ImageIO;
 
 import com.wellmax.entities.*;
 import com.wellmax.main.Game;
+import com.wellmax.world.tiles.*;
+import com.wellmax.world.types.PixelType;
 
 /**
  * The World class initiates the map and all the scenario items
@@ -63,103 +65,113 @@ public class World {
 			int[] pixels = new int[WIDTH * HEIGHT];
 			tiles = new Tile[WIDTH * HEIGHT];
 			map.getRGB(0, 0, WIDTH, HEIGHT, pixels, 0, WIDTH);
-			 			
+
+
+
 			// Sweeps map
 			for(int xx = 0; xx < WIDTH; xx++) {
 				for(int yy = 0; yy < HEIGHT; yy++) {
-					int currentPixel =pixels[xx + (yy*WIDTH)]; 
-					
+					int currentPixel = pixels[xx + (yy*WIDTH)];
+					PixelType pixelType = PixelType.fromColor(currentPixel);
+
 					tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_GRASS[1][1]);
 
-					switch (currentPixel) {
-						case 0xFF9D8686 -> // Wall facing down
-								tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[2][1]);
-						case 0xFF786565 -> // Wall facing right
-								tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[1][2]);
-						case 0xFF665252 -> // Wall middle
-								tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[1][1]);
-						case 0xFF5D4848 -> // Wall facing left
-								tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[1][0]);
-						case 0xFF3A3131 -> // Wall facing up
-								tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[0][1]);
-						case 0xFF8A7575 -> // Wall corner down-left
-								tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[2][0]);
-						case 0xFFB19898 -> // Wall corner down-right
-								tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[2][2]);
-						case 0xFF4A3B3B -> // Wall corner top-right
-								tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[0][2]);
-						case 0xFF2D2C2C -> // Wall corner top-left
-								tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[0][0]);
-						case 0xFF999999 -> // Stone Floor Middle
+					if(pixelType != null) {
+						switch (pixelType) {
+							case WALL_FACING_DOWN ->
+									tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[2][1]);
+							case WALL_FACING_RIGHT ->
+									tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[1][2]);
+							case WALL_MIDDLE ->
+									tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[1][1]);
+							case WALL_FACING_LEFT ->
+									tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[1][0]);
+							case WALL_FACING_UP ->
+									tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[0][1]);
+							case WALL_CORNER_DOWN_LEFT ->
+									tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[2][0]);
+							case WALL_CORNER_DOWN_RIGHT ->
+									tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[2][2]);
+							case WALL_CORNER_TOP_RIGHT ->
+									tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[0][2]);
+							case WALL_CORNER_TOP_LEFT ->
+									tiles[xx + (yy * WIDTH)] = new WallTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_WALL[0][0]);
+
+							case STONE_FLOOR_MIDDLE ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[1][1]);
+							case STONE_FLOOR_FACING_UP ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[0][1]);
+							case STONE_FLOOR_FACING_RIGHT ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[1][2]);
+							case STONE_FLOOR_FACING_DOWN ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[2][1]);
+							case STONE_FLOOR_FACING_LEFT ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[1][0]);
+							case STONE_FLOOR_CORNER_TOP_LEFT ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[0][0]);
+							case STONE_FLOOR_CORNER_TOP_RIGHT ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[0][2]);
+							case STONE_FLOOR_CORNER_DOWN_LEFT ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[2][0]);
+							case STONE_FLOOR_CORNER_DOWN_RIGHT ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[2][2]);
+
+							case PATH_MIDDLE ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[1][1]);
+							case PATH_FACING_UP ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[0][1]);
+							case PATH_FACING_DOWN ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[2][1]);
+							case PATH_FACING_LEFT ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[1][0]);
+							case PATH_FACING_RIGHT ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[1][2]);
+							case PATH_CORNER_TOP_RIGHT ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[0][2]);
+							case PATH_CORNER_TOP_LEFT ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[0][0]);
+							case PATH_CORNER_DOWN_RIGHT ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[2][2]);
+							case PATH_CORNER_DOWN_LEFT ->
+									tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[2][0]);
+
+							case ROCK -> {
+								Rock rock = new Rock(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_ROCK);
+								Game.scenario.add(rock);
+								World.rocks.add(rock);
+							}
+							case TREE -> {
+								Tree tree = new Tree(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_TREE);
+								Game.scenario.add(tree);
+								World.trees.add(tree);
+							}
+							case STATUE -> {
 								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[1][1]);
-						case 0xFF333333 -> // Stone Floor facing up
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[0][1]);
-						case 0xFFB8B8B8 -> // Stone Floor facing right
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[1][2]);
-						case 0xFFDEDCDC -> // Stone Floor facing down
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[2][1]);
-						case 0xFF777777 -> // Stone Floor facing left
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[1][0]);
-						case 0xFF181717 -> // Stone Floor top-left
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[0][0]);
-						case 0xFF555555 -> // Stone Floor top-right
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[0][2]);
-						case 0xFFCECECE -> // Stone Floor down-left
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[2][0]);
-						case 0xFFF7F5F5 -> // Stone Floor down-right
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[2][2]);
-						case 0xFFEE03FF -> { // Tile that statue is placed
-							tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STONE_FLOOR[1][1]);
-							Statue statue = new Statue(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STATUE);
-							Game.scenario.add(statue);
+								Statue statue = new Statue(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_STATUE);
+								Game.scenario.add(statue);
+							}
+
+							case HEALTH_POTION -> {
+								HealthPotion healthPotion = new HealthPotion(xx * TILE_SIZE, yy * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+								healthPotion.setMask(4, 0, 8, 16);
+								Game.collectibles.add(healthPotion);
+							}
+							case FIREBALL -> {
+								Fireball fireball = new Fireball(xx * TILE_SIZE, yy * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+								fireball.setMask(4, 0, 8, 16);
+								Game.collectibles.add(fireball);
+							}
+							case ENEMY -> {
+								Orc en = new Orc(xx * TILE_SIZE, yy * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+								Game.enemies.add(en);
+							}
+							case PLAYER -> {
+								Game.player.setX(xx * TILE_SIZE);
+								Game.player.setY(yy * TILE_SIZE);
+							}
+
+							default -> tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_GRASS[1][1]);
 						}
-						case 0xFFCDA664 -> // Path middle
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[1][1]);
-						case 0xFFA58259 -> // Path up
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[0][1]);
-						case 0xFFD1B57E -> // Path down
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[2][1]);
-						case 0xFFDCA548 -> // Path left
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[1][0]);
-						case 0xFFF1BA5C -> // Path right
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[1][2]);
-						case 0xFFB39471 -> // Path top-right
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[0][2]);
-						case 0xFFAF7B40 -> // Path top-left
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[0][0]);
-						case 0xFFDEC47E -> // Path down-right
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[2][2]);
-						case 0xFFC4A97A -> // Path down-left
-								tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_PATH[2][0]);
-						case 0xFF0E0404 -> { // Rock
-							Rock rock = new Rock(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_ROCK);
-							Game.scenario.add(rock);
-							World.rocks.add(rock);
-						}
-						case 0xFF0D260E -> { // Trees
-							Tree tree = new Tree(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_TREE);
-							Game.scenario.add(tree);
-							World.trees.add(tree);
-						}
-						case 0xFFF4FF00 -> { // Health Potion
-							HealthPotion healthPotion = new HealthPotion(xx * TILE_SIZE, yy * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-							healthPotion.setMask(4, 0, 8, 16);
-							Game.collectibles.add(healthPotion);
-						}
-						case 0xFFFF8200 -> { // FireBall
-							Fireball fireball = new Fireball(xx * TILE_SIZE, yy * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-							fireball.setMask(4, 0, 8, 16);
-							Game.collectibles.add(fireball);
-						}
-						case 0xFFFF0000 -> { // Enemy
-							Orc en = new Orc(xx * TILE_SIZE, yy * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-							Game.enemies.add(en);
-						}
-						case 0xFF0000FF -> { // Player
-							Game.player.setX(xx * TILE_SIZE);
-							Game.player.setY(yy * TILE_SIZE);
-						}
-						default -> tiles[xx + (yy * WIDTH)] = new FloorTile(xx * TILE_SIZE, yy * TILE_SIZE, Tile.TILE_GRASS[1][1]);
 					}
 				}
 			}
@@ -198,14 +210,14 @@ public class World {
 	
 	
 	public void render(Graphics g) {
-		int xstart = Camera.x >> 5;
-		int ystart = Camera.y >> 5;
+		int xStart = Camera.x >> 5;
+		int yStart = Camera.y >> 5;
 		
-		int xfinal = xstart + (Game.WIDTH >> 5);
-		int yfinal = ystart + (Game.HEIGHT >> 5);
+		int xFinal = xStart + (Game.WIDTH >> 5);
+		int yFinal = yStart + (Game.HEIGHT >> 5);
 				
-		for(int xx = xstart; xx <= xfinal; xx++) {
-			for(int yy = ystart; yy <= yfinal; yy++) {
+		for(int xx = xStart; xx <= xFinal; xx++) {
+			for(int yy = yStart; yy <= yFinal; yy++) {
 				if(xx < 0 || yy < 0 || xx >= WIDTH || yy >= HEIGHT)
 					continue;
 				Tile underFloor = new FloorTile(xx*TILE_SIZE, yy*TILE_SIZE, Tile.TILE_GRASS[1][1]);

@@ -14,7 +14,7 @@ public final class Camera {
 	 */
 	public static int x;
 	/**
-	 * Camear y position
+	 * Camera y position
 	 */
 	public static int y;
 	

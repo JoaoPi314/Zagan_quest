@@ -1,4 +1,4 @@
-package com.wellmax.world;
+package com.wellmax.world.tiles;
 
 import com.wellmax.main.Game;
 
@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
  * @author joao.gomes
  *
  */
-public class Rock extends Scenario{
+public class Rock extends Scenario {
 	/**
 	 * The rock constructor initializes the collision mask values
 	 * @param x x position

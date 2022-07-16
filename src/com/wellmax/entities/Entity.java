@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import com.wellmax.main.Game;
-import com.wellmax.world.Scenario;
+import com.wellmax.world.tiles.Scenario;
 
 /**
  * Generic Creature class. The Creature, projectile and Collectible classes

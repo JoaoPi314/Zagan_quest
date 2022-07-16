@@ -1,10 +1,10 @@
-package com.wellmax.world;
+package com.wellmax.world.tiles;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import com.wellmax.entities.Enemy;
-import com.wellmax.main.Game;
+import com.wellmax.world.Camera;
+import com.wellmax.world.Tile;
 
 /**
  * Scenario items have a different behavior when colliding with
@@ -12,7 +12,7 @@ import com.wellmax.main.Game;
  * @author joao.gomes
  *
  */
-public class Scenario extends Tile{
+public abstract class Scenario extends Tile {
 
 	//---------------------------- Attributes ----------------------------------//	
 	/**

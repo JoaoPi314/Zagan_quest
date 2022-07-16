@@ -121,6 +121,18 @@ public abstract class Creature extends Entity {
 	 * Number of frames that cool down must be applied (cool down calculus)
 	 */
 	private double maxFramesCoolDown;
+	/**
+	 * Player shadow
+	 */
+	protected BufferedImage shadowVertical;
+	protected BufferedImage shadowHorizontal;
+
+
+	/**
+	 * Shadow offset
+	 */
+	private double shadowOffsetX;
+	private double shadowOffsetY;
 	//---------------------------- Methods ----------------------------------//	
 	
 	/**
@@ -237,7 +249,21 @@ public abstract class Creature extends Entity {
 	public void setMaxFramesCoolDown(double maxFramesCoolDown) {
 		this.maxFramesCoolDown = maxFramesCoolDown;
 	}
+	public double getShadowOffsetX() {
+		return shadowOffsetX;
+	}
 
+	public void setShadowOffsetX(double shadowOffsetX) {
+		this.shadowOffsetX = shadowOffsetX;
+	}
+
+	public double getShadowOffsetY() {
+		return shadowOffsetY;
+	}
+
+	public void setShadowOffsetY(double shadowOffsetY) {
+		this.shadowOffsetY = shadowOffsetY;
+	}
 	/**
 	 * Checks collision with enemies
 	 * @param xx Next creature x position
@@ -402,4 +428,15 @@ public abstract class Creature extends Entity {
 
 	}
 
+	public void renderShadow(Graphics g) {
+
+		BufferedImage currentSprite = switch(this.getFaceDir()) {
+			case RIGHT, LEFT -> shadowHorizontal;
+			case UP, DOWN -> shadowVertical;
+		};
+
+		g.drawImage(currentSprite, (int) (this.getX() + this.getShadowOffsetX() - Camera.x),
+				(int) (this.getY()  + this.getShadowOffsetY() - Camera.y), null);
+
+	}
 }
