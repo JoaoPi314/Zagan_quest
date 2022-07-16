@@ -97,6 +97,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * Second spritesheet
 	 */
 	public static Spritesheet spritesheet1;
+
+	/**
+	 * Orc spritesheet
+	 */
+	public static Spritesheet orcSpritesheet;
 	/**
 	 * Game Over screen image
 	 */
@@ -278,6 +283,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public void initGame(String level) {
 		Game.spritesheet = new Spritesheet("/zaganSpritesheet.png");
 		Game.spritesheet1 = new Spritesheet("/spritesheet1.png");
+		Game.orcSpritesheet = new Spritesheet("/orcSpritesheet.png");
 
 		try {
 			this.gameOverImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/gameoverscreen.png")));
@@ -482,6 +488,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		// Renders enemies
 		for(int i = 0; i < enemies.size(); i++) {
 			Enemy e = enemies.get(i);
+			e.renderShadow(g);
 			e.render(g);
 		}
 
