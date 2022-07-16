@@ -70,18 +70,6 @@ public class Player extends Creature {
 	private int attackMaxFrames;
 	private int attackIndex;
 
-	/**
-	 * Player shadow
-	 */
-	private final BufferedImage shadowVertical;
-	private final BufferedImage shadowHorizontal;
-
-
-	/**
-	 * Shadow offset
-	 */
-	private double shadowOffsetX;
-	private double shadowOffsetY;
 
 	//---------------------------- Methods ----------------------------------//
 
@@ -271,21 +259,7 @@ public class Player extends Creature {
 		this.attackIndex = attackIndex;
 	}
 
-	public double getShadowOffsetX() {
-		return shadowOffsetX;
-	}
 
-	public void setShadowOffsetX(double shadowOffsetX) {
-		this.shadowOffsetX = shadowOffsetX;
-	}
-
-	public double getShadowOffsetY() {
-		return shadowOffsetY;
-	}
-
-	public void setShadowOffsetY(double shadowOffsetY) {
-		this.shadowOffsetY = shadowOffsetY;
-	}
 
 
 	/**
@@ -500,17 +474,6 @@ public class Player extends Creature {
 		g.drawImage(playerDead, (int) (this.getX() - Camera.x), (int) (this.getY() - Camera.y), null);
 	}
 
-	public void renderShadow(Graphics g) {
-
-		BufferedImage currentSprite = switch(this.getFaceDir()) {
-			case RIGHT, LEFT -> shadowHorizontal;
-			case UP, DOWN -> shadowVertical;
-		};
-
-		g.drawImage(currentSprite, (int) (this.getX() + this.getShadowOffsetX() - Camera.x),
-				(int) (this.getY()  + this.getShadowOffsetY() - Camera.y), null);
-
-	}
 
 
 }
