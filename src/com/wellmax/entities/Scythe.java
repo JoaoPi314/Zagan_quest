@@ -41,12 +41,43 @@ public class Scythe extends Entity{
     private int attackMaxFrames;
     private int attackIndex;
 
+    /**
+     * Array with mask parameters
+     */
+    private final int[][] maskDownValues = {{43, 18, 20, 17},
+                                            {64, 23, 17, 23},
+                                            {43, 23, 12, 23},
+                                            {3, 17, 54, 31},
+                                            {11, 6, 29, 15},
+                                            {11, 6, 29, 15}};
+    private int[][] maskRightValues = {{43, 18, 20, 17},
+            {64, 23, 17, 23},
+            {43, 23, 12, 23},
+            {3, 17, 54, 31},
+            {11, 6, 29, 15},
+            {11, 6, 29, 15}};
+    private int[][] maskUpValues = {{43, 18, 20, 17},
+        {64, 23, 17, 23},
+        {43, 23, 12, 23},
+        {3, 17, 54, 31},
+        {11, 6, 29, 15},
+        {11, 6, 29, 15}};
+    private int[][] maskLeftValues = {{43, 18, 20, 17},
+            {64, 23, 17, 23},
+            {43, 23, 12, 23},
+            {3, 17, 54, 31},
+            {11, 6, 29, 15},
+            {11, 6, 29, 15}};
+
+    private Directions scytheDir;
+
     //---------------------------- Methods ----------------------------------//
 
     public Scythe(int x, int y, int width, int height) {
         super(x, y, width, height);
 
-        this.setAttackMaxFrames(10);
+        this.setNumberOfSprites(6);
+        this.setAttackMaxFrames(5);
 
         this.scytheAttackDown = new BufferedImage[this.getNumberOfSprites()];
         this.scytheAttackLeft = new BufferedImage[this.getNumberOfSprites()];
@@ -58,7 +89,6 @@ public class Scythe extends Entity{
             this.scytheAttackLeft[i] = Game.spritesheet.getSprite(320 + i * 48, 0, 48, this.getWidth());
             this.scytheAttackRight[i] = Game.spritesheet.getSprite(320 + i * 48, 96, 48, this.getWidth());
             this.scytheAttackUp[i] = Game.spritesheet.getSprite(608, i*48,this.getWidth(), 48);
-
         }
     }
 
@@ -109,7 +139,13 @@ public class Scythe extends Entity{
     public void setAttackIndex(int attackIndex) {
         this.attackIndex = attackIndex;
     }
+    public Directions getScytheDir() {
+        return scytheDir;
+    }
 
+    public void setScytheDir(Directions scytheDir) {
+        this.scytheDir = scytheDir;
+    }
     /**
      * Method to update scythe position
      */
@@ -130,7 +166,9 @@ public class Scythe extends Entity{
     /**
      * Update scythe position
      */
-    public void updateScythe(Directions playerDir) {
+    public void updateScythe(Directions playerDir, int x, int y) {
+
+        this.setScytheDir(playerDir);
 
         switch (playerDir) {
             case LEFT -> {
@@ -150,24 +188,59 @@ public class Scythe extends Entity{
                 this.setScytheOffsetY(-8);
             }
         }
+        this.setX(x + this.getScytheOffsetX());
+        this.setY(y + this.getScytheOffsetY());
+
     }
 
 
     @Override
     public void update() {
+        if(this.isStartScytheAttack() && (this.getAttackIndex() < this.getNumberOfSprites())){
+            switch(this.getScytheDir()){
+                case DOWN -> {
+                    this.setMask(this.maskDownValues[this.getAttackIndex()][0],
+                            this.maskDownValues[this.getAttackIndex()][1],
+                            this.maskDownValues[this.getAttackIndex()][2],
+                            this.maskDownValues[this.getAttackIndex()][3]);
+                }
+                case RIGHT -> {
+                    this.setMask(this.maskRightValues[this.getAttackIndex()][0],
+                            this.maskRightValues[this.getAttackIndex()][1],
+                            this.maskRightValues[this.getAttackIndex()][2],
+                            this.maskRightValues[this.getAttackIndex()][3]);
+                }
+                case UP -> {
+                    this.setMask(this.maskUpValues[this.getAttackIndex()][0],
+                            this.maskUpValues[this.getAttackIndex()][1],
+                            this.maskUpValues[this.getAttackIndex()][2],
+                            this.maskUpValues[this.getAttackIndex()][3]);
+                }
+                case LEFT -> {
+                    this.setMask(this.maskLeftValues[this.getAttackIndex()][0],
+                            this.maskLeftValues[this.getAttackIndex()][1],
+                            this.maskLeftValues[this.getAttackIndex()][2],
+                            this.maskLeftValues[this.getAttackIndex()][3]);
+                }
+            }
+        }
+
+        for(int i = 0; i < Game.enemies.size(); i++) {
+            Enemy e = Game.enemies.get(i);
+            if(Entity.isColliding(e, this)){
+                e.setLife(e.getLife() - 1/e.getDefense());
+
+            }
+        }
 
     }
 
     @Override
     public void render(Graphics g) {
 
-    }
-
-    public void render(Graphics g, Directions playerDir, int x, int y) {
-
         BufferedImage currentScytheSprite = null;
         if (this.isStartScytheAttack()) {
-            switch (playerDir) {
+            switch (this.getScytheDir()) {
                 case DOWN -> {
                     currentScytheSprite = this.scytheAttackDown[this.getAttackIndex()];
                 }
@@ -185,8 +258,10 @@ public class Scythe extends Entity{
 
         }
 
-        g.drawImage(currentScytheSprite, (int) (x + this.getScytheOffsetX() - Camera.x),
-                (int) (y + this.getScytheOffsetY() - Camera.y), null);
+        g.drawRect((int) (this.getX() + this.getMaskX()), (int) (this.getY() + this.getMaskY()), this.getMaskWidth(), this.getMaskHeight());
+        g.drawImage(currentScytheSprite, (int) (this.getX() - Camera.x),
+                (int) (this.getY() - Camera.y), null);
 
     }
+
 }

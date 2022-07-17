@@ -262,10 +262,7 @@ public class Player extends Creature {
 			this.setMaxFramesCoolDown(this.scythe.getAttackMaxFrames() * (this.getNumberOfSprites() - 1));
 			this.scythe.setStartScytheAttack(true);
 
-			// Set scythe position
-			this.scythe.updateScythe(this.getFaceDir());
-
-
+			this.scythe.updateScythe(this.getFaceDir(), (int) this.getX(), (int) this.getY());
 		}
 		// The initial frames is equal to max frames
 		this.setFramesCoolDown(getMaxFramesCoolDown());
@@ -278,9 +275,9 @@ public class Player extends Creature {
 		// Keyboard movement
 		if (!this.scythe.isStartScytheAttack()) {
 			this.controlledMovement();
+			// Damage movement
+			this.damageMovement();
 		}
-		// Damage movement
-		this.damageMovement();
 
 		// Sprite update
 		this.countFrames(this.isMoving());
@@ -297,7 +294,6 @@ public class Player extends Creature {
 		this.collidingProjectile();
 
 		this.coolDownCalculus();
-		this.scythe.countAttackFrames();
 
 		// Makes camera follow player
 		Camera.x = Camera.clamp((int) this.getX() - (Game.WIDTH / 2), 0, World.WIDTH * 32 - Game.WIDTH);
