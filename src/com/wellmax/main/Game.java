@@ -391,7 +391,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 				// Game should not be reseted
 				this.setReset(false);
 				Game.player.update();
-				Game.player.countAttackFrames();
+				Game.player.scythe.countAttackFrames();
 			}
 			//
 			case GAME_OVER -> {
@@ -469,8 +469,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 		if(this.getGameState() == GameStates.NORMAL) {
 			Game.player.renderShadow(g);
-			if(Game.player.isStartScytheAttack()) {
+			if(Game.player.scythe.isStartScytheAttack()) {
 				Game.player.renderAttackWithScythe(g);
+				Game.player.scythe.render(g, Game.player.getFaceDir(), (int) Game.player.getX(), (int) Game.player.getY());
 			}else {
 				Game.player.render(g);
 			}
