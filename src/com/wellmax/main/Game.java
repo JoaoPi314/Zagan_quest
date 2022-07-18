@@ -103,6 +103,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 */
 	public static Spritesheet orcSpritesheet;
 	/**
+	 * UI spritesheet
+	 */
+	public static Spritesheet uiSpritesheet;
+	/**
 	 * Game Over screen image
 	 */
 	private BufferedImage gameOverImage;
@@ -284,6 +288,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.spritesheet = new Spritesheet("/zaganSpritesheet.png");
 		Game.spritesheet1 = new Spritesheet("/spritesheet1.png");
 		Game.orcSpritesheet = new Spritesheet("/orcSpritesheet.png");
+		Game.uiSpritesheet = new Spritesheet("/uiSpritesheet.png");
 
 		try {
 			this.gameOverImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/gameoverscreen.png")));
@@ -507,7 +512,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		}
 
 		// Renders User interface
-		//ui.render(g);
+		ui.render(g);
 
 		// Draws everything
 		g.dispose();

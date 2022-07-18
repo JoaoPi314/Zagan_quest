@@ -42,22 +42,22 @@ public class UI {
 	 */
 	private final BufferedImage waveBarBoss;
 	/**
-	 * Sprite of musical note
+	 * Sprite of musical scythe
 	 */
-	private final BufferedImage note;
+	private final BufferedImage scythe;
 	
 	/**
 	 * Size of heart displayed
 	 */
 	private int heartSize;
 	/**
-	 * Size of note displayed
+	 * Size of scythe displayed
 	 */
 	private int fireballSize;
 	/**
 	 * Size of notes
 	 */
-	private int noteSize;
+	private int scytheSize;
 	/**
 	 * Width of wave bar
 	 */
@@ -84,18 +84,18 @@ public class UI {
 	public UI() {
 		
 		// Variables
-		this.setHeartSize(8);
+		this.setHeartSize(16);
 		this.setFireballSize(8);
-		this.setNoteSize(8);
+		this.setScytheSize(16);
 		this.setWaveSize(16);
 		this.setMaxWaveSize(13*16);
 		this.setMaxEnemies(Game.enemies.size());
 		this.setCurrentEnemies(this.getMaxEnemies());
 		
 		// Sprites
-		this.heart = Game.spritesheet.getSprite(0, 144, this.getHeartSize(), this.getHeartSize());
+		this.heart = Game.uiSpritesheet.getSprite(0, 0, this.getHeartSize(), this.getHeartSize());
 		this.fireball = Game.spritesheet.getSprite(0, 152, this.getFireballSize(), this.getFireballSize());
-		this.note = Game.spritesheet.getSprite(8,152, this.getNoteSize(), this.getNoteSize());
+		this.scythe = Game.uiSpritesheet.getSprite(16,16, this.getScytheSize(), this.getScytheSize());
 		
 		this.waveBarCornerRight = Game.spritesheet.getSprite(80, 48, this.getWaveSize(), this.getWaveSize());
 		this.waveBarCornerLeft = Game.spritesheet.getSprite(80, 16, this.getWaveSize(), this.getWaveSize());
@@ -121,12 +121,12 @@ public class UI {
 		this.fireballSize = fireballSize;
 	}
 
-	public int getNoteSize() {
-		return noteSize;
+	public int getScytheSize() {
+		return scytheSize;
 	}
 
-	public void setNoteSize(int noteSize) {
-		this.noteSize = noteSize;
+	public void setScytheSize(int scytheSize) {
+		this.scytheSize = scytheSize;
 	}
 
 	public double getMaxEnemies() {
@@ -178,21 +178,21 @@ public class UI {
 		
 		if(Game.player.isHasFireball()) {
 			// Draw Fireballs
-			g.drawImage(this.fireball, 8, 14, null);
-			g.setFont(new Font("arial", Font.BOLD, 8));
+			g.drawImage(this.fireball, 8, 28, null);
+			g.setFont(new Font("arial", Font.BOLD, 16));
 			g.setColor(Color.white);
-			g.drawString("x"+Game.player.getFireballs(), 17, 21);
+			g.drawString("x"+Game.player.getFireballs(), 34, 42);
 			
 		}else {
-			// Draw note
-			g.drawImage(this.note, 8, 14, null);
-			g.setFont(new Font("arial", Font.BOLD, 8));
+			// Draw scythe
+			g.drawImage(this.scythe, 8, 28, null);
+			g.setFont(new Font("arial", Font.BOLD, 16));
 			g.setColor(Color.white);
-			g.drawString("- -", 17, 21);
+			g.drawString("- -", 34, 42);
 		}
 		
 		g.setColor(new Color(0xFF, 0xFF, 0xFF, 70));
-		g.fillRect(8, 13, (int)((Game.player.getFramesCoolDown()/Game.player.getMaxFramesCoolDown())*18), 10);
+		g.fillRect(8, 26, (int)((Game.player.getFramesCoolDown()/Game.player.getMaxFramesCoolDown())*45), 20);
 		
 		// Draw waveBar
 		g.setColor(Color.red);
