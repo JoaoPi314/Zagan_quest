@@ -24,10 +24,12 @@ public abstract class Collectible extends Entity {
 	static {
 		HEALTH_POTION = new BufferedImage[4];
 		FIREBALL = new BufferedImage[4];
+		int width = 32;
+		int height = 32;
 		
 		for(int i = 0; i < FIREBALL.length; i++) {
-			HEALTH_POTION[i] = Game.spritesheet.getSprite(96 + i*16, 112, 16, 16);
-			FIREBALL[i] = Game.spritesheet.getSprite(96 + i*16, 128, 16, 16);
+			FIREBALL[i] = Game.spritesheet.getSprite(576 + i*width, 320, width, height);
+			HEALTH_POTION[i] = Game.spritesheet.getSprite(96 + i*16, 128, 16, 16);
 		}
 		
 	}

@@ -85,7 +85,7 @@ public class UI {
 		
 		// Variables
 		this.setHeartSize(16);
-		this.setFireballSize(8);
+		this.setFireballSize(16);
 		this.setScytheSize(16);
 		this.setWaveSize(16);
 		this.setMaxWaveSize(13*16);
@@ -94,7 +94,7 @@ public class UI {
 		
 		// Sprites
 		this.heart = Game.uiSpritesheet.getSprite(0, 0, this.getHeartSize(), this.getHeartSize());
-		this.fireball = Game.spritesheet.getSprite(0, 152, this.getFireballSize(), this.getFireballSize());
+		this.fireball = Game.uiSpritesheet.getSprite(0, 16, this.getFireballSize(), this.getFireballSize());
 		this.scythe = Game.uiSpritesheet.getSprite(16,16, this.getScytheSize(), this.getScytheSize());
 		
 		this.waveBarCornerRight = Game.spritesheet.getSprite(80, 48, this.getWaveSize(), this.getWaveSize());

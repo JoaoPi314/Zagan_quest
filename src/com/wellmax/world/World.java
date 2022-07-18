@@ -158,7 +158,7 @@ public class World {
 							}
 							case FIREBALL -> {
 								Fireball fireball = new Fireball(xx * TILE_SIZE, yy * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-								fireball.setMask(4, 0, 8, 16);
+								fireball.setMask(8, 0, 16, 32);
 								Game.collectibles.add(fireball);
 							}
 							case ENEMY -> {
