@@ -368,6 +368,16 @@ public abstract class Creature extends Entity {
 				return;
 			}
 		}
+		//Collision of scythe with enemie
+		if(!(this instanceof Player))
+			if(Entity.isColliding(this, Game.player.scythe)){
+				System.out.println("Oooooooo");
+				this.setLife(this.getLife() - 1/this.getDefense());
+				this.setDamaged(true);
+				this.setKnockBackDir(Game.player.scythe.getScytheDir());
+				this.setKnockBackSpeed(2);
+
+			}
 	}
 
 
