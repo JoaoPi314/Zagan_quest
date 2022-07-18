@@ -162,7 +162,7 @@ public abstract class Enemy extends Creature {
 			}else{ // Enemy is idle - Moves randomly and slowly
 				this.enemyIdleIA();
 			}
-		}else if(Game.player.getLife() > 0) { // If enemy is colliding with player, and player is alive
+		}else if((Game.player.getLife() > 0) && !Game.player.scythe.isStartScytheAttack()) { // If enemy is colliding with player, and player is alive
 			// Attacking player
 			if(!this.isCoolDown()) {
 				this.attack();
