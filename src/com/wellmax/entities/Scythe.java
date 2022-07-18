@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
  * THe scythe class will compute all scythe logic
  * @author joao.gomes
  */
-public class Scythe extends Entity{
+public class Scythe extends Entity {
 
     //---------------------------- Attributes ----------------------------------//
     /**
@@ -43,6 +43,10 @@ public class Scythe extends Entity{
 
     private Directions scytheDir;
 
+    private double damage;
+    private int knockBackDealt;
+
+
     //---------------------------- Methods ----------------------------------//
 
     public Scythe(int x, int y, int width, int height) {
@@ -51,6 +55,8 @@ public class Scythe extends Entity{
         this.setNumberOfSprites(6);
         this.setAttackMaxFrames(5);
         this.setMask(0, 0, 0, 0);
+        this.setDamage(2);
+        this.setKnockBackDealt(2);
 
         this.scytheAttackDown = new BufferedImage[this.getNumberOfSprites()];
         this.scytheAttackLeft = new BufferedImage[this.getNumberOfSprites()];
@@ -61,7 +67,7 @@ public class Scythe extends Entity{
             this.scytheAttackDown[i] = Game.spritesheet.getSprite(224, i * 48, this.getWidth(), 48);
             this.scytheAttackLeft[i] = Game.spritesheet.getSprite(320 + i * 48, 0, 48, this.getWidth());
             this.scytheAttackRight[i] = Game.spritesheet.getSprite(320 + i * 48, 96, 48, this.getWidth());
-            this.scytheAttackUp[i] = Game.spritesheet.getSprite(608, i*48,this.getWidth(), 48);
+            this.scytheAttackUp[i] = Game.spritesheet.getSprite(608, i * 48, this.getWidth(), 48);
         }
     }
 
@@ -112,6 +118,7 @@ public class Scythe extends Entity{
     public void setAttackIndex(int attackIndex) {
         this.attackIndex = attackIndex;
     }
+
     public Directions getScytheDir() {
         return scytheDir;
     }
@@ -119,6 +126,24 @@ public class Scythe extends Entity{
     public void setScytheDir(Directions scytheDir) {
         this.scytheDir = scytheDir;
     }
+
+    public double getDamage() {
+        return damage;
+    }
+
+    public void setDamage(double damage) {
+        this.damage = damage;
+    }
+
+    public int getKnockBackDealt() {
+        return knockBackDealt;
+    }
+
+    public void setKnockBackDealt(int knockBackDealt) {
+        this.knockBackDealt = knockBackDealt;
+    }
+
+
     /**
      * Method to update scythe position
      */
@@ -169,8 +194,8 @@ public class Scythe extends Entity{
 
     @Override
     public void update() {
-        if(this.isStartScytheAttack() && (this.getAttackIndex() == 3)){
-            switch(this.getScytheDir()) {
+        if (this.isStartScytheAttack() && (this.getAttackIndex() == 3)) {
+            switch (this.getScytheDir()) {
                 case DOWN -> {
                     this.setMask(3, 17, 54, 31);
                 }
@@ -184,7 +209,7 @@ public class Scythe extends Entity{
                     this.setMask(0, 7, 31, 44);
                 }
             }
-        }else{
+        } else {
             this.setMask(0, 0, 0, 0);
         }
     }

@@ -372,10 +372,10 @@ public abstract class Creature extends Entity {
 		if(!(this instanceof Player))
 			if(Entity.isColliding(this, Game.player.scythe)){
 				System.out.println("Oooooooo");
-				this.setLife(this.getLife() - 1/this.getDefense());
+				this.setLife(this.getLife() - Game.player.scythe.getDamage()/this.getDefense());
 				this.setDamaged(true);
 				this.setKnockBackDir(Game.player.scythe.getScytheDir());
-				this.setKnockBackSpeed(2);
+				this.setKnockBackSpeed(Game.player.scythe.getKnockBackDealt());
 
 			}
 	}
