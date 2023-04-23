@@ -35,10 +35,10 @@ public class DeadEnemy extends Creature {
 		enWalkingDown = new BufferedImage[this.getNumberOfSprites()];
 
 		for(int i = 0; i < this.getNumberOfSprites(); i++) {
-			enWalkingRight[i] = Game.spritesheet.getSprite(224 + i*16, 32, this.getWidth(), this.getHeight());
-			enWalkingLeft[i] = Game.spritesheet.getSprite(224 + i*16, 48, this.getWidth(), this.getHeight());
-			enWalkingUp[i] = Game.spritesheet.getSprite(224 + i*16, 0, this.getWidth(), this.getHeight());
-			enWalkingDown[i] = Game.spritesheet.getSprite(224 + i*16, 16, this.getWidth(), this.getHeight());
+			enWalkingRight[i] = Game.skeletonSpritesheet.getSprite(i*this.getWidth(), 224, this.getWidth(), this.getHeight());
+			enWalkingLeft[i] = Game.skeletonSpritesheet.getSprite(i*this.getWidth(), 224, this.getWidth(), this.getHeight());
+			enWalkingUp[i] = Game.skeletonSpritesheet.getSprite(i*this.getWidth(), 224, this.getWidth(), this.getHeight());
+			enWalkingDown[i] = Game.skeletonSpritesheet.getSprite(i*this.getWidth(), 224, this.getWidth(), this.getHeight());
 		}
 	}
 	

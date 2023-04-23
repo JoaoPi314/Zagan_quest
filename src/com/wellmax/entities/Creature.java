@@ -371,7 +371,6 @@ public abstract class Creature extends Entity {
 		//Collision of scythe with enemie
 		if(!(this instanceof Player))
 			if(Entity.isColliding(this, Game.player.scythe) && !this.isDamaged()){
-				System.out.println("Oooooooo");
 				this.setLife(this.getLife() - Game.player.scythe.getDamage()/this.getDefense());
 				this.setDamaged(true);
 				this.setKnockBackDir(Game.player.scythe.getScytheDir());
