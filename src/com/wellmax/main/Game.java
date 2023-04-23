@@ -103,6 +103,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 */
 	public static Spritesheet orcSpritesheet;
 	/**
+	 * Skeleton spritesheet
+	 */
+	public static Spritesheet skeletonSpritesheet;
+	/**
 	 * UI spritesheet
 	 */
 	public static Spritesheet uiSpritesheet;
@@ -289,6 +293,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.spritesheet1 = new Spritesheet("/spritesheet1.png");
 		Game.orcSpritesheet = new Spritesheet("/orcSpritesheet.png");
 		Game.uiSpritesheet = new Spritesheet("/uiSpritesheet.png");
+		Game.skeletonSpritesheet = new Spritesheet("/skeletonSpritesheet.png");
 
 		try {
 			this.gameOverImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/gameoverscreen.png")));
