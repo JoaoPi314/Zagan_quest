@@ -135,7 +135,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 */
 	private enum GameStates{
 		NORMAL,
-		GAME_OVER
+		GAME_OVER,
+		MENU
 	}
 	/**
 	 * Game state
@@ -174,6 +175,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 */
 	private int maxWaves;
 
+	/**
+	 * Navigation Menu
+	 */
+	private Menu menu;
+
 	//---------------------------- Methods ----------------------------------//
 
 	/**
@@ -182,7 +188,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public Game() {
 		// Attributes
 		this.setRunning(true);
-		this.setGameState(GameStates.NORMAL);
+		this.setGameState(GameStates.MENU);
 		// game over message
 		this.setFramesGameOver(0);
 		this.setMaxFramesGameOver(30);
@@ -311,6 +317,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.player = new Player(32, 32, 32, 32);
 		Game.world = new World(level);
 		this.ui = new UI();
+		this.menu = new Menu();
 	}
 
 	/**
@@ -416,6 +423,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 					this.setReset(false);
 					this.setGameState(GameStates.NORMAL);
 				}
+			}
+			case MENU ->{
+				this.menu.update();
 			}
 		}
 
@@ -536,7 +546,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			if(showGameOverMessage) {
 				g.drawString("Try again? (Press ENTER)", WIDTH*SCALE / 2 - 175, HEIGHT*SCALE / 2 + 175);
 			}
-
+		}else if(this.getGameState() == GameStates.MENU) {
+			this.menu.render(g);
 		}
 
 
@@ -598,37 +609,52 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 
+		switch(gameState) {
+			case NORMAL -> {
+				// Horizontal keys
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> Game.player.setRight(true);
+					case KeyEvent.VK_LEFT, KeyEvent.VK_A -> Game.player.setLeft(true);
+					default -> {
+					}
+				}
 
-		// Horizontal keys
-		switch (e.getKeyCode()) {
-			case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> Game.player.setRight(true);
-			case KeyEvent.VK_LEFT, KeyEvent.VK_A -> Game.player.setLeft(true);
-			default -> {
+				// Vertical keys
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_UP, KeyEvent.VK_W -> Game.player.setUp(true);
+					case KeyEvent.VK_DOWN, KeyEvent.VK_S -> Game.player.setDown(true);
+					default -> {
+					}
+				}
+
+				// Shoot key
+				if(!player.isCoolDown()) {
+					if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+						player.setAttacking(true);
+					}
+				}
 			}
-		}
-
-		// Vertical keys
-		switch (e.getKeyCode()) {
-			case KeyEvent.VK_UP, KeyEvent.VK_W -> Game.player.setUp(true);
-			case KeyEvent.VK_DOWN, KeyEvent.VK_S -> Game.player.setDown(true);
-			default -> {
+			case GAME_OVER -> {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					reset = true;
+				}
 			}
-		}
-
-		// Shoot key
-		if(!player.isCoolDown()) {
-			if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-				player.setAttacking(true);
+			case MENU -> {
+				switch(e.getKeyCode()) {
+					case KeyEvent.VK_DOWN -> menu.downCursor();
+					case KeyEvent.VK_UP -> menu.upCursor();
+					case KeyEvent.VK_ENTER -> {
+						switch(menu.getCursor()) {
+							case 0 -> this.setGameState(GameStates.NORMAL);
+							case 1 ->{}
+							case 2 -> System.exit(1);
+							default ->{}
+						}
+					}
+				}
 			}
+			default -> throw new IllegalArgumentException("Unexpected value: " + gameState);
 		}
-
-		if(this.getGameState() == GameStates.GAME_OVER) {
-			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-				reset = true;
-			}
-		}
-
-
 	}
 
 	/**
