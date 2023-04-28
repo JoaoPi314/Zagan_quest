@@ -24,10 +24,10 @@ public class Rock extends Scenario {
 		this.setHeight(16);
 		
 		// Collision mask
-		this.setMaskX(0);
+		this.setMaskX(1);
 		this.setMaskY(9);
-		this.setmWidth(16);
-		this.setmHeight(7);
+		this.setmWidth(30);
+		this.setmHeight(22);
 
 		this.shadowSprite = Game.spritesheet1.getSprite(192, 96, 42, 21);
 

@@ -564,7 +564,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		// Catch current time from PC
 		long lastTime = System.nanoTime();
 		// FPS
-		double amountOfTicks = 60.0;
+		double amountOfTicks = 75.0;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0.0;
 
