@@ -1,4 +1,6 @@
-package com.wellmax.world;
+package com.wellmax.world.tiles;
+
+import com.wellmax.world.tiles.Scenario;
 
 import java.awt.image.BufferedImage;
 
@@ -7,24 +9,24 @@ import java.awt.image.BufferedImage;
  * @author joao.gomes
  *
  */
-public class Tree extends Scenario{
+public class Statue extends Scenario {
 	/**
 	 * The tree constructor initializes the collision mask values
 	 * @param x x position
 	 * @param y y position
 	 * @param sprite Rock sprite
 	 */
-	public Tree(int x, int y, BufferedImage sprite) {
+	public Statue(int x, int y, BufferedImage sprite) {
 		super(x, y, sprite);
-
+		
 		// Width and height
-		this.setWidth(32);
-		this.setHeight(48);
+		this.setWidth(64);
+		this.setHeight(64);
 		
 		// Collision mask
 		this.setMaskX(3);
 		this.setMaskY(40);
-		this.setmWidth(26);
-		this.setmHeight(8);
+		this.setmWidth(48);
+		this.setmHeight(12);
 	}
 }

@@ -42,22 +42,22 @@ public class UI {
 	 */
 	private final BufferedImage waveBarBoss;
 	/**
-	 * Sprite of musical note
+	 * Sprite of musical scythe
 	 */
-	private final BufferedImage note;
+	private final BufferedImage scythe;
 	
 	/**
 	 * Size of heart displayed
 	 */
 	private int heartSize;
 	/**
-	 * Size of note displayed
+	 * Size of scythe displayed
 	 */
 	private int fireballSize;
 	/**
 	 * Size of notes
 	 */
-	private int noteSize;
+	private int scytheSize;
 	/**
 	 * Width of wave bar
 	 */
@@ -84,22 +84,22 @@ public class UI {
 	public UI() {
 		
 		// Variables
-		this.setHeartSize(8);
-		this.setFireballSize(8);
-		this.setNoteSize(8);
-		this.setWaveSize(16);
-		this.setMaxWaveSize(13*16);
+		this.setHeartSize(16);
+		this.setFireballSize(16);
+		this.setScytheSize(16);
+		this.setWaveSize(32);
+		this.setMaxWaveSize(13*getWaveSize());
 		this.setMaxEnemies(Game.enemies.size());
 		this.setCurrentEnemies(this.getMaxEnemies());
 		
 		// Sprites
-		this.heart = Game.spritesheet.getSprite(0, 144, this.getHeartSize(), this.getHeartSize());
-		this.fireball = Game.spritesheet.getSprite(0, 152, this.getFireballSize(), this.getFireballSize());
-		this.note = Game.spritesheet.getSprite(8,152, this.getNoteSize(), this.getNoteSize());
+		this.heart = Game.uiSpritesheet.getSprite(0, 0, this.getHeartSize(), this.getHeartSize());
+		this.fireball = Game.uiSpritesheet.getSprite(0, 16, this.getFireballSize(), this.getFireballSize());
+		this.scythe = Game.uiSpritesheet.getSprite(16,16, this.getScytheSize(), this.getScytheSize());
 		
-		this.waveBarCornerRight = Game.spritesheet.getSprite(80, 48, this.getWaveSize(), this.getWaveSize());
-		this.waveBarCornerLeft = Game.spritesheet.getSprite(80, 16, this.getWaveSize(), this.getWaveSize());
-		this.waveBarMiddle = Game.spritesheet.getSprite(80, 32, this.getWaveSize(), this.getWaveSize());
+		this.waveBarCornerRight = Game.uiSpritesheet.getSprite(96, 0, this.getWaveSize(), this.getWaveSize());
+		this.waveBarCornerLeft = Game.uiSpritesheet.getSprite(32, 0, this.getWaveSize(), this.getWaveSize());
+		this.waveBarMiddle = Game.uiSpritesheet.getSprite(64, 0, this.getWaveSize(), this.getWaveSize());
 		this.waveBarBoss= Game.spritesheet.getSprite(80, 64, this.getWaveSize(), this.getWaveSize());
 
 	}
@@ -121,12 +121,12 @@ public class UI {
 		this.fireballSize = fireballSize;
 	}
 
-	public int getNoteSize() {
-		return noteSize;
+	public int getScytheSize() {
+		return scytheSize;
 	}
 
-	public void setNoteSize(int noteSize) {
-		this.noteSize = noteSize;
+	public void setScytheSize(int scytheSize) {
+		this.scytheSize = scytheSize;
 	}
 
 	public double getMaxEnemies() {
@@ -178,32 +178,33 @@ public class UI {
 		
 		if(Game.player.isHasFireball()) {
 			// Draw Fireballs
-			g.drawImage(this.fireball, 8, 14, null);
-			g.setFont(new Font("arial", Font.BOLD, 8));
+			g.drawImage(this.fireball, 8, 28, null);
+			g.setFont(new Font("arial", Font.BOLD, 16));
 			g.setColor(Color.white);
-			g.drawString("x"+Game.player.getFireballs(), 17, 21);
+			g.drawString("x"+Game.player.getFireballs(), 34, 42);
 			
 		}else {
-			// Draw note
-			g.drawImage(this.note, 8, 14, null);
-			g.setFont(new Font("arial", Font.BOLD, 8));
+			// Draw scythe
+			g.drawImage(this.scythe, 8, 28, null);
+			g.setFont(new Font("arial", Font.BOLD, 16));
 			g.setColor(Color.white);
-			g.drawString("- -", 17, 21);
+			g.drawString("- -", 34, 42);
 		}
 		
 		g.setColor(new Color(0xFF, 0xFF, 0xFF, 70));
-		g.fillRect(8, 13, (int)((Game.player.getFramesCoolDown()/Game.player.getMaxFramesCoolDown())*18), 10);
+		g.fillRect(8, 26, (int)((Game.player.getFramesCoolDown()/Game.player.getMaxFramesCoolDown())*45), 20);
 		
+		int waveBarHeight = (int)(Game.HEIGHT-1.5*this.getWaveSize());
 		// Draw waveBar
 		g.setColor(Color.red);
-		g.fillRect(23, 233, (int)((this.getCurrentEnemies()/this.getMaxEnemies())*this.getMaxWaveSize()), 3);
+		g.fillRect(48, waveBarHeight+10, (int)((this.getCurrentEnemies()/this.getMaxEnemies())*this.getMaxWaveSize()), 15);
 		
 		
-		g.drawImage(this.waveBarCornerLeft, 16, 224, null);
-		g.drawImage(this.waveBarCornerRight,224, 224, null);
+		g.drawImage(this.waveBarCornerLeft, 32, waveBarHeight, null);
+		g.drawImage(this.waveBarCornerRight,Game.WIDTH-64, waveBarHeight, null);
 	
 		for(int i = 0; i < (Game.WIDTH/World.TILE_SIZE) - 4; i++) {
-			g.drawImage(this.waveBarMiddle, 32 +i*16, 224, null);
+			g.drawImage(this.waveBarMiddle, 64 +i*32, waveBarHeight, null);
 		}
 
 		

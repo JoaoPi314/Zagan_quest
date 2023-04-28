@@ -55,6 +55,7 @@ public class FireballShoot extends Projectile{
 		this.setTimeRemain(0);
 		this.setDamage(5);
 		this.setKnockBackDealt(3);
+		this.setNumberOfSprites(4);
 		
 		this.fireRight = new BufferedImage[this.getNumberOfSprites()];
 		this.fireLeft = new BufferedImage[this.getNumberOfSprites()];
@@ -63,10 +64,10 @@ public class FireballShoot extends Projectile{
 
 		
 		for(int i = 0; i < this.getNumberOfSprites(); i++) {
-			this.fireRight[i] = Game.spritesheet.getSprite(96 + i*16, 32, this.getMaskWidth(), this.getHeight());
-			this.fireLeft[i] = Game.spritesheet.getSprite(96 + i*16, 48, this.getMaskWidth(), this.getHeight());
-			this.fireUp[i] = Game.spritesheet.getSprite(96 + i*16, 0, this.getMaskWidth(), this.getHeight());
-			this.fireDown[i] = Game.spritesheet.getSprite(96 + i*16, 16, this.getMaskWidth(), this.getHeight());
+			this.fireRight[i] = Game.spritesheet.getSprite(352 + i*this.getWidth(), 288, this.getMaskWidth(), this.getHeight());
+			this.fireLeft[i] = Game.spritesheet.getSprite(352 + i*this.getWidth(), 320, this.getMaskWidth(), this.getHeight());
+			this.fireUp[i] = Game.spritesheet.getSprite(352 + i*this.getWidth(), 224, this.getMaskWidth(), this.getHeight());
+			this.fireDown[i] = Game.spritesheet.getSprite(352 + i*this.getWidth(), 256, this.getMaskWidth(), this.getHeight());
 		}
 		
 	}
@@ -80,7 +81,7 @@ public class FireballShoot extends Projectile{
 					null);
 			case RIGHT -> g.drawImage(fireRight[this.getIndex()], (int) (getX() - Camera.x), (int) (getY() - Camera.y),
 					null);
-			case LEFT -> g.drawImage(fireLeft[this.getIndex()], (int) (getX() - Camera.x), (int) (getY() - Camera.y),
+			case LEFT -> g.drawImage(fireLeft[this.getIndex()], (int) (this.getX() - Camera.x), (int) (this.getY() - Camera.y),
 					null);
 		}
 	}

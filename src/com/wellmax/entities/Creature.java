@@ -60,21 +60,38 @@ public abstract class Creature extends Entity {
 
 	// Sprites
 	/**
-	 * Sprites of entity facing right
+	 * Sprite of entity facing right
 	 */
-	protected BufferedImage[] enRight;
+	protected BufferedImage enRight;
 	/**
-	 * sprites of entity facing left
+	 * Sprite of entity facing left
 	 */
-	protected BufferedImage[] enLeft;
+	protected BufferedImage enLeft;
 	/**
-	 * Sprites of entity facing up
+	 * Sprite of entity facing up
 	 */
-	protected BufferedImage[] enUp;
+	protected BufferedImage enUp;
 	/**
-	 * Sprites of entity facing down
+	 * Sprite of entity facing down
 	 */
-	protected BufferedImage[] enDown;
+	protected BufferedImage enDown;
+
+	/**
+	 * Sprites of entity walking right
+	 */
+	protected BufferedImage[] enWalkingRight;
+	/**
+	 * sprites of entity walking left
+	 */
+	protected BufferedImage[] enWalkingLeft;
+	/**
+	 * Sprites of entity walking up
+	 */
+	protected BufferedImage[] enWalkingUp;
+	/**
+	 * Sprites of entity walking down
+	 */
+	protected BufferedImage[] enWalkingDown;
 	
 	/**
 	 * Sprite of entity taking damage facing right
@@ -104,6 +121,18 @@ public abstract class Creature extends Entity {
 	 * Number of frames that cool down must be applied (cool down calculus)
 	 */
 	private double maxFramesCoolDown;
+	/**
+	 * Player shadow
+	 */
+	protected BufferedImage shadowVertical;
+	protected BufferedImage shadowHorizontal;
+
+
+	/**
+	 * Shadow offset
+	 */
+	private double shadowOffsetX;
+	private double shadowOffsetY;
 	//---------------------------- Methods ----------------------------------//	
 	
 	/**
@@ -220,7 +249,21 @@ public abstract class Creature extends Entity {
 	public void setMaxFramesCoolDown(double maxFramesCoolDown) {
 		this.maxFramesCoolDown = maxFramesCoolDown;
 	}
+	public double getShadowOffsetX() {
+		return shadowOffsetX;
+	}
 
+	public void setShadowOffsetX(double shadowOffsetX) {
+		this.shadowOffsetX = shadowOffsetX;
+	}
+
+	public double getShadowOffsetY() {
+		return shadowOffsetY;
+	}
+
+	public void setShadowOffsetY(double shadowOffsetY) {
+		this.shadowOffsetY = shadowOffsetY;
+	}
 	/**
 	 * Checks collision with enemies
 	 * @param xx Next creature x position
@@ -258,8 +301,6 @@ public abstract class Creature extends Entity {
 				case RIGHT:
 					if(World.isFree((int)(this.getX() + this.getSpeed()*this.getKnockBackSpeed()), (int) this.getY()) &&
 							this.isNotCollidingWithScenario((int) (this.getX() + this.getKnockBackSpeed()),
-									(int) this.getY())&&
-							this.isNotCollidingWithEnemies((int) (this.getX() + this.getKnockBackSpeed()),
 									(int) this.getY())) {
 						this.setX(this.getX() + this.getSpeed()*this.getKnockBackSpeed());
 						this.setMoving(true);
@@ -268,8 +309,6 @@ public abstract class Creature extends Entity {
 				case LEFT:
 					if(World.isFree((int)(this.getX() - this.getSpeed()*this.getKnockBackSpeed()), (int) this.getY()) &&
 							this.isNotCollidingWithScenario((int) (this.getX() - this.getKnockBackSpeed()),
-									(int) this.getY())&&
-							this.isNotCollidingWithEnemies((int) (this.getX() - this.getKnockBackSpeed()),
 									(int) this.getY())) {
 						this.setX(this.getX() - this.getSpeed()*this.getKnockBackSpeed());
 						this.setMoving(true);
@@ -278,9 +317,7 @@ public abstract class Creature extends Entity {
 				case UP:
 					if(World.isFree((int)this.getX(), (int) (this.getY() - this.getSpeed()*this.getKnockBackSpeed())) &&
 							this.isNotCollidingWithScenario((int) this.getX(),
-									(int) (this.getY() - this.getKnockBackSpeed())) &&
-							this.isNotCollidingWithEnemies((int) this.getX(),
-									(int) (this.getY() - this.getKnockBackSpeed()))) {
+									(int) (this.getY() - this.getKnockBackSpeed())) ) {
 						this.setY(this.getY() - this.getSpeed()*this.getKnockBackSpeed());
 						this.setMoving(true);						
 					}
@@ -288,9 +325,7 @@ public abstract class Creature extends Entity {
 				case DOWN:
 					if(World.isFree((int)this.getX(), (int) (this.getY() + this.getSpeed()*this.getKnockBackSpeed())) &&
 							this.isNotCollidingWithScenario((int) this.getX(),
-									(int) (this.getY() + this.getKnockBackSpeed())) &&
-							this.isNotCollidingWithEnemies((int) this.getX(),
-									(int) (this.getY() + this.getKnockBackSpeed()))) {
+									(int) (this.getY() + this.getKnockBackSpeed())) ) {
 						this.setY(this.getY() + this.getSpeed()*this.getKnockBackSpeed());
 						this.setMoving(true);						
 					}
@@ -308,12 +343,46 @@ public abstract class Creature extends Entity {
 			}	
 		}
 	}
+	/**
+	 * Method to compute if a projectile hits player
+	 */
+	protected void collidingProjectile() {
+		// Search for projectiles
+		for(int i = 0; i < Game.projectiles.size(); i++) {
+			Projectile e = Game.projectiles.get(i);
+			if(this instanceof Player) {
+				if (!(e instanceof Bone)) {
+					continue;
+				}
+			} else {
+				if (e instanceof Bone) {
+					continue;
+				}
+			}
+			if(Entity.isColliding(this, e)) {
+				this.setKnockBackDir(e.getFaceDir());
+				this.setKnockBackSpeed(e.getKnockBackDealt());
+				this.setDamaged(true);
+				this.setLife(this.getLife() - e.getDamage()/this.getDefense());
+				Game.projectiles.remove(i);
+				return;
+			}
+		}
+		//Collision of scythe with enemie
+		if(!(this instanceof Player))
+			if(Entity.isColliding(this, Game.player.scythe) && !this.isDamaged()){
+				this.setLife(this.getLife() - Game.player.scythe.getDamage()/this.getDefense());
+				this.setDamaged(true);
+				this.setKnockBackDir(Game.player.scythe.getScytheDir());
+				this.setKnockBackSpeed(Game.player.scythe.getKnockBackDealt());
+
+			}
+	}
+
 
 	/**
-	 * Each creature will have its own attack pattern
+	 * Cool down calculus
 	 */
-	public abstract void attack();
-
 	public void coolDownCalculus(){
 		// Cool down calculus
 		if(this.isCoolDown()) {
@@ -325,6 +394,8 @@ public abstract class Creature extends Entity {
 	}
 
 
+	public abstract void attack();
+
 	@Override
 	public void render(Graphics g) {
 		
@@ -332,32 +403,32 @@ public abstract class Creature extends Entity {
 		
 		switch(this.getFaceDir()) {
 			case RIGHT:
-				if(!this.isDamaged()) {
-					currentSprite = this.enRight[this.getIndex()];
+				if(this.isMoving()) {
+					currentSprite = this.enWalkingRight[this.getIndex()];
 				}else {
-					currentSprite = this.enDamageRight;
+					currentSprite = this.enRight;
 				}
 				break;
 			case LEFT:
-				if(!this.isDamaged()) {
-					currentSprite = this.enLeft[this.getIndex()];
+				if(this.isMoving()) {
+					currentSprite = this.enWalkingLeft[this.getIndex()];
 				}else {
-					currentSprite = this.enDamageLeft;
+					currentSprite = this.enLeft;
 				}
 				break;
 			case UP:
-				if(!this.isDamaged()) {
-					currentSprite = this.enUp[this.getIndex()];
+				if(this.isMoving()) {
+					currentSprite = this.enWalkingUp[this.getIndex()];
 				}else {
-					currentSprite = this.enDamageUp;
+					currentSprite = this.enUp;
 				}
 				break;
 			case DOWN:
 			default:
-				if(!this.isDamaged()) {
-					currentSprite = this.enDown[this.getIndex()];
+				if(this.isMoving()) {
+					currentSprite = this.enWalkingDown[this.getIndex()];
 				}else {
-					currentSprite = this.enDamageDown;
+					currentSprite = this.enDown;
 				}
 				break;
 		}
@@ -366,4 +437,15 @@ public abstract class Creature extends Entity {
 
 	}
 
+	public void renderShadow(Graphics g) {
+
+		BufferedImage currentSprite = switch(this.getFaceDir()) {
+			case RIGHT, LEFT -> shadowHorizontal;
+			case UP, DOWN -> shadowVertical;
+		};
+
+		g.drawImage(currentSprite, (int) (this.getX() + this.getShadowOffsetX() - Camera.x),
+				(int) (this.getY()  + this.getShadowOffsetY() - Camera.y), null);
+
+	}
 }

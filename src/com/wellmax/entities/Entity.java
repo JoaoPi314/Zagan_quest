@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import com.wellmax.main.Game;
-import com.wellmax.world.Scenario;
+import com.wellmax.world.tiles.Scenario;
 
 /**
  * Generic Creature class. The Creature, projectile and Collectible classes
@@ -82,10 +82,10 @@ public abstract class Entity {
 		this.setMaskHeight(height);
 		
 		// Other initializations
-		this.setMaxFrames(10);
+		this.setMaxFrames(6);
 		this.setFrames(0);
 		this.setIndex(0);
-		this.setNumberOfSprites(4);
+		this.setNumberOfSprites(6);
 	}
 	
 	public double getX() {

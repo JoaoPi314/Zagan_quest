@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.wellmax.main.Game;
+import com.wellmax.world.Camera;
 
 /**
  * The Tile class contains all sprites related to map renderization.
@@ -67,24 +68,25 @@ public class Tile {
 	public static BufferedImage TILE_STATUE;
 	
 	static {
+		int tileSize = 32;
 		// Arrays
 		TILE_GRASS = new BufferedImage[3][3];
 		TILE_WALL = new BufferedImage[3][3];
 		TILE_STONE_FLOOR = new BufferedImage[3][3];
 		TILE_PATH = new BufferedImage[3][3];
 		// Scenario items
-		TILE_ROCK = Game.spritesheet1.getSprite(48, 48, 16, 16);
-		TILE_TREE = Game.spritesheet1.getSprite(64, 48, 32, 48);
-		TILE_STATUE = Game.spritesheet.getSprite(224, 64, 64, 64);
+		TILE_ROCK = Game.spritesheet1.getSprite(96, 96, tileSize, tileSize);
+		TILE_TREE = Game.spritesheet1.getSprite(128, 96, tileSize*2, tileSize*3);
+		TILE_STATUE = Game.spritesheet.getSprite(0, 0, tileSize*4, tileSize*4);
 		
 		// Initiates sprites 
 		for(int i = 0; i < 3; i++) {
 			for(int j = 0; j < 3; j++) {
 				// GRASS
-				TILE_GRASS[i][j] = Game.spritesheet1.getSprite(j*16, i*16, 16, 16);
-				TILE_WALL[i][j] = Game.spritesheet1.getSprite(48 + j*16, i*16, 16, 16);
-				TILE_STONE_FLOOR[i][j] = Game.spritesheet1.getSprite(j*16, 48 + i*16, 16, 16);
-				TILE_PATH[i][j] = Game.spritesheet1.getSprite(96 + j*16, i*16, 16, 16);
+				TILE_GRASS[i][j] = Game.spritesheet1.getSprite(j*tileSize, i*tileSize, tileSize, tileSize);
+				TILE_WALL[i][j] = Game.spritesheet1.getSprite(96 + j*tileSize, i*tileSize, tileSize, tileSize);
+				TILE_STONE_FLOOR[i][j] = Game.spritesheet1.getSprite(j*tileSize, 96 + i*tileSize, tileSize, tileSize);
+				TILE_PATH[i][j] = Game.spritesheet1.getSprite(192 + j*tileSize, i*tileSize, tileSize, tileSize);
 			}
 		}
 	}
@@ -101,8 +103,8 @@ public class Tile {
 		this.setX(x);
 		this.setY(y);
 		this.sprite = sprite;
-		this.setWidth(16);
-		this.setHeight(16);
+		this.setWidth(32);
+		this.setHeight(32);
 	}
 
 

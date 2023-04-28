@@ -31,6 +31,7 @@ public class Fireball extends Collectible{
 	public Fireball(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.setNumberOfFireballs(5);
+		this.setNumberOfSprites(4);
 	}
 
 	public int getNumberOfFireballs() {

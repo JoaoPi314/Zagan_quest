@@ -1,4 +1,6 @@
-package com.wellmax.world;
+package com.wellmax.world.tiles;
+
+import com.wellmax.world.Tile;
 
 import java.awt.image.BufferedImage;
 
@@ -7,7 +9,7 @@ import java.awt.image.BufferedImage;
  * @author joao.gomes
  *
  */
-public class FloorTile extends Tile{
+public class FloorTile extends Tile {
 
 	/**
 	 * FloorTile constructor. It only calls super constructor
