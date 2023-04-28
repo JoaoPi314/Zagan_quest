@@ -45,12 +45,12 @@ public class Bone extends Projectile{
 		this.setKnockBackDealt(3);
 
 		// Collision mask
-		this.setMask(2, 2, 12, 12);
+		this.setMask(4, 4, 24, 24);
 
 		this.boneSprite = new BufferedImage[this.getNumberOfSprites()];
 
 		for(int i = 0; i < this.getNumberOfSprites(); i++) {
-			this.boneSprite[i] = Game.spritesheet.getSprite(96 + i*16, 144, this.getWidth(), this.getHeight());
+			this.boneSprite[i] = Game.skeletonSpritesheet.getSprite(224, i*32, this.getWidth(), this.getHeight());
 		}
 		
 	}

@@ -43,7 +43,8 @@ public class Skeleton extends Enemy{
 		this.setDefense(1.5);
 		this.setDamage(1);
 		this.setMaxApproaching(4);
-		
+		this.setMask(5, 0, 28, 32);
+
 		// Initiates sprites
 		enWalkingRight = new BufferedImage[this.getNumberOfSprites()];
 		enWalkingLeft = new BufferedImage[this.getNumberOfSprites()];
