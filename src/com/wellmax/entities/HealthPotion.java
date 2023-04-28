@@ -30,6 +30,7 @@ public class HealthPotion extends Collectible{
 	public HealthPotion(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.setLifeHealed(6);
+		this.setNumberOfSprites(4);
 	}
 
 	public int getLifeHealed() {
