@@ -98,7 +98,7 @@ public class Player extends Creature {
 		this.enDamageUp = Game.spritesheet.getSprite(64, 16, this.getWidth(), this.getHeight());
 		this.enDamageDown = Game.spritesheet.getSprite(64, 32, this.getWidth(), this.getHeight());
 
-		this.playerDead = Game.spritesheet.getSprite(16, 144, this.getWidth(), this.getHeight());
+		this.playerDead = Game.skeletonSpritesheet.getSprite(160, 224, this.getWidth(), this.getHeight());
 
 
 		for (int i = 0; i < this.getNumberOfSprites(); i++) {
