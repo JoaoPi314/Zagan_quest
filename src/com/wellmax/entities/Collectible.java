@@ -29,7 +29,7 @@ public abstract class Collectible extends Entity {
 		
 		for(int i = 0; i < FIREBALL.length; i++) {
 			FIREBALL[i] = Game.spritesheet.getSprite(576 + i*width, 320, width, height);
-			HEALTH_POTION[i] = Game.spritesheet.getSprite(96 + i*16, 128, 16, 16);
+			HEALTH_POTION[i] = Game.spritesheet.getSprite(576 + i*width, 288, width, height);
 		}
 		
 	}
