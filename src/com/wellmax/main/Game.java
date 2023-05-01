@@ -111,6 +111,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 */
 	public static Spritesheet uiSpritesheet;
 	/**
+	 * Menu fireWall spritesheet
+	 */
+	public static Spritesheet menuFireSpritesheet; 
+	/**
+	 * Menu stars spritesheet
+	 */
+	public static Spritesheet menuStarsSpritesheet; 
+	/**
 	 * Game Over screen image
 	 */
 	private BufferedImage gameOverImage;
@@ -300,6 +308,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.orcSpritesheet = new Spritesheet("/orcSpritesheet.png");
 		Game.uiSpritesheet = new Spritesheet("/uiSpritesheet.png");
 		Game.skeletonSpritesheet = new Spritesheet("/skeletonSpritesheet.png");
+		Game.menuFireSpritesheet = new Spritesheet("/menuFireSpritesheet.png");
+		Game.menuStarsSpritesheet = new Spritesheet("/menuStarsSpritesheet.png");
+
 
 		try {
 			this.gameOverImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/gameoverscreen.png")));
