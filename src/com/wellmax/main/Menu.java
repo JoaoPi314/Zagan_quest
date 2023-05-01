@@ -141,7 +141,6 @@ public class Menu {
         }
 
         // Draw cursor
-        g.setColor(new Color(135, 12, 52));
         g.drawString(">", Game.WIDTH*Game.SCALE/3+50, cursorY);
     }
 

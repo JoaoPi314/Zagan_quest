@@ -144,7 +144,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	private enum GameStates{
 		NORMAL,
 		GAME_OVER,
-		MENU
+		MENU,
+		PAUSE_MENU
 	}
 	/**
 	 * Game state
@@ -187,7 +188,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * Navigation Menu
 	 */
 	private Menu menu;
-
+	/**
+	 * Pause Menu
+	 */
+	private PauseMenu pauseMenu;
 	//---------------------------- Methods ----------------------------------//
 
 	/**
@@ -329,6 +333,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.world = new World(level);
 		this.ui = new UI();
 		this.menu = new Menu();
+		this.pauseMenu = new PauseMenu();
 	}
 
 	/**
@@ -407,6 +412,13 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 */
 	public void update() {
 
+		// Checks reset
+		if (this.isReset()) {
+			this.initGame("/map_01.png");
+			this.setReset(false);
+			this.setGameState(GameStates.NORMAL);
+		}
+
 		// Updates deadEnemies
 		for(int i = 0; i < deadEnemies.size(); i++) {
 			DeadEnemy e = deadEnemies.get(i);
@@ -421,6 +433,37 @@ public class Game extends Canvas implements Runnable, KeyListener{
 				Game.player.update();
 				Game.player.scythe.countAttackFrames();
 				Game.player.scythe.update();
+
+				// Updates collectibles
+				for(int i = 0; i < collectibles.size(); i++) {
+					Collectible e = collectibles.get(i);
+					e.update();
+				}
+
+				// Updates enemies
+				for(int i = 0; i < enemies.size(); i++) {
+					Enemy e = enemies.get(i);
+					e.update();
+				}
+
+				// Updates projectile
+				for(int i = 0; i < projectiles.size(); i++) {
+					Projectile p = projectiles.get(i);
+					p.update();
+				}
+
+				// Checks for game over
+				if(player.getLife() <= 0) {
+					this.setGameState(GameStates.GAME_OVER);
+				}
+
+				// Updates User Interface
+				ui.update();
+
+				// Checks for next wave or level
+				if(enemies.size() == 0) {
+					nextWaveOrLevel();
+				}
 			}
 			//
 			case GAME_OVER -> {
@@ -429,48 +472,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 					this.setFramesGameOver(0);
 					this.setShowGameOverMessage(!this.isShowGameOverMessage());
 				}
-				if (this.isReset()) {
-					this.initGame("/map_01.png");
-					this.setReset(false);
-					this.setGameState(GameStates.NORMAL);
-				}
 			}
-			case MENU ->{
+			case MENU -> {
 				this.menu.update();
 			}
+			case PAUSE_MENU -> {
+				this.pauseMenu.update();
+			}
 		}
-
-		// Updates collectibles
-		for(int i = 0; i < collectibles.size(); i++) {
-			Collectible e = collectibles.get(i);
-			e.update();
-		}
-
-		// Updates enemies
-		for(int i = 0; i < enemies.size(); i++) {
-			Enemy e = enemies.get(i);
-			e.update();
-		}
-
-		// Updates projectile
-		for(int i = 0; i < projectiles.size(); i++) {
-			Projectile p = projectiles.get(i);
-			p.update();
-		}
-
-		// Checks for game over
-		if(player.getLife() <= 0) {
-			this.setGameState(GameStates.GAME_OVER);
-		}
-
-		// Updates User Interface
-		ui.update();
-
-		// Checks for next wave or level
-		if(enemies.size() == 0) {
-			nextWaveOrLevel();
-		}
-
 	}
 
 	/**
@@ -498,8 +507,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			e.render(g);
 		}
 
-
-		if(this.getGameState() == GameStates.NORMAL) {
+		if(this.getGameState() == GameStates.GAME_OVER) {
+			Game.player.renderDead(g);
+		} else {
 			Game.player.renderShadow(g);
 			if(Game.player.scythe.isStartScytheAttack()) {
 				Game.player.renderAttackWithScythe(g);
@@ -507,8 +517,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			}else {
 				Game.player.render(g);
 			}
-		}else if(this.getGameState() == GameStates.GAME_OVER) {
-			Game.player.renderDead(g);
 		}
 
 
@@ -559,14 +567,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			}
 		}else if(this.getGameState() == GameStates.MENU) {
 			this.menu.render(g);
+		}else if(this.getGameState() == GameStates.PAUSE_MENU) {
+			this.pauseMenu.render(g);
 		}
 
 
 		bs.show();
 
 	}
-
-
 	/**
 	 * Method to run game
 	 */
@@ -622,6 +630,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 		switch(gameState) {
 			case NORMAL -> {
+				// Pause
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_ESCAPE -> this.setGameState(GameStates.PAUSE_MENU);
+				}
+
 				// Horizontal keys
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> Game.player.setRight(true);
@@ -656,7 +669,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 					case KeyEvent.VK_UP -> menu.upCursor();
 					case KeyEvent.VK_ENTER -> {
 						switch(menu.getCursor()) {
-							case 0 -> this.setGameState(GameStates.NORMAL);
+							case 0 -> {
+								this.setGameState(GameStates.NORMAL);
+								this.setReset(true);
+							}
 							case 1 ->{}
 							case 2 -> System.exit(1);
 							default ->{}
@@ -664,7 +680,23 @@ public class Game extends Canvas implements Runnable, KeyListener{
 					}
 				}
 			}
-			default -> throw new IllegalArgumentException("Unexpected value: " + gameState);
+			case PAUSE_MENU -> {
+				switch(e.getKeyCode()) {
+					case KeyEvent.VK_DOWN -> pauseMenu.downCursor();
+					case KeyEvent.VK_UP -> pauseMenu.upCursor();
+					case KeyEvent.VK_ENTER -> {
+						switch(pauseMenu.getCursor()) {
+							case 0 -> {
+								this.setGameState(GameStates.NORMAL);
+							}
+							case 1 -> {}
+							case 2 -> {}
+							case 3 -> this.setGameState(GameStates.MENU);
+							default ->{}
+						}
+					}
+				}
+			}
 		}
 	}
 
