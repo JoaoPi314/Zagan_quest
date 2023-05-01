@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -40,9 +41,15 @@ public class Menu {
     
     public Menu(){
         
+        Random rand = new Random();
+
         this.setFireNumberOfSprites(8);
         this.setFireWidth(427);
         this.indexStar = new int[NUMBER_OF_STARS];
+
+        for(int i = 0; i < NUMBER_OF_STARS; i++){
+            this.indexStar[i] = rand.nextInt(STARS_SPRITES);
+        }
 
         this.menuFire = new BufferedImage[this.getFireNumberOfSprites()];
         this.menuStars = new BufferedImage[this.STARS_SPRITES];
