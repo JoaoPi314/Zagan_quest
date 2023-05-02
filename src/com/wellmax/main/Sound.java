@@ -18,6 +18,7 @@ public class Sound {
     public static final Sound enemyDead = new Sound("/enemyDead.wav");
     public static final Sound healthPotion = new Sound("/healthPotion.wav");
     public static final Sound rain = new Sound("/rain.wav");
+    public static final Sound ambienceLevel1 = new Sound("/ambienceLevel1.wav");
 
     private InputStream is;
     private AudioInputStream ais;

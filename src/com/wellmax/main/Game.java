@@ -587,6 +587,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		g.drawImage(this.rainSprites[rainIndex], 0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE, null);
 
 		if(this.getGameState() == GameStates.GAME_OVER) {
+			// Stops music
+			Sound.ambienceLevel1.stop();
+
 			// Shows Game over message
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setColor(new Color(0x00, 0x00, 0x00, 150));
@@ -705,6 +708,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			case GAME_OVER -> {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 					reset = true;
+					Sound.ambienceLevel1.loop();
 				}
 			}
 			case MENU -> {
@@ -718,6 +722,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 								this.setReset(true);
 								Sound.musicBackground.stop();
 								Sound.rain.loop();
+								Sound.ambienceLevel1.loop();
 							}
 							case 1 ->{}
 							case 2 -> System.exit(1);
@@ -735,12 +740,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 							case 0 -> {
 								this.setGameState(GameStates.NORMAL);
 								Sound.rain.loop();
+								Sound.ambienceLevel1.loop();
 							}
 							case 1 -> {}
 							case 2 -> {}
 							case 3 -> {
 								this.setGameState(GameStates.MENU);
 								Sound.musicBackground.loop();
+								Sound.ambienceLevel1.stop();
 							}
 							default ->{}
 						}

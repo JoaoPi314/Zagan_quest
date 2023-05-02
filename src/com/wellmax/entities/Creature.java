@@ -366,7 +366,11 @@ public abstract class Creature extends Entity {
 				this.setDamaged(true);
 				this.setLife(this.getLife() - e.getDamage()/this.getDefense());
 				if(this.getLife() > 0)
-					Sound.enemyHit.play();
+					if(this instanceof Player)
+						Sound.zaganHit.play();
+					else
+						Sound.enemyHit.play();
+				
 
 				Game.projectiles.remove(i);
 				return;
