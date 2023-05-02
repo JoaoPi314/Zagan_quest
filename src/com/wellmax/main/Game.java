@@ -119,9 +119,22 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 */
 	public static Spritesheet menuStarsSpritesheet; 
 	/**
+	 * rain spritesheet
+	 */
+	public static Spritesheet rainSpritesheet; 
+	/**
 	 * Game Over screen image
 	 */
 	private BufferedImage gameOverImage;
+	/**
+	 * Game Over screen image
+	 */
+	private BufferedImage[] rainSprites;
+	/**
+	 * Count frames to update rain
+	 */
+	private int countFramesRain = 0;
+	private int rainIndex = 0;
 	/**
 	 * World is responsible for map generation
 	 */
@@ -198,6 +211,19 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * Game constructor
 	 */
 	public Game() {
+		Game.spritesheet = new Spritesheet("/zaganSpritesheet.png");
+		Game.spritesheet1 = new Spritesheet("/spritesheet1.png");
+		Game.orcSpritesheet = new Spritesheet("/orcSpritesheet.png");
+		Game.uiSpritesheet = new Spritesheet("/uiSpritesheet.png");
+		Game.skeletonSpritesheet = new Spritesheet("/skeletonSpritesheet.png");
+		Game.menuFireSpritesheet = new Spritesheet("/menuFireSpritesheet.png");
+		Game.menuStarsSpritesheet = new Spritesheet("/menuStarsSpritesheet.png");
+		Game.rainSpritesheet = new Spritesheet("/rainSpritesheet.png");
+
+		this.rainSprites = new BufferedImage[4];
+		for(int i = 0; i < 4; i++)
+			this.rainSprites[i] = rainSpritesheet.getSprite(i*256, 0, 256, 240);
+
 		// Attributes
 		this.setRunning(true);
 		this.setGameState(GameStates.MENU);
@@ -213,6 +239,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 
 		rand = new Random();
+		this.menu = new Menu();
+
 		this.addKeyListener(this);
 		this.setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		this.initFrame("Zagan quest");
@@ -307,21 +335,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * @param level Path to current map image
 	 */
 	public void initGame(String level) {
-		Game.spritesheet = new Spritesheet("/zaganSpritesheet.png");
-		Game.spritesheet1 = new Spritesheet("/spritesheet1.png");
-		Game.orcSpritesheet = new Spritesheet("/orcSpritesheet.png");
-		Game.uiSpritesheet = new Spritesheet("/uiSpritesheet.png");
-		Game.skeletonSpritesheet = new Spritesheet("/skeletonSpritesheet.png");
-		Game.menuFireSpritesheet = new Spritesheet("/menuFireSpritesheet.png");
-		Game.menuStarsSpritesheet = new Spritesheet("/menuStarsSpritesheet.png");
-
 
 		try {
 			this.gameOverImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/gameoverscreen.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 
 		this.image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		Game.collectibles = new ArrayList<>();
@@ -332,7 +351,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.player = new Player(32, 32, 32, 32);
 		Game.world = new World(level);
 		this.ui = new UI();
-		this.menu = new Menu();
 		this.pauseMenu = new PauseMenu();
 	}
 
@@ -464,6 +482,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 				if(enemies.size() == 0) {
 					nextWaveOrLevel();
 				}
+
+				// Rain
+				this.countFramesRain++;
+				if(this.countFramesRain == 6) {
+					this.rainIndex = (this.rainIndex + 1)%4;
+					countFramesRain = 0;
+				}
+
 			}
 			//
 			case GAME_OVER -> {
@@ -548,10 +574,17 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		// Renders User interface
 		ui.render(g);
 
+		
 		// Draws everything
 		g.dispose();
 		g = bs.getDrawGraphics();
 		g.drawImage(image,  0,  0,  WIDTH*SCALE,  HEIGHT*SCALE, null);
+		
+		Graphics2D gRain = (Graphics2D) g;
+		gRain.setColor(new Color(0x00, 0x00, 0x50, 150));
+		gRain.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.WIDTH*Game.SCALE);
+
+		g.drawImage(this.rainSprites[rainIndex], 0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE, null);
 
 		if(this.getGameState() == GameStates.GAME_OVER) {
 			// Shows Game over message
@@ -627,26 +660,37 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 		switch(gameState) {
 			case NORMAL -> {
 				// Pause
 				switch (e.getKeyCode()) {
-					case KeyEvent.VK_ESCAPE -> this.setGameState(GameStates.PAUSE_MENU);
+					case KeyEvent.VK_ESCAPE -> {
+						this.setGameState(GameStates.PAUSE_MENU);
+						Sound.walk.stop();
+						Sound.rain.stop();
+					}
 				}
 
-				// Horizontal keys
+				// Horizontal key
 				switch (e.getKeyCode()) {
-					case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> Game.player.setRight(true);
-					case KeyEvent.VK_LEFT, KeyEvent.VK_A -> Game.player.setLeft(true);
+					case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> {
+						Game.player.setRight(true);
+					}
+					case KeyEvent.VK_LEFT, KeyEvent.VK_A -> {
+						Game.player.setLeft(true);
+					}
 					default -> {
 					}
 				}
 
 				// Vertical keys
 				switch (e.getKeyCode()) {
-					case KeyEvent.VK_UP, KeyEvent.VK_W -> Game.player.setUp(true);
-					case KeyEvent.VK_DOWN, KeyEvent.VK_S -> Game.player.setDown(true);
+					case KeyEvent.VK_UP, KeyEvent.VK_W -> {
+						Game.player.setUp(true);
+					}
+					case KeyEvent.VK_DOWN, KeyEvent.VK_S -> {
+						Game.player.setDown(true);
+					}
 					default -> {
 					}
 				}
@@ -672,6 +716,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 							case 0 -> {
 								this.setGameState(GameStates.NORMAL);
 								this.setReset(true);
+								Sound.musicBackground.stop();
+								Sound.rain.loop();
 							}
 							case 1 ->{}
 							case 2 -> System.exit(1);
@@ -688,10 +734,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 						switch(pauseMenu.getCursor()) {
 							case 0 -> {
 								this.setGameState(GameStates.NORMAL);
+								Sound.rain.loop();
 							}
 							case 1 -> {}
 							case 2 -> {}
-							case 3 -> this.setGameState(GameStates.MENU);
+							case 3 -> {
+								this.setGameState(GameStates.MENU);
+								Sound.musicBackground.loop();
+							}
 							default ->{}
 						}
 					}
@@ -705,7 +755,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
-
 
 		// Horizontal keys
 		switch (e.getKeyCode()) {

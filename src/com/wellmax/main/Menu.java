@@ -40,8 +40,8 @@ public class Menu {
 	//---------------------------- Methods ----------------------------------//
     
     public Menu(){
-        
         Random rand = new Random();
+        Sound.musicBackground.loop();
 
         this.setFireNumberOfSprites(8);
         this.setFireWidth(427);

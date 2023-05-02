@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
+import com.wellmax.main.Sound;
 import com.wellmax.world.Camera;
 
 public class DeadEnemy extends Creature {
@@ -26,7 +27,6 @@ public class DeadEnemy extends Creature {
 	 */
 	public DeadEnemy(int x, int y, int width, int height, Directions dir) {
 		super(x, y, width, height);
-		
 		this.setFaceDir(dir);
 
 		enWalkingRight = new BufferedImage[this.getNumberOfSprites()];
@@ -40,6 +40,7 @@ public class DeadEnemy extends Creature {
 			enWalkingUp[i] = Game.skeletonSpritesheet.getSprite(i*this.getWidth(), 224, this.getWidth(), this.getHeight());
 			enWalkingDown[i] = Game.skeletonSpritesheet.getSprite(i*this.getWidth(), 224, this.getWidth(), this.getHeight());
 		}
+		Sound.enemyDead.play();
 	}
 	
 

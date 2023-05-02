@@ -3,6 +3,7 @@ package com.wellmax.entities;
 import java.awt.Graphics;
 
 import com.wellmax.main.Game;
+import com.wellmax.main.Sound;
 import com.wellmax.world.Camera;
 
 /**
@@ -44,6 +45,7 @@ public class Fireball extends Collectible{
 
 	@Override
 	public void effect() {
+		Sound.fire.play();
 		Game.player.setFireballs(Game.player.getFireballs() + this.getNumberOfFireballs());
 		Game.player.setHasFireball(true);
 	}
