@@ -1,11 +1,9 @@
 package com.wellmax.entities;
 
-import java.awt.Rectangle;
 
 import com.wellmax.entities.types.Directions;
 import com.wellmax.entities.types.Utils;
 import com.wellmax.main.Game;
-import com.wellmax.main.Sound;
 import com.wellmax.world.World;
 
 public abstract class Enemy extends Creature {
@@ -237,8 +235,11 @@ public abstract class Enemy extends Creature {
 	 * Method called when enemy dies
 	 */
 	protected void enemyDeath() {
-		Game.deadEnemies.add(new DeadEnemy((int)getX(), (int)getY(), getWidth(), getHeight(), this.getFaceDir()));
+		DeadEnemy deadEnemy = new DeadEnemy((int)getX(), (int)getY(), getWidth(), getHeight(), this.getFaceDir());
+		Game.deadEnemies.add(deadEnemy);
+		Game.gameObjects.add(deadEnemy);
 		Game.enemies.remove(this);
+		Game.gameObjects.remove(this);
 	}
 
 	@Override

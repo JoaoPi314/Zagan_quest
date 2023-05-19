@@ -134,6 +134,12 @@ public abstract class Creature extends Entity {
 	 */
 	private double shadowOffsetX;
 	private double shadowOffsetY;
+
+	/**
+	 * Time to compute jump position
+	 */
+	private double tJump;
+	private boolean jumping;
 	//---------------------------- Methods ----------------------------------//	
 	
 	/**
@@ -145,6 +151,15 @@ public abstract class Creature extends Entity {
 	 */
 	public Creature(int x, int y, int width, int height) {
 		super(x, y, width, height);
+		this.setZ(0);
+	}
+
+	public boolean isJumping() {
+		return this.jumping;
+	}
+
+	public void setJumping(boolean jumping) {
+		this.jumping = jumping;
 	}
 
 	public Directions getFaceDir() {
@@ -265,6 +280,15 @@ public abstract class Creature extends Entity {
 	public void setShadowOffsetY(double shadowOffsetY) {
 		this.shadowOffsetY = shadowOffsetY;
 	}
+
+	public double getTJump() {
+		return this.tJump;
+	}
+
+	public void setTJump(double tJump) {
+		this.tJump = tJump;
+	}
+
 	/**
 	 * Checks collision with enemies
 	 * @param xx Next creature x position
@@ -372,7 +396,8 @@ public abstract class Creature extends Entity {
 						Sound.enemyHit.play();
 				
 
-				Game.projectiles.remove(i);
+				Game.gameObjects.remove(e);
+				Game.projectiles.remove(e);
 				return;
 			}
 		}
@@ -442,7 +467,7 @@ public abstract class Creature extends Entity {
 				break;
 		}
 		
-		g.drawImage(currentSprite, (int)(this.getX() - Camera.x), (int)(this.getY() - Camera.y), null);
+		g.drawImage(currentSprite, (int)(this.getX() - Camera.x), (int)(this.getY() - this.getZ() - Camera.y), null);
 
 	}
 

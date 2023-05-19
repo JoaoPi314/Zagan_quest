@@ -224,6 +224,7 @@ public class Player extends Creature {
 			if (Entity.isColliding(this, en)) {
 				en.effect();
 				Game.collectibles.remove(en);
+				Game.gameObjects.remove(en);
 			}
 		}
 	}
@@ -252,6 +253,7 @@ public class Player extends Creature {
 			FireballShoot fire = new FireballShoot((int) (this.getX()), (int) (this.getY()), this.getWidth(),
 					this.getHeight(), this.getFaceDir(), dx, dy);
 			Game.projectiles.add(fire);
+			Game.gameObjects.add(fire);
 			this.setFireballs(this.getFireballs() - 1);
 
 			if (this.getFireballs() <= 0)
@@ -279,6 +281,16 @@ public class Player extends Creature {
 		else
 			Sound.walk.stop();
 
+		// Jump logic
+		if(this.isJumping()) {
+			this.setZ(-0.05*this.getTJump()*(this.getTJump() - 74));
+			this.setTJump(this.getTJump() + 1);
+			if(this.getTJump() == 75){
+				this.setTJump(0);
+				this.setJumping(false);
+			}
+		}
+
 		// Keyboard movement
 		if (!this.scythe.isStartScytheAttack()) {
 			this.controlledMovement();
@@ -293,7 +305,7 @@ public class Player extends Creature {
 		this.checkItems();
 
 		// Shooting update
-		if (this.isAttacking() && !this.isCoolDown()) {
+		if (this.isAttacking() && !this.isCoolDown() && !this.isJumping()) {
 			this.attack();
 		}
 
@@ -305,7 +317,6 @@ public class Player extends Creature {
 		// Makes camera follow player
 		Camera.x = Camera.clamp((int) this.getX() - (Game.WIDTH / 2), 0, World.WIDTH * 32 - Game.WIDTH);
 		Camera.y = Camera.clamp((int) this.getY() - (Game.HEIGHT / 2), 0, World.HEIGHT * 32 - Game.HEIGHT);
-
 	}
 
 	/**
@@ -315,7 +326,6 @@ public class Player extends Creature {
 	 */
 	public void renderAttackWithScythe(Graphics g) {
 
-		BufferedImage currentScytheSprite = null;
 		BufferedImage currentPlayerSprite = null;
 		if (this.scythe.isStartScytheAttack()) {
 			switch (this.getFaceDir()) {

@@ -131,7 +131,7 @@ public abstract class Scenario extends Tile {
 
 	public void render(Graphics g){
 		g.drawImage(this.shadowSprite,this.getShadowX() - Camera.x, this.getShadowY() - Camera.y, null);
-		g.drawImage(this.sprite, this.getX() - Camera.x, this.getY() - Camera.y, null);
+		g.drawImage(this.sprite, (int)(this.getX() - Camera.x), (int)(this.getY() - Camera.y), null);
 
 	}
 

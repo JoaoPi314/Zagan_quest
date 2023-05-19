@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import com.wellmax.main.Game;
+import com.wellmax.main.types.GameLogic;
 import com.wellmax.world.tiles.Scenario;
 
 /**
@@ -12,7 +13,7 @@ import com.wellmax.world.tiles.Scenario;
  * @author joao.gomes
  *
  */
-public abstract class Entity {
+public abstract class Entity implements GameLogic{
 	//---------------------------- Attributes ----------------------------------//
 	
 	/**
@@ -23,6 +24,12 @@ public abstract class Entity {
 	 * y position of Creature
 	 */
 	private double y;
+	/**
+	 * Z position of Entity (Used to fake jump)
+	 */
+	private double z;
+	
+	
 	/**
 	 * Width of Creature
 	 */
@@ -87,7 +94,14 @@ public abstract class Entity {
 		this.setIndex(0);
 		this.setNumberOfSprites(6);
 	}
-	
+	public double getZ() {
+		return z;
+	}
+
+	public void setZ(double z) {
+		this.z = z;
+	}
+
 	public double getX() {
 		return x;
 	}
@@ -194,7 +208,7 @@ public abstract class Entity {
 		Rectangle e1Mask = new Rectangle((int)(e1.getX() + e1.getMaskX()), (int)(e1.getY() + e1.getMaskY()), e1.getMaskWidth(), e1.getMaskHeight());
 		Rectangle e2Mask = new Rectangle((int)(e2.getX() + e2.getMaskX()), (int)(e2.getY() + e2.getMaskY()), e2.getMaskWidth(), e2.getMaskHeight());
 		
-		return e1Mask.intersects(e2Mask);
+		return e1Mask.intersects(e2Mask) && (Math.abs(e1.getZ() - e2.getZ()) <= e1.getHeight());
 	}	
 	
 	/**
@@ -211,7 +225,7 @@ public abstract class Entity {
 			Scenario s = Game.scenario.get(i);
 			
 			Rectangle scenarioItem = new Rectangle(s.getX() + s.getMaskX(), 
-					s.getY() +  s.getMaskY(), s.getmWidth(), s.getmHeight());
+					(int)(s.getY() +  s.getMaskY()), s.getmWidth(), s.getmHeight());
 			if(scenarioItem.intersects(entity)){
 				return false;
 			}

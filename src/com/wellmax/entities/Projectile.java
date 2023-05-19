@@ -133,6 +133,7 @@ public abstract class Projectile extends Entity {
 		this.setTimeRemain(this.getTimeRemain() + 1);
 		if(this.getTimeRemain() >= this.getTotalTime()) {
 			Game.projectiles.remove(this);
+			Game.gameObjects.remove(this);
 		}
 	}
 
@@ -147,6 +148,7 @@ public abstract class Projectile extends Entity {
 			this.setY(this.getY() + this.getDy()*this.getSpeed());
 		}else {
 			Game.projectiles.remove(this);
+			Game.gameObjects.remove(this);
 		}
 
 		this.countFrames(true);

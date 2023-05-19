@@ -21,6 +21,7 @@ public class Sound {
     public static final Sound rain = new Sound("/rain.wav");
     public static final Sound ambienceLevel1 = new Sound("/ambienceLevel1.wav");
     public static final Sound select = new Sound("/select.wav");
+    public static final Sound jump = new Sound("/jump.wav");
 
     private URL is;
     private AudioInputStream ais;
@@ -66,8 +67,6 @@ public class Sound {
 
     public void stop() {
         clip.stop();
-        // clip.flush();
-        // clip.close();
     }
 
 }

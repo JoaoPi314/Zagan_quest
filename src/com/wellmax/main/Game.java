@@ -13,9 +13,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serial;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Collections;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -23,13 +25,16 @@ import javax.swing.JFrame;
 import com.wellmax.entities.Collectible;
 import com.wellmax.entities.DeadEnemy;
 import com.wellmax.entities.Enemy;
+import com.wellmax.entities.Entity;
 import com.wellmax.entities.Player;
 import com.wellmax.entities.Projectile;
 import com.wellmax.entities.Skeleton;
 
 import com.wellmax.graphics.Spritesheet;
 import com.wellmax.graphics.UI;
+import com.wellmax.main.types.GameLogic;
 import com.wellmax.world.tiles.Scenario;
+import com.wellmax.world.Tile;
 import com.wellmax.world.World;
 
 /**
@@ -89,6 +94,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * List with all scenario items
 	 */
 	public static List<Scenario> scenario;
+	/**
+	 * ArrayList to store every object to be rendered
+	 */
+	public static List<GameLogic> gameObjects;
+
 	/**
 	 * First spritesheet
 	 */
@@ -350,6 +360,18 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.scenario = new ArrayList<>();
 		Game.player = new Player(32, 32, 32, 32);
 		Game.world = new World(level);
+
+		Game.gameObjects = new ArrayList<>();
+		Game.gameObjects.addAll(Game.collectibles);
+		Game.gameObjects.addAll(Game.enemies);
+		Game.gameObjects.addAll(Game.projectiles);
+		Game.gameObjects.addAll(Game.deadEnemies);
+		Game.gameObjects.add(Game.player);
+		Game.gameObjects.addAll(Game.scenario);
+
+		System.out.println(Game.gameObjects);
+
+
 		this.ui = new UI();
 		this.pauseMenu = new PauseMenu();
 	}
@@ -409,11 +431,15 @@ public class Game extends Canvas implements Runnable, KeyListener{
 							DeadEnemy en = Game.deadEnemies.get(i);
 							Skeleton skeleton = new Skeleton((int)en.getX(), (int)en.getY(), en.getWidth(), en.getHeight(), en.getFaceDir());
 							Game.enemies.add(skeleton);
+							Game.gameObjects.add(skeleton);
 						}
+						Game.gameObjects.removeAll(Game.deadEnemies);
 						Game.deadEnemies.clear();
+						
 						this.setCurrentWave(this.getCurrentWave() + 1);
 						break;
 					case 2: // Jumps to wave 3
+						Game.gameObjects.removeAll(Game.deadEnemies);
 						Game.deadEnemies.clear();
 						this.setCurrentWave(this.getCurrentWave() + 1);
 						break;
@@ -513,6 +539,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 */
 	public void render() {
 
+		this.orderGameObjects();
 		// Creates BufferedStrategy
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null) {
@@ -528,47 +555,35 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 		// Renders world
 		world.render(g);
-		for(int i = 0; i < deadEnemies.size(); i++) {
-			DeadEnemy e = deadEnemies.get(i);
-			e.render(g);
-		}
 
-		if(this.getGameState() == GameStates.GAME_OVER) {
-			Game.player.renderDead(g);
-		} else {
-			Game.player.renderShadow(g);
-			if(Game.player.scythe.isStartScytheAttack()) {
-				Game.player.renderAttackWithScythe(g);
-				Game.player.scythe.render(g);
-			}else {
-				Game.player.render(g);
+		for(int i = 0; i < Game.gameObjects.size(); i++) {
+			Object obj = Game.gameObjects.get(i);
+
+
+			if(obj instanceof Enemy){
+				Enemy e = (Enemy) obj;
+				e.render(g);
+				e.renderShadow(g);
+			}else if(obj instanceof Player) {
+				if(this.getGameState() == GameStates.GAME_OVER) {
+					Game.player.renderDead(g);
+				} else {
+					Game.player.renderShadow(g);
+					if(Game.player.scythe.isStartScytheAttack()) {
+						Game.player.renderAttackWithScythe(g);
+						Game.player.scythe.render(g);
+					}else {
+						Game.player.render(g);
+					}
+				}
+			}else if(obj instanceof Entity) {
+				Entity e = (Entity) obj;
+				e.render(g);
+			}else if(obj instanceof Tile) {
+				Tile s = (Tile) obj;
+				s.render(g);
 			}
-		}
-
-
-		// Renders projectiles
-		for(int i = 0; i < projectiles.size(); i++) {
-			Projectile p = projectiles.get(i);
-			p.render(g);
-		}
-
-		// Renders enemies
-		for(int i = 0; i < enemies.size(); i++) {
-			Enemy e = enemies.get(i);
-			e.renderShadow(g);
-			e.render(g);
-		}
-
-		// Renders collectibles
-		for(int i = 0; i < collectibles.size(); i++) {
-			Collectible e = collectibles.get(i);
-			e.render(g);
-		}
-
-		// Renders Scenario items
-		for(int i = 0; i < Game.scenario.size(); i++) {
-			Scenario s = Game.scenario.get(i);
-			s.render(g);
+			
 		}
 
 		// Renders User interface
@@ -589,7 +604,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		if(this.getGameState() == GameStates.GAME_OVER) {
 			// Stops music
 			Sound.ambienceLevel1.stop();
-
+			Game.player.renderDead(g);
 			// Shows Game over message
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setColor(new Color(0x00, 0x00, 0x00, 150));
@@ -611,6 +626,19 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		bs.show();
 
 	}
+
+
+	/**
+	 * Method to order gameObjects considering the Y position
+	 */
+	public void orderGameObjects() {
+		Collections.sort(Game.gameObjects,new Comparator<GameLogic>() {
+			public int compare(GameLogic g1, GameLogic g2) {
+				return Double.compare(g1.getY() + g1.getHeight(), g2.getY() + g2.getHeight());
+			}
+		});
+	}
+
 	/**
 	 * Method to run game
 	 */
@@ -698,10 +726,19 @@ public class Game extends Canvas implements Runnable, KeyListener{
 					}
 				}
 
+				switch(e.getKeyCode()) {
+					case KeyEvent.VK_Z -> {
+						if(!Game.player.isJumping() && !Game.player.scythe.isStartScytheAttack())
+							Game.player.setJumping(true);
+							Sound.jump.play();
+					}
+				}
+
 				// Shoot key
 				if(!player.isCoolDown()) {
 					if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-						player.setAttacking(true);
+						if(!Game.player.isJumping())
+							player.setAttacking(true);
 					}
 				}
 			}

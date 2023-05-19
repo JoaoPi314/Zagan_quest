@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.wellmax.main.Game;
+import com.wellmax.main.types.GameLogic;
 import com.wellmax.world.Camera;
 
 /**
@@ -11,7 +12,7 @@ import com.wellmax.world.Camera;
  * @author joao.gomes
  *
  */
-public class Tile {
+public class Tile implements GameLogic{
 	
 	//---------------------------- Attributes ----------------------------------//	
 
@@ -22,7 +23,7 @@ public class Tile {
 	/**
 	 * Y position of tile
 	 */
-	protected int y;
+	protected double y;
 	/**
 	 * Tile width
 	 */
@@ -116,11 +117,11 @@ public class Tile {
 		this.x = x;
 	}
 
-	public int getY() {
+	public double getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(double y) {
 		this.y = y;
 	}
 
@@ -142,7 +143,12 @@ public class Tile {
 
 
 	public void render(Graphics g) {
-		g.drawImage(this.sprite, x - Camera.x, y - Camera.y, null);
+		g.drawImage(this.sprite, (int)(x - Camera.x), (int)(y - Camera.y), null);
+	}
+
+
+	@Override
+	public void update() {
 	}
 	
 }

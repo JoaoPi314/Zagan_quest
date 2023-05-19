@@ -32,6 +32,6 @@ public class Rock extends Scenario {
 		this.shadowSprite = Game.spritesheet1.getSprite(192, 96, 42, 21);
 
 		this.setShadowX(this.getX() - 6);
-		this.setShadowY(this.getY() + 12);
+		this.setShadowY((int) (this.getY() + 12));
 	}
 }

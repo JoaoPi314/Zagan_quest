@@ -166,6 +166,7 @@ public class Skeleton extends Enemy{
 				Bone fire = new Bone((int) (this.getX()), (int) (this.getY()), this.getWidth(),
 						this.getHeight(), this.getFaceDir(), dx, dy);
 				Game.projectiles.add(fire);
+				Game.gameObjects.add(fire);
 			}
 		} else {
 			// Melee attack

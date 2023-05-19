@@ -21,8 +21,8 @@ public class Tree extends Scenario {
 		super(x, y, sprite);
 
 		// Width and height
-		this.setWidth(32);
-		this.setHeight(48);
+		this.setWidth(64);
+		this.setHeight(96);
 		
 		// Collision mask
 		this.setMaskX(6);
@@ -33,6 +33,6 @@ public class Tree extends Scenario {
 		this.shadowSprite = Game.spritesheet1.getSprite(192, 128, 72, 32);
 
 		this.setShadowX(this.getX() - 4);
-		this.setShadowY(this.getY() + 71);
+		this.setShadowY((int) (this.getY() + 71));
 	}
 }
