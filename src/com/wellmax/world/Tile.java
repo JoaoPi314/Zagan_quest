@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 
 import com.wellmax.main.Game;
 import com.wellmax.main.types.GameLogic;
-import com.wellmax.world.Camera;
 
 /**
  * The Tile class contains all sprites related to map renderization.

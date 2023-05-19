@@ -3,7 +3,6 @@ package com.wellmax.entities;
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
 import com.wellmax.world.Camera;
-import com.wellmax.world.World;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 

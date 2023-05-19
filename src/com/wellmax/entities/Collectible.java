@@ -1,6 +1,5 @@
 package com.wellmax.entities;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.wellmax.main.Game;

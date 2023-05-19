@@ -1,7 +1,6 @@
 package com.wellmax.world.tiles;
 
 import com.wellmax.main.Game;
-import com.wellmax.world.tiles.Scenario;
 
 import java.awt.image.BufferedImage;
 
