@@ -713,8 +713,16 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			}
 			case MENU -> {
 				switch(e.getKeyCode()) {
-					case KeyEvent.VK_DOWN -> menu.downCursor();
-					case KeyEvent.VK_UP -> menu.upCursor();
+					case KeyEvent.VK_DOWN -> {
+						Sound.select.stop();
+						menu.downCursor();
+						Sound.select.play();
+					}
+					case KeyEvent.VK_UP -> {
+						Sound.select.stop();
+						menu.upCursor();
+						Sound.select.play();
+					}
 					case KeyEvent.VK_ENTER -> {
 						switch(menu.getCursor()) {
 							case 0 -> {
@@ -733,8 +741,16 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			}
 			case PAUSE_MENU -> {
 				switch(e.getKeyCode()) {
-					case KeyEvent.VK_DOWN -> pauseMenu.downCursor();
-					case KeyEvent.VK_UP -> pauseMenu.upCursor();
+					case KeyEvent.VK_DOWN -> {
+						Sound.select.stop();
+						pauseMenu.downCursor();
+						Sound.select.play();
+					}
+					case KeyEvent.VK_UP -> {
+						Sound.select.stop();
+						pauseMenu.upCursor();
+						Sound.select.play();
+					}
 					case KeyEvent.VK_ENTER -> {
 						switch(pauseMenu.getCursor()) {
 							case 0 -> {
