@@ -53,7 +53,6 @@ public class World {
 	public World(String path) {
 		try {
 			BufferedImage map = ImageIO.read(Objects.requireNonNull(getClass().getResource(path)));
-			
 			WIDTH = map.getWidth();
 			HEIGHT = map.getHeight();
 			
@@ -210,6 +209,7 @@ public class World {
 	
 	
 	public void render(Graphics g) {
+
 		int xStart = Camera.x >> 5;
 		int yStart = Camera.y >> 5;
 		
@@ -225,7 +225,7 @@ public class World {
 				underFloor.render(g);
 				tile.render(g);
 			}
-		}				
+		}
 	}
 	
 	

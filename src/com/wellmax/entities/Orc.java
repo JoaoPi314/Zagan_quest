@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
+import com.wellmax.main.Sound;
 
 /**
  * The orc is the base enemy. All logic is already implemented at Enemy
@@ -67,6 +68,7 @@ public class Orc extends Enemy{
 
 	@Override
 	public void attack() {
+		Sound.zaganHit.play();
 		this.setCoolDown(true);
 		this.setFramesCoolDown(40);
 		Game.player.setLife(Game.player.getLife() - this.getDamage() / Game.player.getDefense());

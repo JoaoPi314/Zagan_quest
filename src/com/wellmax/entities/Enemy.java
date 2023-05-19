@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import com.wellmax.entities.types.Directions;
 import com.wellmax.entities.types.Utils;
 import com.wellmax.main.Game;
+import com.wellmax.main.Sound;
 import com.wellmax.world.World;
 
 public abstract class Enemy extends Creature {
@@ -242,7 +243,7 @@ public abstract class Enemy extends Creature {
 
 	@Override
 	public void update() {
-		
+
 		this.setMoving(false);
 		
 		this.enemyIA();

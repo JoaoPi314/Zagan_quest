@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
+import com.wellmax.main.Sound;
 import com.wellmax.world.Camera;
 import com.wellmax.world.World;
 
@@ -364,6 +365,13 @@ public abstract class Creature extends Entity {
 				this.setKnockBackSpeed(e.getKnockBackDealt());
 				this.setDamaged(true);
 				this.setLife(this.getLife() - e.getDamage()/this.getDefense());
+				if(this.getLife() > 0)
+					if(this instanceof Player)
+						Sound.zaganHit.play();
+					else
+						Sound.enemyHit.play();
+				
+
 				Game.projectiles.remove(i);
 				return;
 			}
@@ -372,10 +380,11 @@ public abstract class Creature extends Entity {
 		if(!(this instanceof Player))
 			if(Entity.isColliding(this, Game.player.scythe) && !this.isDamaged()){
 				this.setLife(this.getLife() - Game.player.scythe.getDamage()/this.getDefense());
+				if(this.getLife() > 0)
+					Sound.enemyHit.play();
 				this.setDamaged(true);
 				this.setKnockBackDir(Game.player.scythe.getScytheDir());
 				this.setKnockBackSpeed(Game.player.scythe.getKnockBackDealt());
-
 			}
 	}
 

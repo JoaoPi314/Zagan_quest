@@ -40,8 +40,8 @@ public class Menu {
 	//---------------------------- Methods ----------------------------------//
     
     public Menu(){
-        
         Random rand = new Random();
+        Sound.musicBackground.loop();
 
         this.setFireNumberOfSprites(8);
         this.setFireWidth(427);
@@ -70,13 +70,15 @@ public class Menu {
     }
 
     public void upCursor() {
-        if(cursor > 0)
+        if(cursor > 0) {
             cursor--;
+        }
     }
 
     public void downCursor() {
-        if(cursor < MAXCURSORPOSITION)
+        if(cursor < MAXCURSORPOSITION) {
             cursor++;
+        }
     }
 
     /**

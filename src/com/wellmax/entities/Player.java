@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import com.wellmax.entities.types.Directions;
 import com.wellmax.main.Game;
+import com.wellmax.main.Sound;
 import com.wellmax.world.Camera;
 import com.wellmax.world.World;
 
@@ -187,7 +188,6 @@ public class Player extends Creature {
 	 * user inputs
 	 */
 	private void controlledMovement() {
-
 		this.setMoving(false);
 
 		if (this.isRight() && World.isFree((int) (this.getX() + this.getSpeed()), (int) this.getY()) &&
@@ -236,6 +236,7 @@ public class Player extends Creature {
 		this.setCoolDown(true);
 		// If player has fireball power and fireballs remaining
 		if (this.isHasFireball() && this.getFireballs() > 0) {
+			Sound.fire.play();
 			// FIRE
 			int dx = 0;
 			int dy = 0;
@@ -259,6 +260,7 @@ public class Player extends Creature {
 			// Cool down of fireball
 			this.setMaxFramesCoolDown(60);
 		} else { // Default attack is scythe
+			Sound.scytheHit.play();
 			this.setMaxFramesCoolDown(this.scythe.getAttackMaxFrames() * (this.getNumberOfSprites() - 1));
 			this.scythe.setStartScytheAttack(true);
 
@@ -271,6 +273,11 @@ public class Player extends Creature {
 
 
 	public void update() {
+		// Checks to walk wav
+		if(this.isMoving())
+			Sound.walk.loop();
+		else
+			Sound.walk.stop();
 
 		// Keyboard movement
 		if (!this.scythe.isStartScytheAttack()) {

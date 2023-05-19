@@ -3,6 +3,7 @@ package com.wellmax.entities;
 import java.awt.Graphics;
 
 import com.wellmax.main.Game;
+import com.wellmax.main.Sound;
 import com.wellmax.world.Camera;
 
 /**
@@ -44,6 +45,7 @@ public class HealthPotion extends Collectible{
 
 	@Override
 	public void effect() {
+		Sound.healthPotion.play();
 		Game.player.setLife(Game.player.getLife() + this.getLifeHealed());
 		if(Game.player.getLife() > Game.player.getMaxLife())
 			Game.player.setLife(Game.player.getMaxLife());
