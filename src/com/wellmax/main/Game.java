@@ -734,6 +734,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 					}
 				}
 
+				switch(e.getKeyCode()) {
+					case KeyEvent.VK_SHIFT -> {
+						if(Game.player.isMoving())
+							Game.player.setRunning(true);
+					}
+				}
+
+
 				// Shoot key
 				if(!player.isCoolDown()) {
 					if(e.getKeyCode() == KeyEvent.VK_SPACE) {
@@ -830,6 +838,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			case KeyEvent.VK_DOWN, KeyEvent.VK_S -> Game.player.setDown(false);
 			default -> {
 			}
+		}
+
+		switch(e.getKeyCode()) {
+			case KeyEvent.VK_SHIFT -> Game.player.setRunning(false);
 		}
 
 	}
