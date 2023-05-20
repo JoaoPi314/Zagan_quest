@@ -22,6 +22,10 @@ public class UI {
 	 */
 	private final BufferedImage heart;
 	/**
+	 * Sprite of Stamina circle
+	 */
+	private final BufferedImage stamina;
+	/**
 	 * Sprite of fireball
 	 */
 	private final BufferedImage fireball;
@@ -94,6 +98,7 @@ public class UI {
 		
 		// Sprites
 		this.heart = Game.uiSpritesheet.getSprite(0, 0, this.getHeartSize(), this.getHeartSize());
+		this.stamina = Game.uiSpritesheet.getSprite(128, 0, this.getWaveSize(), this.getWaveSize());
 		this.fireball = Game.uiSpritesheet.getSprite(0, 16, this.getFireballSize(), this.getFireballSize());
 		this.scythe = Game.uiSpritesheet.getSprite(16,16, this.getScytheSize(), this.getScytheSize());
 		
@@ -175,6 +180,12 @@ public class UI {
 		for(int i = 0; i < Game.player.getLife(); i++) {
 			g.drawImage(this.heart, 8 + 9*i, 4, null);
 		}
+
+		// Draw Stamina circle
+		g.setColor(Color.MAGENTA);
+		g.fillArc(65, 25, this.getWaveSize() - 4, this.getWaveSize() - 4, 90, Game.player.getStamina()*360/Game.player.getMaxStamina());
+		g.drawImage(stamina, 64, 24, null);
+
 		
 		if(Game.player.isHasFireball()) {
 			// Draw Fireballs

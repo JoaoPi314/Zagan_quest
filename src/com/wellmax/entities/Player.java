@@ -64,7 +64,9 @@ public class Player extends Creature {
 		this.setSpeed(1.2);
 		this.setFaceDir(Directions.DOWN);
 		this.setLife(12);
+		this.setStamina(100);
 		this.setMaxLife(12);
+		this.setMaxStamina(100);
 		this.setDefense(1);
 
 		this.setHasFireball(false);
@@ -281,6 +283,20 @@ public class Player extends Creature {
 		else
 			Sound.walk.stop();
 
+		// Run logic
+		int incrementStamina;
+		this.staminaFrames++;
+		if(this.staminaFrames == 7) {
+			if(this.isRunning() && (this.getStamina() != 0)) {
+				incrementStamina = -1;
+			}else {
+				incrementStamina = 1;
+			}
+			this.setStamina(this.getStamina() + incrementStamina);
+			if(this.getStamina() == 0)
+				this.setRunning(false);
+			staminaFrames = 0;
+		}
 		// Jump logic
 		if(this.isJumping()) {
 			this.setZ(-0.05*this.getTJump()*(this.getTJump() - 74));
@@ -297,6 +313,9 @@ public class Player extends Creature {
 			// Damage movement
 			this.damageMovement();
 		}
+
+		if(!this.isMoving())
+			this.setRunning(false);
 
 		// Sprite update
 		this.countFrames(this.isMoving());

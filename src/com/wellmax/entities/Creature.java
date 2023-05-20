@@ -44,6 +44,15 @@ public abstract class Creature extends Entity {
 	 */
 	private int maxLife;
 	/**
+	 * Creature stamina (Used to run)
+	 */
+	private int stamina;
+	/**
+	 * Creature Max stamina (Used to run)
+	 */
+	private int maxStamina;
+
+	/**
 	 * Creature defense
 	 */
 	private double defense;
@@ -127,6 +136,8 @@ public abstract class Creature extends Entity {
 	 * Number of frames that cool down must be applied (cool down calculus)
 	 */
 	private double maxFramesCoolDown;
+
+	protected int staminaFrames;
 	/**
 	 * Player shadow
 	 */
@@ -214,7 +225,21 @@ public abstract class Creature extends Entity {
 	public void setLife(double life) {
 		this.life = life;
 	}
+	public int getStamina() {
+		return stamina;
+	}
 
+	public int getMaxStamina() {
+		return maxStamina;
+	}
+
+	public void setMaxStamina(int maxStamina) {
+		this.maxStamina = maxStamina;
+	}
+
+	public void setStamina(int stamina) {
+		this.stamina = stamina;
+	}
 	public double getDefense() {
 		return defense;
 	}

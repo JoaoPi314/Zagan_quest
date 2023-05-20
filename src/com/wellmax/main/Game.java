@@ -736,7 +736,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 				switch(e.getKeyCode()) {
 					case KeyEvent.VK_SHIFT -> {
-						if(Game.player.isMoving())
+						if(Game.player.isMoving() && Game.player.getStamina() > 20)
 							Game.player.setRunning(true);
 					}
 				}
