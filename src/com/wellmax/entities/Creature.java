@@ -504,25 +504,8 @@ public abstract class Creature extends Entity {
 				}
 				break;
 		}
-		double angle;
-
-		if(this.isRunning())
-			angle = (this.getFaceDir() == Directions.RIGHT) ? 
-				Math.toRadians(5) : (this.getFaceDir() == Directions.LEFT) ? -Math.toRadians(5) : 0;
-		else
-			angle = 0;
-
-		AffineTransform transform = new AffineTransform();
-		transform.rotate(angle, this.getX() - Camera.x, this.getY() - this.getZ() - Camera.y);
-
-		Graphics2D g2d = (Graphics2D) g;
-		AffineTransform originalTransform = g2d.getTransform();
-
-		g2d.transform(transform);
 		
-		g2d.drawImage(currentSprite, (int)(this.getX() - Camera.x), (int)(this.getY() - this.getZ() - Camera.y), null);
-
-		g2d.setTransform(originalTransform);
+		g.drawImage(currentSprite, (int)(this.getX() - Camera.x), (int)(this.getY() - this.getZ() - Camera.y), null);
 	}
 
 	public void renderShadow(Graphics g) {
