@@ -8,8 +8,8 @@ import java.awt.Graphics2D;
 public class PauseMenu {
   	//---------------------------- Attributes ----------------------------------//
 
-    private final String[] OPTIONS = {"Resume", "Save Game", "Load Game", "Exit to menu"};
-    private final int MAXCURSORPOSITION = OPTIONS.length - 1;
+    protected String[] options = {"Resume", "Save Game", "Load Game", "Options", "Exit to menu"};
+    protected int maxCursorPosition = options.length - 1;
 
     private int cursor = 0;
     private int cursorY;
@@ -23,7 +23,7 @@ public class PauseMenu {
     }
 
     public void downCursor() {
-        if(cursor < MAXCURSORPOSITION)
+        if(cursor < maxCursorPosition)
             cursor++;
     }
 
@@ -37,6 +37,7 @@ public class PauseMenu {
             case 1 -> cursorY = baseCursor + 50;
             case 2 -> cursorY = baseCursor + 100;
             case 3 -> cursorY = baseCursor + 150;
+            case 4 -> cursorY = baseCursor + 200;
             default -> {
             }
         }
@@ -56,7 +57,7 @@ public class PauseMenu {
         Font menu_font = new Font("URW Chancery L Medium Italic", Font.BOLD, 36); 
         g.setFont(menu_font);
         int i = Game.HEIGHT*Game.SCALE/3;
-        for (String string : OPTIONS) {
+        for (String string : options) {
             g.drawString(string, (Game.WIDTH*Game.SCALE - g.getFontMetrics(menu_font).stringWidth(string))/2, Game.HEIGHT*Game.SCALE/8 + i);
             i += 50;
         }

@@ -153,6 +153,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * Game player
 	 */
 	public static Player player;
+	
+	public static Controls controls;
 	/**
 	 * User interface
 	 */
@@ -168,7 +170,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		NORMAL,
 		GAME_OVER,
 		MENU,
-		PAUSE_MENU
+		PAUSE_MENU,
+		OPTIONS
 	}
 	/**
 	 * Game state
@@ -215,6 +218,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * Pause Menu
 	 */
 	private PauseMenu pauseMenu;
+	/**
+	 * Options Menu
+	 */
+	private OptionsMenu optionsMenu;
 	//---------------------------- Methods ----------------------------------//
 
 	/**
@@ -360,6 +367,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.scenario = new ArrayList<>();
 		Game.player = new Player(32, 32, 32, 32);
 		Game.world = new World(level);
+		Game.controls = new Controls();
 
 		Game.gameObjects = new ArrayList<>();
 		Game.gameObjects.addAll(Game.collectibles);
@@ -374,6 +382,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 		this.ui = new UI();
 		this.pauseMenu = new PauseMenu();
+		this.optionsMenu = new OptionsMenu();
 	}
 
 	/**
@@ -531,6 +540,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			case PAUSE_MENU -> {
 				this.pauseMenu.update();
 			}
+			case OPTIONS -> {
+				this.optionsMenu.update();
+			}
 		}
 	}
 
@@ -595,11 +607,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		g = bs.getDrawGraphics();
 		g.drawImage(image,  0,  0,  WIDTH*SCALE,  HEIGHT*SCALE, null);
 		
-		Graphics2D gRain = (Graphics2D) g;
-		gRain.setColor(new Color(0x00, 0x00, 0x50, 150));
-		gRain.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.WIDTH*Game.SCALE);
+		// Graphics2D gRain = (Graphics2D) g;
+		// gRain.setColor(new Color(0x00, 0x00, 0x50, 150));
+		// gRain.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.WIDTH*Game.SCALE);
 
-		g.drawImage(this.rainSprites[rainIndex], 0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE, null);
+		// g.drawImage(this.rainSprites[rainIndex], 0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE, null);
 
 		if(this.getGameState() == GameStates.GAME_OVER) {
 			// Stops music
@@ -620,6 +632,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			this.menu.render(g);
 		}else if(this.getGameState() == GameStates.PAUSE_MENU) {
 			this.pauseMenu.render(g);
+		}else if(this.getGameState() == GameStates.OPTIONS) {
+			this.optionsMenu.render(g);
 		}
 
 
@@ -694,57 +708,40 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		switch(gameState) {
 			case NORMAL -> {
 				// Pause
-				switch (e.getKeyCode()) {
-					case KeyEvent.VK_ESCAPE -> {
-						this.setGameState(GameStates.PAUSE_MENU);
-						Sound.walk.stop();
-						Sound.rain.stop();
-					}
+				if(e.getKeyCode() == Game.controls.getPause()) {
+					this.setGameState(GameStates.PAUSE_MENU);
+					Sound.walk.stop();
 				}
 
 				// Horizontal key
-				switch (e.getKeyCode()) {
-					case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> {
-						Game.player.setRight(true);
-					}
-					case KeyEvent.VK_LEFT, KeyEvent.VK_A -> {
-						Game.player.setLeft(true);
-					}
-					default -> {
-					}
-				}
+				if(e.getKeyCode() == Game.controls.getWalkRight())
+					Game.player.setRight(true);	
+				else if(e.getKeyCode() == Game.controls.getWalkLeft())
+					Game.player.setLeft(true);
 
 				// Vertical keys
-				switch (e.getKeyCode()) {
-					case KeyEvent.VK_UP, KeyEvent.VK_W -> {
-						Game.player.setUp(true);
-					}
-					case KeyEvent.VK_DOWN, KeyEvent.VK_S -> {
-						Game.player.setDown(true);
-					}
-					default -> {
+				if(e.getKeyCode() == Game.controls.getWalkUp())
+					Game.player.setUp(true);	
+				else if(e.getKeyCode() == Game.controls.getWalkDown())
+					Game.player.setDown(true);
+
+				// Jump
+				if(e.getKeyCode() == Game.controls.getJump()) {
+					if(!Game.player.isJumping() && !Game.player.scythe.isStartScytheAttack()) {
+						Game.player.setJumping(true);
+						Sound.jump.play();
 					}
 				}
 
-				switch(e.getKeyCode()) {
-					case KeyEvent.VK_Z -> {
-						if(!Game.player.isJumping() && !Game.player.scythe.isStartScytheAttack())
-							Game.player.setJumping(true);
-							Sound.jump.play();
-					}
+				// Run
+				if(e.getKeyCode() == Game.controls.getRun()) {
+					if(Game.player.getStamina() > 20)
+						Game.player.setRunning(true);
 				}
-
-				switch(e.getKeyCode()) {
-					case KeyEvent.VK_SHIFT -> {
-						if(Game.player.isMoving() && Game.player.getStamina() > 20)
-							Game.player.setRunning(true);
-					}
-				}
-
 
 				// Shoot key
 				if(!player.isCoolDown()) {
-					if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+					if(e.getKeyCode() == Game.controls.getAttack()) {
 						if(!Game.player.isJumping())
 							player.setAttacking(true);
 					}
@@ -774,7 +771,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 								this.setGameState(GameStates.NORMAL);
 								this.setReset(true);
 								Sound.musicBackground.stop();
-								Sound.rain.loop();
 								Sound.ambienceLevel1.loop();
 							}
 							case 1 ->{}
@@ -800,16 +796,43 @@ public class Game extends Canvas implements Runnable, KeyListener{
 						switch(pauseMenu.getCursor()) {
 							case 0 -> {
 								this.setGameState(GameStates.NORMAL);
-								Sound.rain.loop();
+								// Sound.rain.loop();
 								Sound.ambienceLevel1.loop();
 							}
 							case 1 -> {}
 							case 2 -> {}
-							case 3 -> {
+							case 3 -> {this.setGameState(GameStates.OPTIONS);}
+							case 4 -> {
 								this.setGameState(GameStates.MENU);
 								Sound.musicBackground.loop();
 								Sound.ambienceLevel1.stop();
 							}
+							default ->{}
+						}
+					}
+				}
+			} case OPTIONS -> {
+				switch(e.getKeyCode()) {
+					case KeyEvent.VK_DOWN -> {
+						Sound.select.stop();
+						optionsMenu.downCursor();
+						Sound.select.play();
+					}
+					case KeyEvent.VK_UP -> {
+						Sound.select.stop();
+						optionsMenu.upCursor();
+						Sound.select.play();
+					}
+					case KeyEvent.VK_ENTER -> {
+						switch(optionsMenu.getCursor()) {
+							case 0 -> {
+								this.setGameState(GameStates.NORMAL);
+								// Sound.rain.loop();
+								Sound.ambienceLevel1.loop();
+							}
+							case 1 -> {}
+							case 2 -> {}
+							case 3 -> {this.setGameState(GameStates.PAUSE_MENU);}
 							default ->{}
 						}
 					}
