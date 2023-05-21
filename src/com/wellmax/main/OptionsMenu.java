@@ -9,7 +9,7 @@ public class OptionsMenu extends PauseMenu {
         this.options[2] = "Controls";
         this.options[3] = "Back";
 
-        this.maxCursorPosition = options.length;
+        this.maxCursorPosition = options.length -1 ;
     }
 
 }

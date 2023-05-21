@@ -16,7 +16,13 @@ public class Controls {
 
     private int pause;
 
+    private int numberOfControls;
+
+
+
     public Controls(){
+
+        this.setNumberOfControls(8);
         this.setJump(KeyEvent.VK_Z);
         
         this.setWalkRight(KeyEvent.VK_RIGHT);
@@ -97,11 +103,12 @@ public class Controls {
         this.pause = pause;
     }
 
-    public int getSelect() {
-        return this.select;
+
+    public int getNumberOfControls() {
+        return this.numberOfControls;
     }
 
-    public void setSelect(int select) {
-        this.select = select;
+    public void setNumberOfControls(int numberOfControls) {
+        this.numberOfControls = numberOfControls;
     }
 }

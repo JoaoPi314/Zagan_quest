@@ -11,7 +11,7 @@ public class SoundMenu extends OptionsMenu {
         this.options[1] = "Music [==========]";
         this.options[2] = "Back";
 
-        this.maxCursorPosition = options.length;
+        this.maxCursorPosition = options.length - 1;
         
         this.sfxVolume = 1.0f;
         this.musicVolume = 1.0f;

@@ -11,8 +11,8 @@ public class PauseMenu {
     protected String[] options = {"Resume", "Save Game", "Load Game", "Options", "Exit to menu"};
     protected int maxCursorPosition = options.length - 1;
 
-    private int cursor = 0;
-    private int cursorY;
+    protected int cursor = 0;
+    protected int cursorY;
 
     
     //---------------------------- Methods ----------------------------------//
@@ -54,11 +54,11 @@ public class PauseMenu {
 
         // Draw Options
         g.setColor(Color.WHITE);
-        Font menu_font = new Font("URW Chancery L Medium Italic", Font.BOLD, 36); 
-        g.setFont(menu_font);
+        Font menuFont = new Font("URW Chancery L Medium Italic", Font.BOLD, 36); 
+        g.setFont(menuFont);
         int i = Game.HEIGHT*Game.SCALE/3;
         for (String string : options) {
-            g.drawString(string, (Game.WIDTH*Game.SCALE - g.getFontMetrics(menu_font).stringWidth(string))/2, Game.HEIGHT*Game.SCALE/8 + i);
+            g.drawString(string, (Game.WIDTH*Game.SCALE - g.getFontMetrics(menuFont).stringWidth(string))/2, Game.HEIGHT*Game.SCALE/8 + i);
             i += 50;
         }
 

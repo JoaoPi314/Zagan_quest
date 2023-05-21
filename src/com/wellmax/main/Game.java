@@ -132,6 +132,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * rain spritesheet
 	 */
 	public static Spritesheet rainSpritesheet; 
+
+	public static Spritesheet controlSpritesheet;
 	/**
 	 * Game Over screen image
 	 */
@@ -172,7 +174,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		MENU,
 		PAUSE_MENU,
 		OPTIONS,
-		SOUNDS
+		SOUNDS,
+		CONTROLS
 	}
 	/**
 	 * Game state
@@ -227,6 +230,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * Sounds Menu
 	 */
 	private SoundMenu soundMenu;
+
+	private ControlsMenu controlsMenu;
 	//---------------------------- Methods ----------------------------------//
 
 	/**
@@ -241,6 +246,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.menuFireSpritesheet = new Spritesheet("/menuFireSpritesheet.png");
 		Game.menuStarsSpritesheet = new Spritesheet("/menuStarsSpritesheet.png");
 		Game.rainSpritesheet = new Spritesheet("/rainSpritesheet.png");
+		Game.controlSpritesheet = new Spritesheet("/controlsSpritesheet.png");
 
 		this.rainSprites = new BufferedImage[4];
 		for(int i = 0; i < 4; i++)
@@ -262,6 +268,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 		rand = new Random();
 		this.menu = new Menu();
+		this.pauseMenu = new PauseMenu();
+		this.optionsMenu = new OptionsMenu();
+		this.soundMenu = new SoundMenu();
+		this.controlsMenu = new ControlsMenu();
+		Game.controls = new Controls();
 
 		this.addKeyListener(this);
 		this.setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
@@ -372,7 +383,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Game.scenario = new ArrayList<>();
 		Game.player = new Player(32, 32, 32, 32);
 		Game.world = new World(level);
-		Game.controls = new Controls();
 
 		Game.gameObjects = new ArrayList<>();
 		Game.gameObjects.addAll(Game.collectibles);
@@ -386,9 +396,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 
 		this.ui = new UI();
-		this.pauseMenu = new PauseMenu();
-		this.optionsMenu = new OptionsMenu();
-		this.soundMenu = new SoundMenu();
+
 	}
 
 	/**
@@ -552,6 +560,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			case SOUNDS -> {
 				this.soundMenu.update();
 			}
+			case CONTROLS -> {
+				this.controlsMenu.update();
+			}
 		}
 	}
 
@@ -647,6 +658,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			this.optionsMenu.render(g);
 		}else if(this.getGameState() == GameStates.SOUNDS) {
 			this.soundMenu.render(g);
+		}else if(this.getGameState() == GameStates.CONTROLS) {
+			this.controlsMenu.render(g);
 		}
 
 
@@ -846,7 +859,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 								this.setGameState(GameStates.SOUNDS);
 								this.soundMenu.setCursor(0);
 							}
-							case 2 -> {}
+							case 2 -> {
+								this.setGameState(GameStates.CONTROLS);
+								this.controlsMenu.setCursor(0);
+							}
 							case 3 -> {
 								this.setGameState(GameStates.PAUSE_MENU);
 								this.pauseMenu.setCursor(0);
@@ -898,6 +914,23 @@ public class Game extends Canvas implements Runnable, KeyListener{
 					}
 				}
 
+			} case CONTROLS -> {
+
+				if(this.controlsMenu.getSelectStatus() == 1){
+					this.controlsMenu.select(e.getKeyCode());
+				}else 
+					switch(e.getKeyCode()) {
+						case KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT -> {
+							this.controlsMenu.moveCursor(e.getKeyCode());
+						}
+						case KeyEvent.VK_ENTER -> {
+							this.controlsMenu.select(e.getKeyCode());
+						}
+						case KeyEvent.VK_ESCAPE -> {
+							this.setGameState(GameStates.OPTIONS);
+							this.optionsMenu.setCursor(0);
+						}
+					}
 			}
 		}
 	}
@@ -909,20 +942,16 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public void keyReleased(KeyEvent e) {
 
 		// Horizontal keys
-		switch (e.getKeyCode()) {
-			case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> Game.player.setRight(false);
-			case KeyEvent.VK_LEFT, KeyEvent.VK_A -> Game.player.setLeft(false);
-			default -> {
-			}
-		}
+		if(e.getKeyCode() == Game.controls.getWalkRight())
+			Game.player.setRight(false);	
+		else if(e.getKeyCode() == Game.controls.getWalkLeft())
+			Game.player.setLeft(false);
 
 		// Vertical keys
-		switch (e.getKeyCode()) {
-			case KeyEvent.VK_UP, KeyEvent.VK_W -> Game.player.setUp(false);
-			case KeyEvent.VK_DOWN, KeyEvent.VK_S -> Game.player.setDown(false);
-			default -> {
-			}
-		}
+		if(e.getKeyCode() == Game.controls.getWalkUp())
+			Game.player.setUp(false);	
+		else if(e.getKeyCode() == Game.controls.getWalkDown())
+			Game.player.setDown(false);
 
 		switch(e.getKeyCode()) {
 			case KeyEvent.VK_SHIFT -> Game.player.setRunning(false);
