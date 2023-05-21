@@ -192,25 +192,27 @@ public class Player extends Creature {
 	private void controlledMovement() {
 		this.setMoving(false);
 
-		if (this.isRight() && World.isFree((int) (this.getX() + this.getSpeed()), (int) this.getY()) &&
-				this.isNotCollidingWithScenario((int) (this.getX() + this.getSpeed()), (int) this.getY())) {
-			this.setX(this.getX() + this.getSpeed()*(this.isRunning() ? 1.5 : 1));
+		double realSpeed = this.getSpeed()*(this.isRunning() ? 1.5 : 1);
+
+		if (this.isRight() && World.isFree((int) (this.getX() + realSpeed), (int) this.getY()) &&
+				this.isNotCollidingWithScenario((int) (this.getX() + realSpeed), (int) this.getY())) {
+			this.setX(this.getX() + realSpeed);
 			this.setFaceDir(Directions.RIGHT);
 			this.setMoving(true);
-		} else if (this.isLeft() && World.isFree((int) (this.getX() - this.getSpeed()), (int) this.getY()) &&
-				this.isNotCollidingWithScenario((int) (this.getX() - this.getSpeed()), (int) this.getY())) {
-			this.setX(this.getX() - this.getSpeed()*(this.isRunning() ? 1.5 : 1));
+		} else if (this.isLeft() && World.isFree((int) (this.getX() - realSpeed), (int) this.getY()) &&
+				this.isNotCollidingWithScenario((int) (this.getX() - realSpeed), (int) this.getY())) {
+			this.setX(this.getX() - realSpeed);
 			this.setFaceDir(Directions.LEFT);
 			this.setMoving(true);
 		}
-		if (this.isUp() && World.isFree((int) this.getX(), (int) (this.getY() - this.getSpeed())) &&
-				this.isNotCollidingWithScenario((int) this.getX(), (int) (this.getY() - this.getSpeed()))) {
-			this.setY(this.getY() - this.getSpeed()*(this.isRunning() ? 1.5 : 1));
+		if (this.isUp() && World.isFree((int) this.getX(), (int) (this.getY() - realSpeed)) &&
+				this.isNotCollidingWithScenario((int) this.getX(), (int) (this.getY() - realSpeed))) {
+			this.setY(this.getY() - realSpeed);
 			this.setFaceDir(Directions.UP);
 			this.setMoving(true);
-		} else if (this.isDown() && World.isFree((int) this.getX(), (int) (this.getY() + this.getSpeed())) &&
-				this.isNotCollidingWithScenario((int) this.getX(), (int) (this.getY() + this.getSpeed()))) {
-			this.setY(this.getY() + this.getSpeed()*(this.isRunning() ? 1.5 : 1));
+		} else if (this.isDown() && World.isFree((int) this.getX(), (int) (this.getY() + realSpeed)) &&
+				this.isNotCollidingWithScenario((int) this.getX(), (int) (this.getY() + realSpeed))) {
+			this.setY(this.getY() + realSpeed);
 			this.setFaceDir(Directions.DOWN);
 			this.setMoving(true);
 		}
@@ -314,8 +316,8 @@ public class Player extends Creature {
 			this.damageMovement();
 		}
 
-		if(!this.isMoving())
-			this.setRunning(false);
+		// if(!this.isMoving())
+		// 	this.setRunning(false);
 
 		// Sprite update
 		this.countFrames(this.isMoving());
