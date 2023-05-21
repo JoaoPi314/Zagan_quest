@@ -5,6 +5,7 @@ import java.net.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 public class Sound {
     private Clip clip;
@@ -22,15 +23,18 @@ public class Sound {
     public static final Sound select = new Sound("/select.wav");
     public static final Sound jump = new Sound("/jump.wav");
 
+
     private URL is;
     private AudioInputStream ais;
+    private FloatControl gainControl;
+    
     private Sound(String name) {
         try {
             clip = AudioSystem.getClip();
             this.is = Sound.class.getResource(name);
             this.ais = AudioSystem.getAudioInputStream(is);
             clip.open(ais);
-
+            gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         } catch(Throwable e) {
             System.out.println(e);
         }
@@ -68,4 +72,9 @@ public class Sound {
         clip.stop();
     }
 
+    public void setVolume(float volume) {
+        if (volume < 0f || volume > 1f)
+            throw new IllegalArgumentException("Volume not valid: " + volume);
+        gainControl.setValue(79f * (float) Math.log10(volume));
+    }
 }

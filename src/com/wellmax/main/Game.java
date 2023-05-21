@@ -171,7 +171,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		GAME_OVER,
 		MENU,
 		PAUSE_MENU,
-		OPTIONS
+		OPTIONS,
+		SOUNDS
 	}
 	/**
 	 * Game state
@@ -222,6 +223,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	 * Options Menu
 	 */
 	private OptionsMenu optionsMenu;
+	/**
+	 * Sounds Menu
+	 */
+	private SoundMenu soundMenu;
 	//---------------------------- Methods ----------------------------------//
 
 	/**
@@ -383,6 +388,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		this.ui = new UI();
 		this.pauseMenu = new PauseMenu();
 		this.optionsMenu = new OptionsMenu();
+		this.soundMenu = new SoundMenu();
 	}
 
 	/**
@@ -543,6 +549,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			case OPTIONS -> {
 				this.optionsMenu.update();
 			}
+			case SOUNDS -> {
+				this.soundMenu.update();
+			}
 		}
 	}
 
@@ -607,9 +616,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		g = bs.getDrawGraphics();
 		g.drawImage(image,  0,  0,  WIDTH*SCALE,  HEIGHT*SCALE, null);
 		
-		// Graphics2D gRain = (Graphics2D) g;
-		// gRain.setColor(new Color(0x00, 0x00, 0x50, 150));
-		// gRain.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.WIDTH*Game.SCALE);
+		if(this.getCurrentWave() == 2) {
+			Graphics2D gRain = (Graphics2D) g;
+			gRain.setColor(new Color(0x00, 0x00, 0x50, 150));
+			gRain.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.WIDTH*Game.SCALE);
+		}
 
 		// g.drawImage(this.rainSprites[rainIndex], 0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE, null);
 
@@ -634,6 +645,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			this.pauseMenu.render(g);
 		}else if(this.getGameState() == GameStates.OPTIONS) {
 			this.optionsMenu.render(g);
+		}else if(this.getGameState() == GameStates.SOUNDS) {
+			this.soundMenu.render(g);
 		}
 
 
@@ -801,7 +814,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 							}
 							case 1 -> {}
 							case 2 -> {}
-							case 3 -> {this.setGameState(GameStates.OPTIONS);}
+							case 3 -> {
+								this.setGameState(GameStates.OPTIONS);
+								this.optionsMenu.setCursor(0);
+							}
 							case 4 -> {
 								this.setGameState(GameStates.MENU);
 								Sound.musicBackground.loop();
@@ -825,18 +841,63 @@ public class Game extends Canvas implements Runnable, KeyListener{
 					}
 					case KeyEvent.VK_ENTER -> {
 						switch(optionsMenu.getCursor()) {
-							case 0 -> {
-								this.setGameState(GameStates.NORMAL);
-								// Sound.rain.loop();
-								Sound.ambienceLevel1.loop();
+							case 0 -> {}
+							case 1 -> {
+								this.setGameState(GameStates.SOUNDS);
+								this.soundMenu.setCursor(0);
 							}
-							case 1 -> {}
 							case 2 -> {}
-							case 3 -> {this.setGameState(GameStates.PAUSE_MENU);}
+							case 3 -> {
+								this.setGameState(GameStates.PAUSE_MENU);
+								this.pauseMenu.setCursor(0);
+							}
 							default ->{}
 						}
 					}
 				}
+			} case SOUNDS ->{
+				switch(e.getKeyCode()) {
+					case KeyEvent.VK_DOWN -> {
+						Sound.select.stop();
+						soundMenu.downCursor();
+						Sound.select.play();
+					}
+					case KeyEvent.VK_UP -> {
+						Sound.select.stop();
+						soundMenu.upCursor();
+						Sound.select.play();
+					}
+					case KeyEvent.VK_LEFT -> {
+						switch(soundMenu.getCursor()) {
+							case 0 -> {
+								soundMenu.sfxDecrease();
+								Sound.select.play();
+							}
+							case 1 -> {soundMenu.musicDecrease();}
+							default -> {}
+						}
+					}
+					case KeyEvent.VK_RIGHT -> {
+						switch(soundMenu.getCursor()) {
+							case 0 -> {
+								soundMenu.sfxIncrease();
+								Sound.select.play();
+							}
+							case 1 -> {soundMenu.musicIncrease();}
+							default -> {}
+						}
+					}
+					case KeyEvent.VK_ENTER -> {
+						switch(soundMenu.getCursor()) {
+							case 2 -> {
+								this.setGameState(GameStates.OPTIONS);
+								this.optionsMenu.setCursor(0);
+							}
+							default ->{}
+						}
+					}
+				}
+
 			}
 		}
 	}

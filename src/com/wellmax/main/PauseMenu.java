@@ -63,11 +63,15 @@ public class PauseMenu {
         }
 
         // Draw cursor
-        g.drawString(">", Game.WIDTH*Game.SCALE/3+50, cursorY);
+        g.drawString(">", Game.WIDTH*Game.SCALE/4+50, cursorY);
     }
 
     public int getCursor() {
         return this.cursor;
+    }
+
+    public void setCursor(int cursor) {
+        this.cursor = cursor;
     }
 
 }
