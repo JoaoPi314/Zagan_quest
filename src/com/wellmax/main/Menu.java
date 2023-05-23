@@ -17,8 +17,8 @@ public class Menu {
     private final int STARS_SPRITES = 6;
     private final String[] OPTIONS = {"New Game", "Load Game", "Exit"};
     private final int MAXCURSORPOSITION = OPTIONS.length - 1;
-    private final int[] STARXPOSITION = {588, 618, 255, 184, 343, 325, 188, 786, 438, 476};
-    private final int[] STARYPOSITION = {39, 37, 93, 219, 182, 421, 251, 64, 238, 261};
+    private final int[] STARXPOSITION = {294, 309, 127, 92, 171, 162, 94, 393, 219, 238};
+    private final int[] STARYPOSITION = {19, 18, 46, 109, 91, 210, 125, 32, 119, 130};
     private final int[] STARSIZE = {48, 32, 8, 16, 48, 16, 32, 48, 32, 32};
 
     private BufferedImage menuBackground;
@@ -95,11 +95,11 @@ public class Menu {
             countFrames = 0;
         }
 
-        int baseCursor = (int)(Game.HEIGHT*Game.SCALE*0.458333333);
+        int baseCursor = (int)(Game.HEIGHT*0.458333333);
         switch(cursor) {
             case 0 -> cursorY = baseCursor;
-            case 1 -> cursorY = baseCursor + 50;
-            case 2 -> cursorY = baseCursor + 100;
+            case 1 -> cursorY = baseCursor + 25;
+            case 2 -> cursorY = baseCursor + 50;
             default -> {
             }
         }
@@ -115,35 +115,35 @@ public class Menu {
     public void render(Graphics g) {
         // Draw background
         g.setColor(Color.BLACK);
-        g.drawImage(this.menuBackground, 0, 0,Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE, null);
+        g.drawImage(this.menuBackground, 0, 0,Game.WIDTH, Game.HEIGHT, null);
         
         for(int i = 0; i < NUMBER_OF_STARS; i++) {
             g.drawImage(this.menuStars[this.indexStar[i]], this.STARXPOSITION[i], this.STARYPOSITION[i], this.STARSIZE[i], this.STARSIZE[i], null);
         }
         
-        g.drawImage(this.menuFire[this.getIndex()], 0, Game.HEIGHT*Game.SCALE - this.getFireWidth() +55, this.getFireWidth()+100, this.getFireWidth(), null);
-        g.drawImage(this.menuZagan, 0, 0,Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE, null);
+        g.drawImage(this.menuFire[this.getIndex()], 0, Game.HEIGHT - this.getFireWidth()/2, this.getFireWidth()/2 + 50, this.getFireWidth()/2, null);
+        g.drawImage(this.menuZagan, 0, 0,Game.WIDTH, Game.HEIGHT, null);
         
 
         // Draw title
-        Font title_font = new Font("URW Chancery L Medium Italic", Font.BOLD, 96);
+        Font title_font = new Font("URW Chancery L Medium Italic", Font.BOLD, 48);
         String title_name = "Zagan Quest";
         g.setColor(Color.WHITE);
         g.setFont(title_font);
-        g.drawString(title_name, Game.WIDTH/8, Game.HEIGHT*Game.SCALE/6);
+        g.drawString(title_name, Game.WIDTH/8, Game.HEIGHT/6);
 
         // Draw Options
         g.setColor(Color.WHITE);
-        Font menu_font = new Font("URW Chancery L Medium Italic", Font.BOLD, 36); 
+        Font menu_font = new Font("URW Chancery L Medium Italic", Font.BOLD, 18); 
         g.setFont(menu_font);
-        int i = Game.HEIGHT*Game.SCALE/3;
+        int i = Game.HEIGHT/3;
         for (String string : OPTIONS) {
-            g.drawString(string, (Game.WIDTH*Game.SCALE - g.getFontMetrics(menu_font).stringWidth(string))/2, Game.HEIGHT*Game.SCALE/8 + i);
-            i += 50;
+            g.drawString(string, (Game.WIDTH - g.getFontMetrics(menu_font).stringWidth(string))/2, Game.HEIGHT/8 + i);
+            i += 25;
         }
 
         // Draw cursor
-        g.drawString(">", Game.WIDTH*Game.SCALE/3+50, cursorY);
+        g.drawString(">", Game.WIDTH/6+50, cursorY);
     }
 
     private int getIndex() {

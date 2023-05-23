@@ -7,16 +7,31 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
+import com.wellmax.entities.Player;
+import com.wellmax.entities.types.Directions;
+import com.wellmax.world.Camera;
+
 public class ControlsMenu extends OptionsMenu {
 
     private BufferedImage[][] controlsSprite;
     private BufferedImage selectingSprite;
+
+    // Players
+    private Player playerWalkingUp;
+    private Player playerWalkingDown;
+    private Player playerWalkingLeft;
+    private Player playerWalkingRight;
+
+    private Player playerAttacking;
+    private Player playerRunning;
+    private Player playerJumping;
 
     private int [][] cursorArray;
     private int horizontalCursor;
     private int verticalCursor;
     private int maxHorizontalCursor;
     private int maxVerticalCursor;
+    private int framesIdle;
 
     /**
      * SelectStatus = 0->1 : Selected
@@ -31,6 +46,17 @@ public class ControlsMenu extends OptionsMenu {
         this.selectStatus = 0;
 
         controlsSprite = new BufferedImage[2][4];
+        
+        playerWalkingUp = new Player(Game.WIDTH/5 + 96, 128, 32, 32);
+        playerWalkingDown = new Player(Game.WIDTH/5, 128, 32, 32);
+        playerWalkingLeft = new Player(Game.WIDTH/5 + 96*2, 128, 32, 32);
+        playerWalkingRight = new Player(Game.WIDTH/5 + 96*3, 128, 32, 32);
+    
+        playerAttacking = new Player(Game.WIDTH/5, Game.HEIGHT/6 + 196, 32, 32);
+        playerJumping = new Player(Game.WIDTH/5 + 96, Game.HEIGHT/6 + 196, 32, 32);
+        // playerRunning = new Player(Game.WIDTH/5, Game.HEIGHT/6, 32, 32);
+        
+
 
         controlsSprite[0][0] = Game.controlSpritesheet.getSprite(32, 128, 32, 32);
         controlsSprite[0][1] = Game.controlSpritesheet.getSprite(448, 96, 32, 32);
@@ -54,8 +80,8 @@ public class ControlsMenu extends OptionsMenu {
         this.horizontalCursor = 0;
         this.verticalCursor = 0;
 
-        this.selectX = Game.WIDTH*Game.SCALE/5 - 2;
-        this.selectY = Game.HEIGHT*Game.SCALE/6 - 2;
+        this.selectX = Game.WIDTH/5 - 2;
+        this.selectY = Game.HEIGHT/6 - 2;
 
 
     }
@@ -84,8 +110,6 @@ public class ControlsMenu extends OptionsMenu {
                 }
             }
             this.cursorArray[this.verticalCursor][this.horizontalCursor] = 1;
-            System.out.println(Arrays.toString(this.cursorArray[0]));
-            System.out.println(Arrays.toString(this.cursorArray[1]));
         }
         
     }
@@ -112,21 +136,21 @@ public class ControlsMenu extends OptionsMenu {
 
     public void render(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE);
+        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
         // Draw selection
         g.setColor(Color.GREEN);
-        g.fillRect(selectX, selectY, 34*Game.SCALE, 34*Game.SCALE);
+        g.fillRect(selectX, selectY, 36, 36);
 
         // Options
         g.setColor(Color.RED);
 
-        int xPosition = Game.WIDTH*Game.SCALE/5;
-        int yPosition = Game.HEIGHT*Game.SCALE/6;
+        int xPosition = Game.WIDTH/5;
+        int yPosition = Game.HEIGHT/6;
 
         for(int i = 0; i < 2; i++) {
             for(int j = 0; j < 4; j++) {
-                g.drawImage(this.controlsSprite[i][j], xPosition +j*96*Game.SCALE, yPosition + i*256*Game.SCALE,32*Game.SCALE, 32*Game.SCALE,null);
+                g.drawImage(this.controlsSprite[i][j], xPosition +j*96, yPosition + i*256,32, 32,null);
             }
         }
 
@@ -138,18 +162,103 @@ public class ControlsMenu extends OptionsMenu {
             text = "Press Enter to assign a Key...";    
         else {
             text = "Waiting new Key...";
-            g.drawImage(selectingSprite, selectX+2, selectY+2, 32*Game.SCALE, 32*Game.SCALE, null);
+            g.drawImage(selectingSprite, selectX+2, selectY+2, 32, 32, null);
         }
 
-        Font controlsText = new Font("URW Chancery L Medium Italic", Font.BOLD, 36); 
+        Font controlsText = new Font("URW Chancery L Medium Italic", Font.BOLD, 18); 
         g.setFont(controlsText);
-        g.drawString(text, (Game.WIDTH*Game.SCALE - g.getFontMetrics(controlsText).stringWidth(text))/2, Game.HEIGHT*Game.SCALE - 96);
+        g.drawString(text, (Game.WIDTH - g.getFontMetrics(controlsText).stringWidth(text))/2, Game.HEIGHT - 48);
+
+        // Draw players
+        playerWalkingLeft.render(g);
+        playerWalkingUp.render(g);
+        playerWalkingDown.render(g);
+        playerWalkingRight.render(g);
+
+        if(!playerAttacking.scythe.isStartScytheAttack())
+            playerAttacking.render(g);
+        else {
+            playerAttacking.scythe.render(g);
+            playerAttacking.renderAttackWithScythe(g);
+        }
+        playerJumping.render(g);
+        // playerRunning.render(g);
+
+
 
     }
 
     public void update() {
-        this.selectX = Game.WIDTH*Game.SCALE/5 + this.horizontalCursor*96*Game.SCALE - 2;
-        this.selectY = Game.HEIGHT*Game.SCALE/6 + this.verticalCursor*256*Game.SCALE - 2;
+
+        this.selectX = Game.WIDTH/5 + this.horizontalCursor*96 - 2;
+        this.selectY = Game.HEIGHT/6 + this.verticalCursor*256 - 2;
+
+        playerWalkingDown.setMoving(false);
+        playerWalkingUp.setMoving(false);
+        playerWalkingLeft.setMoving(false);
+        playerWalkingRight.setMoving(false);
+        playerJumping.setJumping(false);
+
+        playerWalkingUp.setFaceDir(Directions.DOWN);
+        playerWalkingLeft.setFaceDir(Directions.DOWN);
+        playerWalkingRight.setFaceDir(Directions.DOWN);
+        playerAttacking.setFaceDir(Directions.DOWN);
+        playerJumping.setZ(0);      
+        
+        String cursorStr = verticalCursor + "" + horizontalCursor; 
+        switch(cursorStr) {
+            case "00" -> {
+                playerAttacking.scythe.setStartScytheAttack(false);
+                playerAttacking.setAttacking(false);
+                playerJumping.setTJump(0);
+                playerWalkingDown.update();
+                playerWalkingDown.setDown(true);
+                playerWalkingDown.setY(selectY + 55);
+            }
+            case "01" -> {
+                playerAttacking.scythe.setStartScytheAttack(false);        
+                playerJumping.setTJump(0);
+                playerWalkingUp.update();
+                playerWalkingUp.setUp(true);
+                playerWalkingUp.setY(selectY + 55);        
+            }
+            case "02" -> {
+                playerAttacking.scythe.setStartScytheAttack(false);        
+                playerJumping.setTJump(0);
+                playerWalkingLeft.update();
+                playerWalkingLeft.setLeft(true);
+                playerWalkingLeft.setX(selectX);   
+            }
+            case "03" -> {
+                playerAttacking.scythe.setStartScytheAttack(false);        
+                playerJumping.setTJump(0);
+                playerWalkingRight.update();
+                playerWalkingRight.setRight(true);
+                playerWalkingRight.setX(selectX);   
+            }
+            case "10" -> {
+                playerJumping.setTJump(0);
+                if(framesIdle == 75) {
+                    playerAttacking.attack();
+                    framesIdle = 0;
+                }
+                playerAttacking.update();
+                playerAttacking.scythe.countAttackFrames();
+                playerAttacking.scythe.update();
+                framesIdle++;
+            }
+            case "11" -> {
+                playerAttacking.scythe.setStartScytheAttack(false);
+                playerJumping.setJumping(true);
+                playerJumping.update();
+            }
+            // case "12" -> Game.controls.setRun(keyEvent);
+            // case "13" -> Game.controls.setPause(keyEvent);
+        }            
+        
+        Camera.x = 0;
+        Camera.y = 0;
+
     }
 
 

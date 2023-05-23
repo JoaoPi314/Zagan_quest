@@ -621,20 +621,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		// Renders User interface
 		ui.render(g);
 
-		
-		// Draws everything
-		g.dispose();
-		g = bs.getDrawGraphics();
-		g.drawImage(image,  0,  0,  WIDTH*SCALE,  HEIGHT*SCALE, null);
-		
-		if(this.getCurrentWave() == 2) {
-			Graphics2D gRain = (Graphics2D) g;
-			gRain.setColor(new Color(0x00, 0x00, 0x50, 150));
-			gRain.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.WIDTH*Game.SCALE);
-		}
-
-		// g.drawImage(this.rainSprites[rainIndex], 0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE, null);
-
 		if(this.getGameState() == GameStates.GAME_OVER) {
 			// Stops music
 			Sound.ambienceLevel1.stop();
@@ -661,6 +647,21 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		}else if(this.getGameState() == GameStates.CONTROLS) {
 			this.controlsMenu.render(g);
 		}
+		
+		// Draws everything
+		g.dispose();
+		g = bs.getDrawGraphics();
+		g.drawImage(image,  0,  0,  WIDTH*SCALE,  HEIGHT*SCALE, null);
+		
+		if(this.getCurrentWave() == 2) {
+			Graphics2D gRain = (Graphics2D) g;
+			gRain.setColor(new Color(0x00, 0x00, 0x50, 150));
+			gRain.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.WIDTH*Game.SCALE);
+		}
+
+		// g.drawImage(this.rainSprites[rainIndex], 0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE, null);
+
+
 
 
 		bs.show();
@@ -687,7 +688,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		// Catch current time from PC
 		long lastTime = System.nanoTime();
 		// FPS
-		double amountOfTicks = 75.0;
+		double amountOfTicks = 75;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0.0;
 
@@ -751,6 +752,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 				else if(e.getKeyCode() == Game.controls.getWalkDown())
 					Game.player.setDown(true);
 
+				
 				// Jump
 				if(e.getKeyCode() == Game.controls.getJump()) {
 					if(!Game.player.isJumping() && !Game.player.scythe.isStartScytheAttack()) {

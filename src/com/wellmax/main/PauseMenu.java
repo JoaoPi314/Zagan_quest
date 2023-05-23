@@ -31,13 +31,13 @@ public class PauseMenu {
      * Method to update frame at frame
      */
     public void update() {
-        int baseCursor = (int)(Game.HEIGHT*Game.SCALE*0.458333333);
+        int baseCursor = (int)(Game.HEIGHT*0.458333333);
         switch(cursor) {
             case 0 -> cursorY = baseCursor;
-            case 1 -> cursorY = baseCursor + 50;
-            case 2 -> cursorY = baseCursor + 100;
-            case 3 -> cursorY = baseCursor + 150;
-            case 4 -> cursorY = baseCursor + 200;
+            case 1 -> cursorY = baseCursor + 25;
+            case 2 -> cursorY = baseCursor + 50;
+            case 3 -> cursorY = baseCursor + 75;
+            case 4 -> cursorY = baseCursor + 100;
             default -> {
             }
         }
@@ -50,20 +50,20 @@ public class PauseMenu {
 
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(new Color(0x00, 0x00, 0x00, 150));
-        g2.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE);
+        g2.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
         // Draw Options
         g.setColor(Color.WHITE);
-        Font menuFont = new Font("URW Chancery L Medium Italic", Font.BOLD, 36); 
+        Font menuFont = new Font("URW Chancery L Medium Italic", Font.BOLD, 18); 
         g.setFont(menuFont);
-        int i = Game.HEIGHT*Game.SCALE/3;
+        int i = Game.HEIGHT/3;
         for (String string : options) {
-            g.drawString(string, (Game.WIDTH*Game.SCALE - g.getFontMetrics(menuFont).stringWidth(string))/2, Game.HEIGHT*Game.SCALE/8 + i);
-            i += 50;
+            g.drawString(string, (Game.WIDTH - g.getFontMetrics(menuFont).stringWidth(string))/2, Game.HEIGHT/8 + i);
+            i += 25;
         }
 
         // Draw cursor
-        g.drawString(">", Game.WIDTH*Game.SCALE/4+50, cursorY);
+        g.drawString(">", Game.WIDTH/4+25, cursorY);
     }
 
     public int getCursor() {
